@@ -1,0 +1,28 @@
+{
+    "name": "woolly",
+    "version": "1.0.0",
+    "description": "Wrap your code in the warm embrace of LLMs.",
+    "main": "index.js",
+    "scripts": {
+        "start": "node index.js",
+        "dev": "nodemon index.js",
+        "client": "cd client && npm start",
+        "server": "npm start",
+        "build": "cd client && npm run build",
+        "postinstall": "cd client && npm install && npm run build"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "child_process": "^1.0.2",
+        "cors": "^2.8.5",
+        "express": "^4.18.2",
+        "path": "^0.12.7",
+        "strip-ansi": "^7.0.1",
+        "ws": "^8.13.0"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.22"
+    },
+    "proxy": "http://localhost:5000"
+}
