@@ -1,7 +1,7 @@
 {
-    "name": "woolly",
+    "name": "llama-cpp-openai-api",
     "version": "1.0.0",
-    "description": "Wrap your code in the warm embrace of LLMs.",
+    "description": "Use llama.cpp in place of the OpenAi API.",
     "main": "index.js",
     "type": "module",
     "scripts": {
@@ -20,9 +20,7 @@
         "express": "^4.18.2",
         "fs": "^0.0.1-security",
         "nanoid": "^4.0.2",
-        "path": "^0.12.7",
-        "strip-ansi": "^7.0.1",
-        "ws": "^8.13.0"
+        "path": "^0.12.7"
     },
     "devDependencies": {
         "nodemon": "^2.0.22"
