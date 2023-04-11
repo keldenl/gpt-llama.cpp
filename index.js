@@ -1,62 +1,20 @@
 import express from "express";
 import cors from "cors";
-import path, { resolve } from "path";
+import path from "path";
 import { spawn } from "child_process";
-import { nanoid } from "nanoid";
-import { readdir } from "fs/promises";
+import {
+  getFiles,
+  stripAnsiCodes,
+  messagesToString,
+  dataToResponse,
+  getLlamaPath,
+} from "./utils.js";
+import { defaultArgs, defaultMsgs } from "./defaults.js";
 
-async function* getFiles(dir) {
-  const dirents = await readdir(dir, { withFileTypes: true });
-  for (const dirent of dirents) {
-    const res = resolve(dir, dirent.name);
-    if (dirent.isDirectory()) {
-      yield* getFiles(res);
-    } else {
-      const currFile = res.split(".");
-      if (currFile[currFile.length - 1] === "bin") {
-        yield res;
-      }
-    }
-  }
-}
-
-function stripAnsiCodes(str) {
-  return str.replace(/\u001b\[\d+m/g, "");
-}
-
+let childProcess;
 const app = express();
 app.use(cors());
 app.use(express.json());
-// app.use(express.static(path.join(__dirname, "client/build")));
-
-let childProcess;
-
-// Utils
-const messagesToString = (messages) => {
-  return messages
-    .map((m) => {
-      return `${m.role}: ${m.content}`;
-    })
-    .join("\n");
-};
-
-const dataToResponse = (data, reason = null) => {
-  const currDate = new Date();
-  const contentData = { content: data };
-
-  return JSON.stringify({
-    choices: [
-      {
-        delta: !!data ? contentData : {},
-        finish_reason: reason,
-        index: 0,
-      },
-    ],
-    created: currDate.getTime(),
-    id: nanoid(),
-    object: "chat.completion.chunk",
-  });
-};
 
 app.get("/v1/models", async (req, res) => {
   const llamaPath = getLlamaPath(req);
@@ -77,51 +35,23 @@ app.get("/v1/models", async (req, res) => {
   })();
 });
 
-const getLlamaPath = (req) => {
-  const API_KEY = req.headers.authorization.split(" ")[1];
-  // We're using API_KEY as a slot to provide "llama.cpp" folder path
-  return API_KEY;
-};
-
 app.post("/v1/chat/completions", (req, res) => {
   const llamaPath = getLlamaPath(req);
-  const modelId = req.body.model;
+  const modelId = req.body.model; // TODO: Implement model somehow
   const scriptPath = `${llamaPath}/main`;
-  // const modelPath = `${llamaPath}/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin`;
   const modelPath = process.env.MODEL;
+  
+  const stream = req.body.stream;
 
   if (!modelPath) {
-    return res.status(500).send('Re-run Herd with MODEL= variable set.')
+    return res.status(500).send("re-run Herd with MODEL= variable set.");
   }
-
-  console.log(scriptPath);
-  console.log(modelId);
 
   const messages = req.body.messages;
   const lastMessage = messages.pop();
 
   const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
-  const defaultMsgs = [
-    { role: "system", content: "You are a helpful assistant." },
-    { role: "user", content: "How are you?" },
-    { role: "assistant", content: "Hi, how may I help you today?" },
-  ];
-
-  const chatHistory = messagesToString(defaultMsgs)
-  const defaultArgs = [
-    "--temp",
-    "0.7",
-    "-b",
-    "512",
-    "-n",
-    "512",
-    "--top_k",
-    "40",
-    "--top_p",
-    "0.1",
-    "--repeat_penalty",
-    "1.1764705882352942",
-  ];
+  const chatHistory = messagesToString(defaultMsgs);
 
   const stopPrompts = [
     "user:",
@@ -154,13 +84,12 @@ assistant:`,
   ];
 
   childProcess = spawn(scriptPath, scriptArgs);
-
   console.log(
     `Child process spawned with command: ${scriptPath} ${scriptArgs.join(" ")}`
   );
 
   const stdoutStream = childProcess.stdout;
-  const stream = new ReadableStream({
+  const readable = new ReadableStream({
     start(controller) {
       const decoder = new TextDecoder();
       const onData = (chunk) => {
@@ -225,7 +154,7 @@ assistant:`,
     },
   });
 
-  stream.pipeTo(writable);
+  readable.pipeTo(writable);
 });
 
 app.get("*", (req, res) => {
