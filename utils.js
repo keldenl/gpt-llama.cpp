@@ -29,14 +29,15 @@ export const messagesToString = (messages) => {
     .join("\n");
 };
 
-export const dataToResponse = (data, reason = null) => {
+export const dataToResponse = (data, stream = false, reason = null) => {
   const currDate = new Date();
   const contentData = { content: data };
+  const contentName = stream ? "delta" : "message";
 
   return JSON.stringify({
     choices: [
       {
-        delta: !!data ? contentData : {},
+        [contentName]: !!data ? contentData : {},
         finish_reason: reason,
         index: 0,
       },

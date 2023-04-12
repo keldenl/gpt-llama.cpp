@@ -40,7 +40,7 @@ app.post("/v1/chat/completions", (req, res) => {
   const modelId = req.body.model; // TODO: Implement model somehow
   const scriptPath = `${llamaPath}/main`;
   const modelPath = process.env.MODEL;
-  
+
   const stream = req.body.stream;
 
   if (!modelPath) {
@@ -58,7 +58,7 @@ app.post("/v1/chat/completions", (req, res) => {
     "\nuser",
     "system:",
     "\nsystem",
-    "###",
+    // "###",
     "##",
     "\n##",
   ];
@@ -98,7 +98,7 @@ assistant:`,
         if (data.includes(`### Instructions`)) {
           return;
         }
-        controller.enqueue(dataToResponse(data));
+        controller.enqueue(dataToResponse(data, stream));
       };
 
       const onClose = () => {
@@ -118,43 +118,80 @@ assistant:`,
     },
   });
 
-  res.writeHead(200, {
-    "Content-Type": "text/event-stream",
-    "Cache-Control": "no-cache",
-    Connection: "keep-alive",
-  });
+  // const contentType = stream ? "text/event-stream" : "application/json";
 
-  let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
-  const writable = new WritableStream({
-    write(chunk) {
-      const currContent = JSON.parse(chunk).choices[0].delta.content;
-      const lastContent = !!lastChunk
-        ? JSON.parse(lastChunk).choices[0].delta.content
-        : undefined;
-      const last2Content = !!lastContent
-        ? lastContent + currContent
-        : currContent;
-      console.log("last2: ", last2Content);
-      // If we detect the stop prompt, stop generation
-      if (
-        stopPrompts.includes(currContent) ||
-        stopPrompts.includes(last2Content)
-      ) {
-        console.log("SEND DONE EVENT SIGNAL");
-        res.write("event: data\n");
-        res.write(`data: ${dataToResponse(undefined, "stop")}\n\n`);
-        res.write("event: data\n");
-        res.write("data: [DONE]\n\n");
-        childProcess.kill("SIGINT");
-      } else {
-        res.write("event: data\n");
-        res.write(`data: ${chunk}\n\n`);
-        lastChunk = chunk;
-      }
-    },
-  });
+  
+  // If streaming, return an event-stream
+  if (stream) {
+    res.writeHead(200, {
+      "Content-Type": 'text/event-stream',
+      "Cache-Control": "no-cache",
+      Connection: "keep-alive",
+    });
+    let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
+    const writable = new WritableStream({
+      write(chunk) {
+        const currContent = JSON.parse(chunk).choices[0].delta.content;
+        const lastContent = !!lastChunk
+          ? JSON.parse(lastChunk).choices[0].delta.content
+          : undefined;
+        const last2Content = !!lastContent
+          ? lastContent + currContent
+          : currContent;
+        console.log("last2: ", last2Content);
+        // If we detect the stop prompt, stop generation
+        if (
+          stopPrompts.includes(currContent) ||
+          stopPrompts.includes(last2Content)
+        ) {
+          console.log("SEND DONE EVENT SIGNAL");
+          res.write("event: data\n");
+          res.write(`data: ${dataToResponse(undefined, stream, "stop")}\n\n`);
+          res.write("event: data\n");
+          res.write("data: [DONE]\n\n");
+          childProcess.kill("SIGINT");
+        } else {
+          res.write("event: data\n");
+          res.write(`data: ${chunk}\n\n`);
+          lastChunk = chunk;
+        }
+      },
+    });
 
-  readable.pipeTo(writable);
+    readable.pipeTo(writable);
+  }
+  // Return a single json response instead of streaming
+  else {
+    let responseData = "";
+    let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
+    const writable = new WritableStream({
+      write(chunk) {
+        const currContent = JSON.parse(chunk).choices[0].message.content;
+        const lastContent = !!lastChunk
+          ? JSON.parse(lastChunk).choices[0].message.content
+          : undefined;
+        const last2Content = !!lastContent
+          ? lastContent + currContent
+          : currContent;
+        console.log("last2: ", last2Content);
+        // If we detect the stop prompt, stop generation
+        if (
+          stopPrompts.includes(currContent) ||
+          stopPrompts.includes(last2Content)
+        ) {
+          console.log('DONE JSON')
+          console.log(dataToResponse(responseData,stream, "stop"))
+          res.status(200).json(dataToResponse(responseData, stream,"stop"))
+          childProcess.kill("SIGINT");
+        } else {
+          responseData += currContent;
+          console.log(responseData);
+          lastChunk = chunk;
+        }
+      },
+    });
+    readable.pipeTo(writable);
+  }
 });
 
 app.get("*", (req, res) => {
