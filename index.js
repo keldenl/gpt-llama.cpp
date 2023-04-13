@@ -9,8 +9,9 @@ import {
   dataToResponse,
   getLlamaPath,
   getModelPath,
+  getModelName,
 } from "./utils.js";
-import { defaultMsgs, getArgs } from "./defaults.js";
+import { defaultMsgs, getArgs, gptModelNames } from "./defaults.js";
 
 let childProcess;
 const app = express();
@@ -18,22 +19,36 @@ app.use(cors());
 app.use(express.json());
 
 app.get("/v1/models", async (req, res) => {
-  const llamaPath = getLlamaPath(req);
-  (async () => {
-    const models = [];
-    for await (const f of getFiles(`${llamaPath}/models/`)) {
-      models.push(f.split("llama.cpp/models")[1]); // only return relative
-    }
-    console.log(models);
-    const data = models.map((m) => ({
-      id: m,
-      object: m,
+  const modelName = getModelName(getModelPath(req));
+  // Map the user-defined model to gpt-3-turbo
+  const data = [
+    {
+      id: gptModelNames["3.5"],
+      object: modelName,
       owned_by: "user",
       permission: [],
-    }));
-    console.log({ data });
-    res.status(200).json({ data });
-  })();
+    },
+  ];
+
+  res.status(200).json({ data });
+
+  // Commented out this approach – this will get you all local models but right now isn't
+  // very compatible with GPT applications
+  // (async () => {
+  //   const models = [];
+  //   for await (const f of getFiles(`${llamaPath}/models/`)) {
+  //     models.push(f.split("llama.cpp/models")[1]); // only return relative
+  //   }
+  //   console.log(models);
+  // const data = models.map((m) => ({
+  //   id: m,
+  //   object: m,
+  //   owned_by: "user",
+  //   permission: [],
+  // }));
+  //   console.log({ data });
+  //   res.status(200).json({ data });
+  // })();
 });
 
 app.post("/v1/chat/completions", (req, res) => {

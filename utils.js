@@ -51,11 +51,16 @@ export const dataToResponse = (data, stream = false, reason = null) => {
 export const getModelPath = (req) => {
   // We're using API_KEY as a slot to provide the "llama.cpp" model path
   const API_KEY = req.headers.authorization.split(" ")[1];
-  return API_KEY
-}
+  return API_KEY;
+};
+
+export const getModelName = (path) => {
+  const modelArr = path.split("/");
+  return modelArr[modelArr.length - 1];
+};
 
 export const getLlamaPath = (req) => {
-  const modelPath = getModelPath(req)
-  const path = modelPath.split("/llama.cpp")[0]; // only 
+  const modelPath = getModelPath(req);
+  const path = modelPath.split("/llama.cpp")[0]; // only
   return `${path}/llama.cpp`;
 };
