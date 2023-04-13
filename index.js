@@ -8,6 +8,7 @@ import {
   messagesToString,
   dataToResponse,
   getLlamaPath,
+  getModelPath,
 } from "./utils.js";
 import { defaultMsgs, getArgs } from "./defaults.js";
 
@@ -36,10 +37,10 @@ app.get("/v1/models", async (req, res) => {
 });
 
 app.post("/v1/chat/completions", (req, res) => {
-  const llamaPath = getLlamaPath(req);
   const modelId = req.body.model; // TODO: Implement model somehow
+  const llamaPath = getLlamaPath(req);
+  const modelPath = getModelPath(req);
   const scriptPath = `${llamaPath}/main`;
-  const modelPath = process.env.MODEL;
 
   const stream = req.body.stream;
 
