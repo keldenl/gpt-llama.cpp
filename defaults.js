@@ -4,17 +4,45 @@ export const defaultMsgs = [
   { role: "assistant", content: "Hi, how may I help you today?" },
 ];
 
-export const defaultArgs = [
-  "--temp",
-  "0.7",
-  "-b",
-  "512",
-  "-n",
-  "512",
-  "--top_k",
-  "40",
-  "--top_p",
-  "0.1",
-  "--repeat_penalty",
-  "1.1764705882352942",
-];
+const defaultParams = {
+  "--temp": "0.7",
+  "--n_predict": "512",
+  "--top_p": "0.1",
+  "--top_k": "40",
+  "-b": "512",
+  "--repeat_penalty": "1.1764705882352942",
+};
+
+const openAiToLlamaMapping = {
+  temperature: '--temp',
+  stop: '--reverse-prompt', // string or string array
+  max_tokens: '--n_predict',
+  top_p: '--top_p',
+}
+
+export const getArgs = (args) => {
+  const convertedArgs = {}
+  Object.keys(args).forEach(a => {
+    if (!!openAiToLlamaMapping[a]) {
+      console.log(`${openAiToLlamaMapping[a]}: ${args[a]}`)
+      convertedArgs[openAiToLlamaMapping[a]] = args[a]
+    }
+  })
+  const params = { ...defaultParams, ...convertedArgs };
+  return Object.keys(params).flatMap((pKey) => [pKey, params[pKey]]);
+};
+
+// export const defaultArgs = [
+//   "--temp",
+//   "0.7",
+//   "-b",
+//   "512",
+//   "-n",
+//   "512",
+//   "--top_k",
+//   "40",
+//   "--top_p",
+//   "0.1",
+//   "--repeat_penalty",
+//   "1.1764705882352942",
+// ];

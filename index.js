@@ -9,7 +9,7 @@ import {
   dataToResponse,
   getLlamaPath,
 } from "./utils.js";
-import { defaultArgs, defaultMsgs } from "./defaults.js";
+import { defaultMsgs, getArgs } from "./defaults.js";
 
 let childProcess;
 const app = express();
@@ -64,11 +64,11 @@ app.post("/v1/chat/completions", (req, res) => {
   ];
 
   const stopArgs = stopPrompts.flatMap((s) => ["--reverse-prompt", s]);
-
+  const args = getArgs(req.body);
   const scriptArgs = [
     "-m",
     modelPath,
-    ...defaultArgs,
+    ...args,
     ...stopArgs,
     "-p",
     `### Instructions
@@ -120,11 +120,10 @@ assistant:`,
 
   // const contentType = stream ? "text/event-stream" : "application/json";
 
-  
   // If streaming, return an event-stream
   if (stream) {
     res.writeHead(200, {
-      "Content-Type": 'text/event-stream',
+      "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
       Connection: "keep-alive",
     });
@@ -179,9 +178,9 @@ assistant:`,
           stopPrompts.includes(currContent) ||
           stopPrompts.includes(last2Content)
         ) {
-          console.log('DONE JSON')
-          console.log(dataToResponse(responseData,stream, "stop"))
-          res.status(200).json(dataToResponse(responseData, stream,"stop"))
+          console.log("DONE JSON");
+          console.log(dataToResponse(responseData, stream, "stop"));
+          res.status(200).json(dataToResponse(responseData, stream, "stop"));
           childProcess.kill("SIGINT");
         } else {
           responseData += currContent;
