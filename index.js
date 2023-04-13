@@ -74,7 +74,6 @@ app.post("/v1/chat/completions", (req, res) => {
     "\nuser",
     "system:",
     "\nsystem",
-    // "###",
     "##",
     "\n##",
   ];
@@ -134,10 +133,8 @@ assistant:`,
     },
   });
 
-  // const contentType = stream ? "text/event-stream" : "application/json";
-
-  // If streaming, return an event-stream
   if (stream) {
+    // If streaming, return an event-stream
     res.writeHead(200, {
       "Content-Type": "text/event-stream",
       "Cache-Control": "no-cache",
@@ -153,13 +150,12 @@ assistant:`,
         const last2Content = !!lastContent
           ? lastContent + currContent
           : currContent;
-        console.log("last2: ", last2Content);
         // If we detect the stop prompt, stop generation
         if (
           stopPrompts.includes(currContent) ||
           stopPrompts.includes(last2Content)
         ) {
-          console.log("SEND DONE EVENT SIGNAL");
+          console.log("COMPLETED");
           res.write("event: data\n");
           res.write(`data: ${dataToResponse(undefined, stream, "stop")}\n\n`);
           res.write("event: data\n");
@@ -188,14 +184,12 @@ assistant:`,
         const last2Content = !!lastContent
           ? lastContent + currContent
           : currContent;
-        console.log("last2: ", last2Content);
         // If we detect the stop prompt, stop generation
         if (
           stopPrompts.includes(currContent) ||
           stopPrompts.includes(last2Content)
         ) {
-          console.log("DONE JSON");
-          console.log(dataToResponse(responseData, stream, "stop"));
+          console.log("COMPLETED");
           res.status(200).json(dataToResponse(responseData, stream, "stop"));
           childProcess.kill("SIGINT");
         } else {
