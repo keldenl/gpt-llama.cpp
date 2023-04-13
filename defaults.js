@@ -24,7 +24,6 @@ export const getArgs = (args) => {
   const convertedArgs = {}
   Object.keys(args).forEach(a => {
     if (!!openAiToLlamaMapping[a]) {
-      console.log(`${openAiToLlamaMapping[a]}: ${args[a]}`)
       convertedArgs[openAiToLlamaMapping[a]] = args[a]
     }
   })
