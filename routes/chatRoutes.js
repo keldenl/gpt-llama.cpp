@@ -1,6 +1,5 @@
 import express from "express";
 import { spawn } from "child_process";
-
 import {
   stripAnsiCodes,
   messagesToString,
@@ -73,7 +72,8 @@ const router = express.Router();
  *                             description: Additional metadata about the completion
  */
 
-router.get("/completions", async (req, res) => {
+router.post("/completions", async (req, res) => {
+  console.log("HI");
   const modelId = req.body.model; // TODO: Implement model somehow
   const llamaPath = getLlamaPath(req, res);
   const modelPath = getModelPath(req, res);
@@ -91,7 +91,15 @@ router.get("/completions", async (req, res) => {
   const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
   const chatHistory = messagesToString(defaultMsgs);
 
-  const stopPrompts = ["user:", "\nuser", "system:", "\nsystem", "##", "\n##"];
+  const stopPrompts = [
+    "user:",
+    "\nuser",
+    "system:",
+    "\nsystem",
+    "##",
+    "\n##",
+    "###",
+  ];
 
   const stopArgs = stopPrompts.flatMap((s) => ["--reverse-prompt", s]);
   const args = getArgs(req.body);
@@ -102,23 +110,23 @@ router.get("/completions", async (req, res) => {
     ...stopArgs,
     "-p",
     `### Instructions
-  ${instructions}
-  
-  ### Inputs
-  ${chatHistory}
-  ${messagesToString(messages)}
-  
-  ### Response
-  ${messagesToString([lastMessage])}
-  assistant:`,
+${instructions}
+
+### Inputs
+${chatHistory}
+${messagesToString(messages)}
+
+### Response
+${messagesToString([lastMessage])}
+assistant:`,
   ];
 
-  childProcess = spawn(scriptPath, scriptArgs);
+  global.childProcess = spawn(scriptPath, scriptArgs);
   console.log(
     `Child process spawned with command: ${scriptPath} ${scriptArgs.join(" ")}`
   );
 
-  const stdoutStream = childProcess.stdout;
+  const stdoutStream = global.childProcess.stdout;
   const readable = new ReadableStream({
     start(controller) {
       const decoder = new TextDecoder();
@@ -175,7 +183,7 @@ router.get("/completions", async (req, res) => {
           res.write(`data: ${dataToResponse(undefined, stream, "stop")}\n\n`);
           res.write("event: data\n");
           res.write("data: [DONE]\n\n");
-          childProcess.kill("SIGINT");
+          global.childProcess.kill("SIGINT");
         } else {
           res.write("event: data\n");
           res.write(`data: ${chunk}\n\n`);
@@ -206,7 +214,7 @@ router.get("/completions", async (req, res) => {
         ) {
           console.log("COMPLETED");
           res.status(200).json(dataToResponse(responseData, stream, "stop"));
-          childProcess.kill("SIGINT");
+          global.childProcess.kill("SIGINT");
         } else {
           responseData += currContent;
           console.log(responseData);
