@@ -48,10 +48,14 @@ export const dataToResponse = (data, stream = false, reason = null) => {
   });
 };
 
-export const getModelPath = (req) => {
+export const getModelPath = (req, res) => {
+  const API_KEY = req.headers.authorization;
+  if (!API_KEY) {
+    return;
+  }
   // We're using API_KEY as a slot to provide the "llama.cpp" model path
-  const API_KEY = req.headers.authorization.split(" ")[1];
-  return API_KEY;
+  const modelPath = API_KEY.split(" ")[1];
+  return modelPath;
 };
 
 export const getModelName = (path) => {
@@ -59,8 +63,8 @@ export const getModelName = (path) => {
   return modelArr[modelArr.length - 1];
 };
 
-export const getLlamaPath = (req) => {
-  const modelPath = getModelPath(req);
+export const getLlamaPath = (req, res) => {
+  const modelPath = getModelPath(req, res);
   const path = modelPath.split("/llama.cpp")[0]; // only
   return `${path}/llama.cpp`;
 };

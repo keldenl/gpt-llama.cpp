@@ -2,8 +2,10 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 import { spawn } from "child_process";
+import swaggerJsdoc from "swagger-jsdoc";
+import swaggerUi from "swagger-ui-express";
+
 import {
-  getFiles,
   stripAnsiCodes,
   messagesToString,
   dataToResponse,
@@ -12,49 +14,67 @@ import {
   getModelName,
 } from "./utils.js";
 import { defaultMsgs, getArgs, gptModelNames } from "./defaults.js";
+import modelsRoutes from "./routes/modelsRoutes.js";
+
+const options = {
+  definition: {
+    openapi: "3.0.1",
+    info: {
+      title: "gpt-llama.cpp",
+      version: "1.0.0",
+      description: "Use llama.cpp in place of the OpenAi GPT API",
+      license: {
+        name: "MIT",
+        url: "https://spdx.org/licenses/MIT.html",
+      },
+      contact: {
+        name: "Kelden",
+        url: "https://github.com/keldenl",
+      },
+    },
+    basePath: "/",
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT",
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [],
+      },
+    ],
+    servers: [
+      {
+        url: "http://localhost:6969",
+      },
+    ],
+  },
+  apis: ["./routes/*.js"],
+};
+
+const specs = swaggerJsdoc(options);
 
 let childProcess;
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-app.get("/v1/models", async (req, res) => {
-  const modelName = getModelName(getModelPath(req));
-  // Map the user-defined model to gpt-3-turbo
-  const data = [
-    {
-      id: gptModelNames["3.5"],
-      object: modelName,
-      owned_by: "user",
-      permission: [],
-    },
-  ];
-
-  res.status(200).json({ data });
-
-  // Commented out this approach – this will get you all local models but right now isn't
-  // very compatible with GPT applications
-  // (async () => {
-  //   const models = [];
-  //   for await (const f of getFiles(`${llamaPath}/models/`)) {
-  //     models.push(f.split("llama.cpp/models")[1]); // only return relative
-  //   }
-  //   console.log(models);
-  // const data = models.map((m) => ({
-  //   id: m,
-  //   object: m,
-  //   owned_by: "user",
-  //   permission: [],
-  // }));
-  //   console.log({ data });
-  //   res.status(200).json({ data });
-  // })();
-});
-
+app.use(
+  "/docs",
+  swaggerUi.serve,
+  swaggerUi.setup(specs, {
+    explorer: true,
+  })
+);
+app.use("/v1/models", modelsRoutes);
 app.post("/v1/chat/completions", (req, res) => {
   const modelId = req.body.model; // TODO: Implement model somehow
-  const llamaPath = getLlamaPath(req);
-  const modelPath = getModelPath(req);
+  const llamaPath = getLlamaPath(req, res);
+  const modelPath = getModelPath(req, res);
   const scriptPath = `${llamaPath}/main`;
 
   const stream = req.body.stream;
@@ -69,14 +89,7 @@ app.post("/v1/chat/completions", (req, res) => {
   const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
   const chatHistory = messagesToString(defaultMsgs);
 
-  const stopPrompts = [
-    "user:",
-    "\nuser",
-    "system:",
-    "\nsystem",
-    "##",
-    "\n##",
-  ];
+  const stopPrompts = ["user:", "\nuser", "system:", "\nsystem", "##", "\n##"];
 
   const stopArgs = stopPrompts.flatMap((s) => ["--reverse-prompt", s]);
   const args = getArgs(req.body);

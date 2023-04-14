@@ -20,7 +20,9 @@
         "express": "^4.18.2",
         "fs": "^0.0.1-security",
         "nanoid": "^4.0.2",
-        "path": "^0.12.7"
+        "path": "^0.12.7",
+        "swagger-jsdoc": "^6.2.8",
+        "swagger-ui-express": "^4.6.2"
     },
     "devDependencies": {
         "nodemon": "^2.0.22"
