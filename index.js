@@ -59,7 +59,7 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
-let childProcess;
+global.childProcess = undefined;
 const app = express();
 app.use(cors());
 app.use(express.json());
