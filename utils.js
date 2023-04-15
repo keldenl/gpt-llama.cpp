@@ -48,6 +48,19 @@ export const dataToResponse = (data, stream = false, reason = null) => {
   });
 };
 
+export const dataToEmbeddingResponse = (output) => {
+  return JSON.stringify({
+    object: 'list',
+    data: [
+      {
+        object: 'embedding',
+        embedding: output,
+        index: 0,
+      },
+    ],
+  });
+}
+
 export const getModelPath = (req, res) => {
   const API_KEY = req.headers.authorization;
   if (!API_KEY) {

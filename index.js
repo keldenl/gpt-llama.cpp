@@ -16,6 +16,7 @@ import {
 import { defaultMsgs, getArgs, gptModelNames } from "./defaults.js";
 import modelsRoutes from "./routes/modelsRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
+import embeddingsRoutes from "./routes/embeddingsRoutes.js";
 
 const options = {
   definition: {
@@ -73,6 +74,7 @@ app.use(
 );
 app.use("/v1/models", modelsRoutes);
 app.use("/v1/chat", chatRoutes);
+app.use("/v1/embeddings", embeddingsRoutes);
 
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "client/build/index.html"));
