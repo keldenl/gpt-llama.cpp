@@ -1,7 +1,7 @@
 {
-    "name": "gpt-llama-cpp",
-    "version": "1.0.0",
-    "description": "Use llama.cpp in place of the OpenAi API.",
+    "name": "gpt-llama.cpp",
+    "version": "0.0.1",
+    "description": "A drop-in replacement for OpenAI's GPT endpoints that utilizes a local llama.cpp server. Any GPT-powered app can now seamlessly work with llama.cpp, with any local model you want to run.",
     "main": "index.js",
     "type": "module",
     "scripts": {
