@@ -67,9 +67,8 @@ router.post("/", async (req, res) => {
   if (!modelPath) {
     return res.status(500).send("re-run Herd with MODEL= variable set.");
   }
-
+  
   const input = req.body.input;
-
   const scriptArgs = ["-m", modelPath, "-p", input];
 
   global.childProcess = spawn(scriptPath, scriptArgs);
@@ -84,13 +83,15 @@ router.post("/", async (req, res) => {
       const decoder = new TextDecoder();
       const onData = (chunk) => {
         const data = stripAnsiCodes(decoder.decode(chunk));
-        output = [...output, ...data.split(" ").map(d => parseFloat(d))];
-        // output.push(data.split(" "))
+        output = [
+          ...output,
+          ...data.split(" ").flatMap((d) => parseFloat(d) || []),
+        ];
       };
 
       const onClose = () => {
         console.log("Readable Stream: CLOSED");
-        console.log(dataToEmbeddingResponse(output))
+        console.log(dataToEmbeddingResponse(output));
         res.status(200).json(dataToEmbeddingResponse(output));
         controller.close();
       };
