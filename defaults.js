@@ -10,6 +10,7 @@ const defaultParams = {
   "--top_p": "0.1",
   "--top_k": "40",
   "-b": "512",
+  "-c": "2048",
   "--repeat_penalty": "1.1764705882352942",
 };
 
