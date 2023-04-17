@@ -1,7 +1,7 @@
 # 🦙 gpt-llama.cpp 
 Replace GPT API with [`llama.cpp`](https://github.com/ggerganov/llama.cpp#description)'s [supported models](https://github.com/ggerganov/llama.cpp#description)
 
-![Demo GIF](assets/demo.gif)
+![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model_
 
 ## Features
@@ -72,7 +72,7 @@ More applications are currently being tested, and welcome requests for verificat
 
 3. Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. `"../llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
 
-![API Documentation](assets/docs.png)
+![API Documentation](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/docs.png)
 
 
 4. (Optional) Test the server by sending a request to `http://localhost:443/v1/chat/completions` with the following cURL command:

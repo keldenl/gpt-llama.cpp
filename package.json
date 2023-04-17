@@ -8,8 +8,12 @@
         "start": "node index.js",
         "dev": "nodemon index.js"
     },
-    "author": "",
-    "license": "ISC",
+    "author": "kelden",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/keldenl/gpt-llama.cpp"
+    },
     "dependencies": {
         "child_process": "^1.0.2",
         "cors": "^2.8.5",
