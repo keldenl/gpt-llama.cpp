@@ -1,16 +1,12 @@
 {
-    "name": "llama-cpp-openai-api",
+    "name": "gpt-llama-cpp",
     "version": "1.0.0",
     "description": "Use llama.cpp in place of the OpenAi API.",
     "main": "index.js",
     "type": "module",
     "scripts": {
         "start": "node index.js",
-        "dev": "nodemon index.js",
-        "client": "cd client && npm start",
-        "server": "npm start",
-        "build": "cd client && npm run build",
-        "postinstall": "cd client && npm install && npm run build"
+        "dev": "nodemon index.js"
     },
     "author": "",
     "license": "ISC",
@@ -26,6 +22,5 @@
     },
     "devDependencies": {
         "nodemon": "^2.0.22"
-    },
-    "proxy": "http://localhost:5000"
+    }
 }
