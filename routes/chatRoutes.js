@@ -6,6 +6,7 @@ import {
   dataToResponse,
   getLlamaPath,
   getModelPath,
+  compareArrays,
 } from "../utils.js";
 import { defaultMsgs, getArgs } from "../defaults.js";
 
@@ -103,7 +104,7 @@ router.post("/completions", async (req, res) => {
 
   const stopArgs = stopPrompts.flatMap((s) => ["--reverse-prompt", s]);
   const args = getArgs(req.body);
-  const prompt = `### Instructions
+  const initPrompt = `### Instructions
 ${instructions}
 
 ### Inputs
@@ -113,17 +114,47 @@ ${messagesToString(messages)}
 ### Response
 ${messagesToString([lastMessage])}
 assistant:`;
-  const scriptArgs = ["-m", modelPath, ...args, ...stopArgs, "-p", prompt];
+  const interactionPrompt = `### Inputs\\\n${messagesToString(
+    [lastMessage],
+    true
+  )}\\\n\\\n### Response\\\nassistant:\n`;
+  const samePrompt =
+    global.lastRequest &&
+    global.lastRequest.type === "chat" &&
+    compareArrays(global.lastRequest.messages, messages);
+  const continuedInteraction = !!global.childProcess && samePrompt;
 
-  global.childProcess = spawn(scriptPath, scriptArgs);
-  console.log(
-    `Child process spawned with command: ${scriptPath} ${scriptArgs.join(" ")}`
-  );
-
-  const stdoutStream = global.childProcess.stdout;
+  // important variables
   let responseStart = false;
-  const promptTokens = Math.ceil(prompt.length / 4);
+  let responseContent = "";
+  
+  const promptTokens = Math.ceil(initPrompt.length / 4);
   let completionTokens = 0;
+
+  // if we're interacting in the same chat context, continue the conversation
+  if (continuedInteraction) {
+    global.childProcess.stdin.write(interactionPrompt);
+  } else {
+    !!global.childProcess && global.childProcess.kill("SIGINT");
+    const scriptArgs = [
+      "-m",
+      modelPath,
+      ...args,
+      ...stopArgs,
+      "-i",
+      "-p",
+      initPrompt,
+    ];
+
+    global.childProcess = spawn(scriptPath, scriptArgs);
+    console.log(
+      `Child process spawned with command: ${scriptPath} ${scriptArgs.join(
+        " "
+      )}`
+    );
+  }
+
+  let stdoutStream = global.childProcess.stdout;
 
   const readable = new ReadableStream({
     start(controller) {
@@ -136,7 +167,8 @@ assistant:`;
           console.log("RESPONSE START");
           return;
         }
-        if (responseStart) {
+
+        if (responseStart || continuedInteraction) {
           controller.enqueue(
             dataToResponse(data, promptTokens, completionTokens, stream)
           );
@@ -177,7 +209,7 @@ assistant:`;
         const last2Content = !!lastContent
           ? lastContent + currContent
           : currContent;
-  
+
         // If we detect the stop prompt, stop generation
         if (
           stopPrompts.includes(currContent) ||
@@ -198,12 +230,21 @@ assistant:`;
           );
           res.write("event: data\n");
           res.write("data: [DONE]\n\n");
-          global.childProcess.kill("SIGINT");
+          global.lastRequest = {
+            type: "chat",
+            messages: [
+              ...messages,
+              lastMessage,
+              { role: "assistant", content: responseContent },
+            ],
+          };
+          stdoutStream.removeAllListeners();
         } else {
           res.write("event: data\n");
           res.write(`data: ${JSON.stringify(chunk)}\n\n`);
           lastChunk = chunk;
           completionTokens++;
+          responseContent += currContent;
         }
       },
     });

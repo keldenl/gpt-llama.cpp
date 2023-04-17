@@ -51,6 +51,8 @@ const options = {
 const specs = swaggerJsdoc(options);
 
 global.childProcess = undefined;
+global.lastRequest = undefined;
+
 const app = express();
 app.use(cors());
 app.use(express.json());

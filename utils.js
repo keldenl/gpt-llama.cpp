@@ -21,10 +21,11 @@ export function stripAnsiCodes(str) {
   return str.replace(/\u001b\[\d+m/g, "");
 }
 
-export const messagesToString = (messages) => {
+export const messagesToString = (messages, newLine = false) => {
+  const whitespace = newLine ? `\\\n` : ` `
   return messages
     .map((m) => {
-      return `${m.role}: ${m.content}`;
+      return `${m.role}:${whitespace}${m.content}`;
     })
     .join("\n");
 };
@@ -92,3 +93,20 @@ export const getLlamaPath = (req, res) => {
   const path = modelPath.split("/llama.cpp")[0]; // only
   return `${path}/llama.cpp`;
 };
+
+export const compareArrays = (arr1, arr2) => {
+  if (arr1.length !== arr2.length) {
+    return false;
+  }
+
+  for (let i = 0; i < arr1.length; i++) {
+    const obj1 = arr1[i];
+    const obj2 = arr2[i];
+
+    if (JSON.stringify(obj1) !== JSON.stringify(obj2)) {
+      return false;
+    }
+  }
+
+  return true;
+}
