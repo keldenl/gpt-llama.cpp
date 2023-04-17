@@ -1,12 +1,14 @@
 import express from "express";
 import cors from "cors";
-import path from "path";
+import IP from 'ip';
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
 import modelsRoutes from "./routes/modelsRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import embeddingsRoutes from "./routes/embeddingsRoutes.js";
+
+const PORT = 443;
 
 const options = {
   definition: {
@@ -41,7 +43,7 @@ const options = {
     ],
     servers: [
       {
-        url: "http://localhost:6969",
+        url: `http://localhost:${PORT}`,
       },
     ],
   },
@@ -68,10 +70,9 @@ app.use("/v1/models", modelsRoutes);
 app.use("/v1/chat", chatRoutes);
 app.use("/v1/embeddings", embeddingsRoutes);
 
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "client/build/index.html"));
-});
-
-app.listen(6969, () => {
-  console.log("Server is listening on port 3000");
+app.listen(PORT, () => {
+  const ipAddress = IP.address();
+  console.log(`Server is listening on:
+  - localhost:${PORT}
+  - ${ipAddress}:${PORT} (for other devices on the same network)`);
 });
