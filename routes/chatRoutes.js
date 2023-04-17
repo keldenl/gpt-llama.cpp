@@ -170,7 +170,6 @@ assistant:`;
     let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
     const writable = new WritableStream({
       write(chunk) {
-        // console.log(JSON.stringify(JSON.parse(chunk).choices[0]))
         const currContent = chunk.choices[0].delta.content;
         const lastContent = !!lastChunk
           ? lastChunk.choices[0].delta.content
@@ -178,6 +177,7 @@ assistant:`;
         const last2Content = !!lastContent
           ? lastContent + currContent
           : currContent;
+  
         // If we detect the stop prompt, stop generation
         if (
           stopPrompts.includes(currContent) ||
@@ -201,7 +201,7 @@ assistant:`;
           global.childProcess.kill("SIGINT");
         } else {
           res.write("event: data\n");
-          res.write(`data: ${chunk}\n\n`);
+          res.write(`data: ${JSON.stringify(chunk)}\n\n`);
           lastChunk = chunk;
           completionTokens++;
         }
