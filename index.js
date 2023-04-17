@@ -1,19 +1,9 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-import { spawn } from "child_process";
 import swaggerJsdoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
-import {
-  stripAnsiCodes,
-  messagesToString,
-  dataToResponse,
-  getLlamaPath,
-  getModelPath,
-  getModelName,
-} from "./utils.js";
-import { defaultMsgs, getArgs, gptModelNames } from "./defaults.js";
 import modelsRoutes from "./routes/modelsRoutes.js";
 import chatRoutes from "./routes/chatRoutes.js";
 import embeddingsRoutes from "./routes/embeddingsRoutes.js";
