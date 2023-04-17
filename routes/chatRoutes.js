@@ -103,13 +103,7 @@ router.post("/completions", async (req, res) => {
 
   const stopArgs = stopPrompts.flatMap((s) => ["--reverse-prompt", s]);
   const args = getArgs(req.body);
-  const scriptArgs = [
-    "-m",
-    modelPath,
-    ...args,
-    ...stopArgs,
-    "-p",
-    `### Instructions
+  const prompt = `### Instructions
 ${instructions}
 
 ### Inputs
@@ -118,8 +112,8 @@ ${messagesToString(messages)}
 
 ### Response
 ${messagesToString([lastMessage])}
-assistant:`,
-  ];
+assistant:`;
+  const scriptArgs = ["-m", modelPath, ...args, ...stopArgs, "-p", prompt];
 
   global.childProcess = spawn(scriptPath, scriptArgs);
   console.log(
@@ -127,16 +121,26 @@ assistant:`,
   );
 
   const stdoutStream = global.childProcess.stdout;
+  let responseStart = false;
+  const promptTokens = Math.ceil(prompt.length / 4);
+  let completionTokens = 0;
+
   const readable = new ReadableStream({
     start(controller) {
       const decoder = new TextDecoder();
       const onData = (chunk) => {
         const data = stripAnsiCodes(decoder.decode(chunk));
         // Don't return initial prompt
-        if (data.includes(`### Instructions`)) {
+        if (data.includes(`### Response`)) {
+          responseStart = true;
+          console.log("RESPONSE START");
           return;
         }
-        controller.enqueue(dataToResponse(data, stream));
+        if (responseStart) {
+          controller.enqueue(
+            dataToResponse(data, promptTokens, completionTokens, stream)
+          );
+        }
       };
 
       const onClose = () => {
@@ -166,9 +170,10 @@ assistant:`,
     let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
     const writable = new WritableStream({
       write(chunk) {
-        const currContent = JSON.parse(chunk).choices[0].delta.content;
+        // console.log(JSON.stringify(JSON.parse(chunk).choices[0]))
+        const currContent = chunk.choices[0].delta.content;
         const lastContent = !!lastChunk
-          ? JSON.parse(lastChunk).choices[0].delta.content
+          ? lastChunk.choices[0].delta.content
           : undefined;
         const last2Content = !!lastContent
           ? lastContent + currContent
@@ -180,7 +185,17 @@ assistant:`,
         ) {
           console.log("COMPLETED");
           res.write("event: data\n");
-          res.write(`data: ${dataToResponse(undefined, stream, "stop")}\n\n`);
+          res.write(
+            `data: ${JSON.stringify(
+              dataToResponse(
+                undefined,
+                promptTokens,
+                completionTokens,
+                stream,
+                "stop"
+              )
+            )}\n\n`
+          );
           res.write("event: data\n");
           res.write("data: [DONE]\n\n");
           global.childProcess.kill("SIGINT");
@@ -188,6 +203,7 @@ assistant:`,
           res.write("event: data\n");
           res.write(`data: ${chunk}\n\n`);
           lastChunk = chunk;
+          completionTokens++;
         }
       },
     });
@@ -200,9 +216,9 @@ assistant:`,
     let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
     const writable = new WritableStream({
       write(chunk) {
-        const currContent = JSON.parse(chunk).choices[0].message.content;
+        const currContent = chunk.choices[0].message.content;
         const lastContent = !!lastChunk
-          ? JSON.parse(lastChunk).choices[0].message.content
+          ? lastChunk.choices[0].message.content
           : undefined;
         const last2Content = !!lastContent
           ? lastContent + currContent
@@ -213,12 +229,23 @@ assistant:`,
           stopPrompts.includes(last2Content)
         ) {
           console.log("COMPLETED");
-          res.status(200).json(dataToResponse(responseData, stream, "stop"));
+          res
+            .status(200)
+            .json(
+              dataToResponse(
+                responseData,
+                promptTokens,
+                completionTokens,
+                stream,
+                "stop"
+              )
+            );
           global.childProcess.kill("SIGINT");
         } else {
           responseData += currContent;
           console.log(responseData);
           lastChunk = chunk;
+          completionTokens++;
         }
       },
     });

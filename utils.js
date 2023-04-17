@@ -29,12 +29,18 @@ export const messagesToString = (messages) => {
     .join("\n");
 };
 
-export const dataToResponse = (data, stream = false, reason = null) => {
+export const dataToResponse = (
+  data,
+  promptTokens,
+  completionTokens,
+  stream = false,
+  reason = null
+) => {
   const currDate = new Date();
   const contentData = { content: data };
   const contentName = stream ? "delta" : "message";
 
-  return JSON.stringify({
+  return ({
     choices: [
       {
         [contentName]: !!data ? contentData : {},
@@ -45,21 +51,26 @@ export const dataToResponse = (data, stream = false, reason = null) => {
     created: currDate.getTime(),
     id: nanoid(),
     object: "chat.completion.chunk",
+    usage: {
+      prompt_tokens: promptTokens,
+      completion_tokens: completionTokens,
+      total_tokens: promptTokens + completionTokens,
+    },
   });
 };
 
 export const dataToEmbeddingResponse = (output) => {
-  return JSON.stringify({
-    object: 'list',
+  return ({
+    object: "list",
     data: [
       {
-        object: 'embedding',
+        object: "embedding",
         embedding: output,
         index: 0,
       },
     ],
   });
-}
+};
 
 export const getModelPath = (req, res) => {
   const API_KEY = req.headers.authorization;
