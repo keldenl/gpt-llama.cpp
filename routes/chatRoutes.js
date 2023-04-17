@@ -86,7 +86,10 @@ router.post("/completions", async (req, res) => {
     return res.status(500).send("re-run Herd with MODEL= variable set.");
   }
 
-  const messages = req.body.messages;
+  const messages = req.body.messages.map((m) => ({
+    ...{ role: "assistant" }, // if there isn't a role, assume it's assistant
+    ...m,
+  }));
   const lastMessage = messages.pop();
 
   const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
@@ -127,7 +130,7 @@ assistant:`;
   // important variables
   let responseStart = false;
   let responseContent = "";
-  
+
   const promptTokens = Math.ceil(initPrompt.length / 4);
   let completionTokens = 0;
 
@@ -253,7 +256,6 @@ assistant:`;
   }
   // Return a single json response instead of streaming
   else {
-    let responseData = "";
     let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
     const writable = new WritableStream({
       write(chunk) {
@@ -274,17 +276,24 @@ assistant:`;
             .status(200)
             .json(
               dataToResponse(
-                responseData,
+                responseContent,
                 promptTokens,
                 completionTokens,
                 stream,
                 "stop"
               )
             );
-          global.childProcess.kill("SIGINT");
+          global.lastRequest = {
+            type: "chat",
+            messages: [
+              ...messages,
+              lastMessage,
+              { role: "assistant", content: responseContent },
+            ],
+          };
+          stdoutStream.removeAllListeners();
         } else {
-          responseData += currContent;
-          console.log(responseData);
+          responseContent += currContent;
           lastChunk = chunk;
           completionTokens++;
         }

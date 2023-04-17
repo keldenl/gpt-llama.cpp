@@ -25,7 +25,7 @@ export const messagesToString = (messages, newLine = false) => {
   const whitespace = newLine ? `\\\n` : ` `
   return messages
     .map((m) => {
-      return `${m.role}:${whitespace}${m.content}`;
+      return `${m.role || 'assistant'}:${whitespace}${m.content}`;
     })
     .join("\n");
 };
@@ -104,6 +104,7 @@ export const compareArrays = (arr1, arr2) => {
     const obj2 = arr2[i];
 
     if (JSON.stringify(obj1) !== JSON.stringify(obj2)) {
+      console.log(`${JSON.stringify(obj1)} !== ${JSON.stringify(obj2)}`)
       return false;
     }
   }
