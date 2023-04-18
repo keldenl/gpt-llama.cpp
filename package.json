@@ -27,5 +27,8 @@
     },
     "devDependencies": {
         "nodemon": "^2.0.22"
+    },
+    "bin": {
+        "gpt-llama.cpp": "./index.js"
     }
 }
