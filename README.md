@@ -31,9 +31,9 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 
 The following applications (list growing) have been tested and confirmed to work with `gpt-llama.cpp`:
 - mckaywrigley's [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
-    - gpt-llama.cpp setup guide with [here](#)
+    - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
 - Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
-    - gpt-llama.cpp setup guide with [here](#)
+    - gpt-llama.cpp setup guide [here](#)
 
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 

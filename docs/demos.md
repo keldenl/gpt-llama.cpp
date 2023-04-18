@@ -7,7 +7,7 @@
 
 **Project Description:** Chatbot UI is an advanced chatbot kit for OpenAI's chat models built on top of Chatbot UI Lite using Next.js, TypeScript, and Tailwind CSS.
 
-**gpt-llama.cpp setup guide:** [Guide Link]()
+**gpt-llama.cpp setup guide:** [Guide Link](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
 
 _Note: Due to interactive mode support, the followup responses are very fast._
 
