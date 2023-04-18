@@ -38,7 +38,21 @@ The following applications (list growing) have been tested and confirmed to work
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 
 
-## Installation
+## Quickstart
+
+### Prerequisite
+Setup llama.cpp by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+
+Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. 
+
+### Running gpt-llama.cpp
+#### NPM Package
+```bash
+npx gpt-llama.cpp start
+```
+That's it!
+
+#### Run Locally
 1. Clone the repository:
 
    ```bash
@@ -52,9 +66,11 @@ More applications are currently being tested, and welcome requests for verificat
    npm install
    ```
 
-3. Setup llama.cpp by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+3. Start the server!
 
-4. Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder
+   ```bash
+   npm start
+   ```
 
 ## Usage
 
@@ -64,18 +80,12 @@ More applications are currently being tested, and welcome requests for verificat
         - Update the `openai_api_key` slot in the gpt-powered app to the path of your local llama-based model (i.e. `"../llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`). 
         - Change the `BASE_URL` for the OpenAi endpoint the app is calling to `localhost:443` or `localhost:443/v1`. This is sometimes provided in the `.env` file, or would require manual updating within the app OpenAi calls depending on the specific application.
 
-2. Start the server:
-
-   ```bash
-   npm start
-   ```
-
-3. Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. `"../llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
+2. Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. `"../llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
 
 ![API Documentation](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/docs.png)
 
 
-4. (Optional) Test the server by sending a request to `http://localhost:443/v1/chat/completions` with the following cURL command:
+3. (Optional) Test the server by sending a request to `http://localhost:443/v1/chat/completions` with the following cURL command:
 
    ```bash
    curl --location --request POST 'http://localhost:443/v1/chat/completions' \
