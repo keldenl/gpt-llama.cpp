@@ -13,7 +13,7 @@ _Note: Due to interactive mode support, the followup responses are very fast._
 
 
 ## [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
-![ChatGPT-Siri](../assets/chatgpt-siri-demo.gif)
+![ChatGPT-Siri](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/chatgpt-siri-demo.gif)
 
 **Author:** Yue-Yang
 
