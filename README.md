@@ -1,24 +1,14 @@
 # 🦙 gpt-llama.cpp 
-Replace GPT API with [`llama.cpp`](https://github.com/ggerganov/llama.cpp#description)'s [supported models](https://github.com/ggerganov/llama.cpp#description)
+Replace GPT API with [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description)
 
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
-_Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/main/docs/demos.md)._
-
-## Features
-
-`gpt-llama.cpp` provides the following features:
-- Easy set up and usage
-- Drop-in replacement for GPT-based applications
-- Interactive mode supported, which means that requests within the same chat context will have blazing-fast responses
-- Automatic adoption of new improvements from llama.cpp
-- Support for multiple platforms (in progress)
-- Usage of local models for GPT-powered apps
+_Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
 ## Description
 
-`gpt-llama.cpp` is an API wrapper around [`llama.cpp`](https://github.com/ggerganov/llama.cpp#description). It runs a local API server that simulates OpenAI's API GPT endpoints but uses local llama-based models to process requests. 
+`gpt-llama.cpp` is an API wrapper around [`llama.cpp`](https://github.com/ggerganov/llama.cpp). It runs a local API server that simulates OpenAI's API GPT endpoints but uses local llama-based models to process requests. 
 
-It is designed to be a drop-in replacement for GPT-based applications, meaning that any apps created for use with GPT-3.5 or GPT-4 can work with [`llama.cpp`](https://github.com/ggerganov/llama.cpp#description) instead. 
+It is designed to be a drop-in replacement for GPT-based applications, meaning that any apps created for use with GPT-3.5 or GPT-4 can work with [`llama.cpp`](https://github.com/ggerganov/llama.cpp) instead. 
 
 The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoint and use local models, which decreases cost (free) and ensures privacy (local only).
 
@@ -27,25 +17,35 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 - [ ] macOS (Intel) _(untested)_
 - [ ] Windows _(untested)_
 
+
+## Features
+
+`gpt-llama.cpp` provides the following features:
+- Drop-in replacement for GPT-based applications
+- Interactive mode supported, which means that requests within the same chat context will have blazing-fast responses
+- Automatic adoption of new improvements from [`llama.cpp`](https://github.com/ggerganov/llama.cpp)
+- Usage of local models for GPT-powered apps
+- Support for multiple platforms
+
 ## Supported applications
 
 The following applications (list growing) have been tested and confirmed to work with `gpt-llama.cpp`:
 - mckaywrigley's [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
-    - Step-by-step guide [here](#)
+    - gpt-llama.cpp setup guide with [here](#)
 - Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
-    - Step-by-step guide [here](#)
+    - gpt-llama.cpp setup guide with [here](#)
 
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 
-_See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/main/docs/demos.md)._
+_See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
 
 ## Quickstart
 
 ### Prerequisite
-Setup llama.cpp by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
 
-Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. 
+Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may move on to 1 of the 2 below methods to get up and running.
 
 ### Running gpt-llama.cpp
 #### NPM Package
@@ -53,7 +53,7 @@ Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the
 ```bash
 npx gpt-llama.cpp start
 ```
-That's it!
+That's it! NPX will automatically pull the latest version and 
 
 #### Run Locally
 
@@ -112,7 +112,7 @@ That's it!
 
 ## Contributing
 
-You can contribute to GPT-Llama.CPP by creating branches and pull requests to merge. Please follow the standard process for open sourcing. 
+You can contribute to `gpt-llama.cpp` by creating branches and pull requests to merge. Please follow the standard process for open sourcing. 
 
 ## License
 
