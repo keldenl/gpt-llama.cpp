@@ -2,7 +2,7 @@
 Replace GPT API with [`llama.cpp`](https://github.com/ggerganov/llama.cpp#description)'s [supported models](https://github.com/ggerganov/llama.cpp#description)
 
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
-_Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model_
+_Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/main/docs/demos.md)._
 
 ## Features
 
@@ -37,6 +37,8 @@ The following applications (list growing) have been tested and confirmed to work
 
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 
+_See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/main/docs/demos.md)._
+
 
 ## Quickstart
 
@@ -47,12 +49,14 @@ Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the
 
 ### Running gpt-llama.cpp
 #### NPM Package
+
 ```bash
 npx gpt-llama.cpp start
 ```
 That's it!
 
 #### Run Locally
+
 1. Clone the repository:
 
    ```bash
@@ -77,10 +81,10 @@ That's it!
 1. To set up the GPT-powered app, there are 2 ways:
     - To use with a documented GPT-powered application, follow [supported applications](https://github.com/keldenl/gpt-llama.cpp#Supported-applications) directions.
     - To use with a undocumented GPT-powered application, please do the following:
-        - Update the `openai_api_key` slot in the gpt-powered app to the path of your local llama-based model (i.e. `"../llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`). 
+        - Update the `openai_api_key` slot in the gpt-powered app to the absolute path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`). 
         - Change the `BASE_URL` for the OpenAi endpoint the app is calling to `localhost:443` or `localhost:443/v1`. This is sometimes provided in the `.env` file, or would require manual updating within the app OpenAi calls depending on the specific application.
 
-2. Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. `"../llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
+2. Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
 
 ![API Documentation](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/docs.png)
 
