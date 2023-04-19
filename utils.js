@@ -70,6 +70,7 @@ export const dataToEmbeddingResponse = (output) => {
         index: 0,
       },
     ],
+    embeddingSize: output.length
   });
 };
 

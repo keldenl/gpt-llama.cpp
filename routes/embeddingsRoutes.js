@@ -67,9 +67,11 @@ router.post("/", async (req, res) => {
   if (!modelPath) {
     return res.status(500).send("re-run Herd with MODEL= variable set.");
   }
-  
-  const input = req.body.input;
-  const scriptArgs = ["-m", modelPath, "-p", input];
+
+  const input = Array.isArray(req.body.input)
+    ? req.body.input.join(" ")
+    : req.body.input;
+  const scriptArgs = ["-m", modelPath, "-p", input.replace(/"/g, '\\"')];
 
   global.childProcess = spawn(scriptPath, scriptArgs);
   console.log(
@@ -77,23 +79,27 @@ router.post("/", async (req, res) => {
   );
 
   const stdoutStream = global.childProcess.stdout;
+  let outputString = "";
   let output = [];
   const readable = new ReadableStream({
     start(controller) {
       const decoder = new TextDecoder();
       const onData = (chunk) => {
         const data = stripAnsiCodes(decoder.decode(chunk));
-        output = [
-          ...output,
-          ...data.split(" ").flatMap((d) => parseFloat(d) || []),
-        ];
+        outputString += data;
       };
 
       const onClose = () => {
-        console.log("Readable Stream: CLOSED");
-        console.log(dataToEmbeddingResponse(output));
+        global.childProcess.kill("SIGINT");
+        output = outputString.split(" ").flatMap((d) => {
+          const validFloatRegex = /^[-+]?[0-9]*\.?[0-9]+$/;
+          return validFloatRegex.test(d) ? parseFloat(d) : [];
+        });
+        // See llama model embedding sizes: https://huggingface.co/shalomma/llama-7b-embeddings#quantitative-analysis
         res.status(200).json(dataToEmbeddingResponse(output));
         controller.close();
+        console.log("Readable Stream: CLOSED");
+        console.log(dataToEmbeddingResponse(output));
       };
 
       const onError = (error) => {
