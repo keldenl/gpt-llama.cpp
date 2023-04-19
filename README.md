@@ -1,5 +1,7 @@
-# 🦙 gpt-llama.cpp 
-Replace GPT API with [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description)
+# 🦙 gpt-llama.cpp 🦙
+[![npm version](https://badge.fury.io/js/gpt-llama.cpp.svg)](https://badge.fury.io/js/gpt-llama.cpp)
+
+Avoid using OpenAi's GPT APIs and instead use [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description) locally
 
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
@@ -34,6 +36,10 @@ The following applications (list growing) have been tested and confirmed to work
     - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
 - Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
     - gpt-llama.cpp setup guide [here](#)
+- _WIP:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
+    - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
+- _WIP:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
+    - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/3)
 
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 
@@ -53,7 +59,7 @@ Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the
 ```bash
 npx gpt-llama.cpp start
 ```
-That's it! NPX will automatically pull the latest version and 
+That's it! npx will automatically pull the latest version and run the API server!
 
 #### Run Locally
 
