@@ -1,6 +1,6 @@
 {
     "name": "gpt-llama.cpp",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "description": "A llama.cpp drop-in replacement for OpenAI's GPT endpoints, allowing GPT-powered apps to run off local llama.cpp models instead of OpenAi.",
     "main": "index.js",
     "type": "module",
@@ -29,6 +29,6 @@
         "nodemon": "^2.0.22"
     },
     "bin": {
-        "gpt-llama.cpp": "bin/cli.cjs"
+        "gpt-llama.cpp": "node bin/cli.cjs"
     }
 }
