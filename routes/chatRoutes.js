@@ -126,7 +126,8 @@ assistant:`;
     global.lastRequest &&
     global.lastRequest.type === "chat" &&
     compareArrays(global.lastRequest.messages, messages);
-  const continuedInteraction = !!global.childProcess && samePrompt;
+  const continuedInteraction =
+    !!global.childProcess && samePrompt && messages.length > 1;
 
   // important variables
   let responseStart = false;
@@ -151,7 +152,7 @@ assistant:`;
     ];
 
     global.childProcess = spawn(scriptPath, scriptArgs);
-    console.log(`\nllama.cpp spawned:`);
+    console.log(`\n--LLAMA.CPP SPAWNED--`);
     console.log(`${scriptPath} ${scriptArgs.join(" ")}\n`);
   }
 
