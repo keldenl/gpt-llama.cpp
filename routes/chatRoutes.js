@@ -1,5 +1,6 @@
 import express from "express";
 import { spawn } from "child_process";
+import { join } from "path";
 import {
   stripAnsiCodes,
   messagesToString,
@@ -77,7 +78,7 @@ router.post("/completions", async (req, res) => {
   const modelId = req.body.model; // TODO: Implement model somehow
   const llamaPath = getLlamaPath(req, res);
   const modelPath = getModelPath(req, res);
-  const scriptPath = `${llamaPath}/main`;
+  const scriptPath = join(llamaPath, 'main');
 
   const stream = req.body.stream;
 

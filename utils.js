@@ -1,4 +1,4 @@
-import { resolve } from "path";
+import { sep, join, resolve } from "path";
 import { nanoid } from "nanoid";
 import { readdir } from "fs/promises";
 
@@ -22,10 +22,10 @@ export function stripAnsiCodes(str) {
 }
 
 export const messagesToString = (messages, newLine = false) => {
-  const whitespace = newLine ? `\\\n` : ` `
+  const whitespace = newLine ? `\\\n` : ` `;
   return messages
     .map((m) => {
-      return `${m.role || 'assistant'}:${whitespace}${m.content}`;
+      return `${m.role || "assistant"}:${whitespace}${m.content}`;
     })
     .join("\n");
 };
@@ -41,7 +41,7 @@ export const dataToResponse = (
   const contentData = { content: data };
   const contentName = stream ? "delta" : "message";
 
-  return ({
+  return {
     choices: [
       {
         [contentName]: !!data ? contentData : {},
@@ -57,11 +57,11 @@ export const dataToResponse = (
       completion_tokens: completionTokens,
       total_tokens: promptTokens + completionTokens,
     },
-  });
+  };
 };
 
 export const dataToEmbeddingResponse = (output) => {
-  return ({
+  return {
     object: "list",
     data: [
       {
@@ -70,8 +70,8 @@ export const dataToEmbeddingResponse = (output) => {
         index: 0,
       },
     ],
-    embeddingSize: output.length
-  });
+    embeddingSize: output.length,
+  };
 };
 
 export const getModelPath = (req, res) => {
@@ -81,18 +81,27 @@ export const getModelPath = (req, res) => {
   }
   // We're using API_KEY as a slot to provide the "llama.cpp" model path
   const modelPath = API_KEY.split(" ")[1];
-  return modelPath;
+  console.log(modelPath);
+  console.log(normalizePath(modelPath));
+  return normalizePath(modelPath);
 };
 
+// Normalizes and fixes all the slahses for Win/Mac
+export const normalizePath = (path) =>
+  sep === "\\" ? path.replace(/\//g, "\\") : path.replace(/\\/g, "/");
+
+const splitPath = (path) => path.split(/[\/\\]/);
+
 export const getModelName = (path) => {
-  const modelArr = path.split("/");
+  const normalizedPath = normalizePath(path);
+  const modelArr = splitPath(normalizedPath);
   return modelArr[modelArr.length - 1];
 };
 
 export const getLlamaPath = (req, res) => {
   const modelPath = getModelPath(req, res);
-  const path = modelPath.split("/llama.cpp")[0]; // only
-  return `${path}/llama.cpp`;
+  const path = modelPath.split("llama.cpp")[0]; // only
+  return join(path, "llama.cpp");
 };
 
 export const compareArrays = (arr1, arr2) => {
@@ -105,10 +114,10 @@ export const compareArrays = (arr1, arr2) => {
     const obj2 = arr2[i];
 
     if (JSON.stringify(obj1) !== JSON.stringify(obj2)) {
-      console.log(`${JSON.stringify(obj1)} !== ${JSON.stringify(obj2)}`)
+      console.log(`${JSON.stringify(obj1)} !== ${JSON.stringify(obj2)}`);
       return false;
     }
   }
 
   return true;
-}
+};

@@ -1,5 +1,6 @@
 import express from "express";
 import { spawn } from "child_process";
+import { join } from "path";
 import {
   stripAnsiCodes,
   getLlamaPath,
@@ -62,7 +63,7 @@ router.post("/", async (req, res) => {
   const modelId = req.body.model; // TODO: Implement model somehow
   const llamaPath = getLlamaPath(req, res);
   const modelPath = getModelPath(req, res);
-  const scriptPath = `${llamaPath}/embedding`;
+  const scriptPath = join(llamaPath, 'embedding');
 
   if (!modelPath) {
     return res.status(500).send("re-run Herd with MODEL= variable set.");
