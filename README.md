@@ -44,6 +44,7 @@ The following applications (list growing) have been tested and confirmed to work
     - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
 - _WIP:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
     - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
+    - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/Auto-GPT-setup-guide.md)
 - _WIP:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
     - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/3)
 
