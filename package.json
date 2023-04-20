@@ -6,7 +6,8 @@
     "type": "module",
     "scripts": {
         "start": "node index.js",
-        "dev": "nodemon index.js"
+        "dev": "nodemon index.js",
+        "precommit": "prettier --write ."
     },
     "author": "kelden",
     "license": "MIT",
@@ -26,7 +27,11 @@
         "swagger-ui-express": "^4.6.2"
     },
     "devDependencies": {
-        "nodemon": "^2.0.22"
+        "nodemon": "^2.0.22",
+        "prettier": "2.8.7"
+    },
+    "engines": {
+        "node": ">=16.0.0"
     },
     "bin": {
         "gpt-llama.cpp": "node bin/cli.cjs"
