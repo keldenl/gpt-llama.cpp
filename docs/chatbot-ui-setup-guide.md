@@ -4,11 +4,11 @@
 Install `chatbot-ui` based on the [official installation guide on their repo](https://github.com/mckaywrigley/chatbot-ui#running-locally), but with some modifications:
 
 - Instead of providing the `OPENAI_API_KEY`, provide the local model path in the llama.cpp project folder. 
-    - For example, for a Mac with a vicuna 7b model, it would be something like `/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin`.
+    - For example, for a Mac with a vicuna 7b model (this can be any other model as well), it would be something like `/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin`.
     - Here's how your `.env.local` may look like:
         ``` bash
         # Chatbot UI
-        DEFAULT_MODEL=vendor/llama.cpp/models/ggml-alpaca-native-enhanced-7b-q4.bin
+        DEFAULT_MODEL=gpt-3.5-turbo
         DEFAULT_SYSTEM_PROMPT=You are ChatGPT, a large language model trained by OpenAI. Follow the user's instructions carefully. Respond using markdown.
         OPENAI_API_KEY=../llama.cpp/models/vicuna/13B/ggml-vicuna-unfiltered-13b-4bit.bin
 
