@@ -7,8 +7,8 @@ Replace OpenAi's GPT APIs with [`llama.cpp`](https://github.com/ggerganov/llama.
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
 ### 🔥 Hot Topics (4/19/2023)
-- On-going cross-platform (windows) compatibility support
-- Auto-GPT support
+- On-going testing for cross-platform [windows support](https://github.com/keldenl/gpt-llama.cpp/issues/6)
+- [Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)
 - BabyAGI support
 
 ## Description
@@ -21,9 +21,9 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 
 ### Tested platforms
 - [x] macOS (ARM)
-- [ ] macOS (Intel) _(untested)_
+- [ ] macOS (Intel)
 - [x] Windows
-- [] Linux
+- [ ] Linux
 
 
 ## Features
