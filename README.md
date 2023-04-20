@@ -1,12 +1,22 @@
-# 🦙 gpt-llama.cpp 🦙
-[![npm version](https://badge.fury.io/js/gpt-llama.cpp.svg)](https://badge.fury.io/js/gpt-llama.cpp)
+# gpt-llama.cpp
+<p align="center">
+   <img src="https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/gpt-llama.cpp.jpeg" width="250"  alt="gpt-llama.cpp logo">
+   
+   [![discord](https://img.shields.io/discord/1098490114893680652)](https://discord.gg/aWHBQnJaFC)
+   [![npm version](https://img.shields.io/npm/v/gpt-llama.cpp)](https://www.npmjs.com/package/gpt-llama.cpp)
+   [![npm downloads](https://img.shields.io/npm/dw/gpt-llama.cpp)](https://www.npmjs.com/package/gpt-llama.cpp)
+   [![license](https://img.shields.io/npm/l/gpt-llama.cpp)](https://github.com/keldenl/gpt-llama.cpp/blob/master/LICENSE)
 
-Replace OpenAi's GPT APIs with [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description) locally
+   Replace OpenAi's GPT APIs with [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description) locally
+</p>
 
+
+## Demo
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
 ### 🔥 Hot Topics (4/19/2023)
+- 🔥🔥 WE MADE A DISCORD CHANNEL, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥
 - On-going testing for cross-platform [windows support](https://github.com/keldenl/gpt-llama.cpp/issues/6)
 - [Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)
 - BabyAGI support
@@ -21,8 +31,8 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 
 ### Tested platforms
 - [x] macOS (ARM)
-- [ ] macOS (Intel)
 - [x] Windows
+- [ ] macOS (Intel)
 - [ ] Linux
 
 
@@ -55,14 +65,14 @@ More applications are currently being tested, and welcome requests for verificat
 _See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
 
-## Quickstart
+## Quickstart Installation
 
 ### Prerequisite
-⚠️ THIS IS REQUIRED ⚠️
+⚠️ **THIS IS REQUIRED** ⚠️
 
 Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
 
-_IF YOU'RE HAVING ISSUES GETTING LLAMA.CPP WORKING ON WINDOWS, DOWNLOAD THE LATEST RELEASE AVX ZIP FROM https://github.com/ggerganov/llama.cpp/releases. EXTRACT. COPY TO \LLAMA.CPP\ FOLDER. THAT SHOULD WORK._
+🔴🔴 _WINDOWS USERS: IF YOU'RE HAVING ISSUES GETTING GPT-LLAMA.CPP OR LLAMA.CPP WORKING (MISSING MAKE.EXE FILE?), YOU CAN INSTEAD DOWNLOAD THE LATEST RELEASE AVX ZIP FROM https://github.com/ggerganov/llama.cpp/releases. EXTRACT. COPY TO \LLAMA.CPP\ FOLDER. PROFIT. THAT SHOULD WORK. YOU'RE WELCOME._ 🔴🔴
 
 Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may now move on to 1 of the 2 below methods to get up and running.
 
