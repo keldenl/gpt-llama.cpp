@@ -118,7 +118,7 @@ That's it!
             "role": "user",
             "content": "How are you doing today?"
          }
-      ],
+      ]
    }'
    ```
 
