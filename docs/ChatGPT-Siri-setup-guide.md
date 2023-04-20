@@ -1,24 +1,43 @@
 # [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri) setup guide
 
 ## Guide
-Install `ChatGPT-Siri` based on the [official installation guide on their repo](https://github.com/Yue-Yang/ChatGPT-Siri), but with some modifications:
-- Download last version of the [shortcut](https://github.com/Yue-Yang/ChatGPT-Siri#chatgpt-siri-125)
+@keldenl made a `ChatGPT-Siri` fork based on the [original 1.2.5 shortcut version](https://github.com/Yue-Yang/ChatGPT-Siri)
 
-- In the shortcut modify these parameters
-  - 1-use your local path to model as API_key in text box (Just before API-key definition to text box)
-    - ../llama.cpp/models/vicuna/13B/ggml-vicuna-unfiltered-13b-4bit.bin
-  - 2-change API-key check to not get an error:
-    - I just uses API-Key must begin with / ( because my local APY key begins with /)
-  - 3-Change URL link for the API
-    - http://localhost:443/v1/chat/completions
-  - 4-I removed the show text box with chatgpt-output variable
-    5-Add a speak/tell command with chatgpt-output as parameter (in french version its "Énoncer")
+⭐ **Download the iOS shortcut [here](https://www.icloud.com/shortcuts/c50e0007261141be9bedbf99c976225c)**
 
--Finally then start the API with npm start in gpt-llama.cc folder
+In the shortcut follow the setup instructions:
 
--Call siri for shortcut "name_of_your_shorcut"
+1. Paste the IP address and Port for gpt-llama.cpp (i.e. 192.168.0.69:443). It is displayed when you start the gpt-llama.cpp server.
+  - To get this, run gpt-llama.cpp (`gpt-llama.cpp start`, or `npm start`, however you set it up earlier). You should see something like this in your terminal:
+    ```bash
+      gpt-llama.cpp % npm run dev
 
-That's it! Make sure to also run `gpt-llama.cpp` in a separate terminal/cmd window.
+      > gpt-llama.cpp@0.1.9 dev
+      > nodemon index.js
+
+      [nodemon] 2.0.22
+      [nodemon] to restart at any time, enter `rs`
+      [nodemon] watching path(s): *.*
+      [nodemon] watching extensions: js,mjs,json
+      [nodemon] starting `node index.js`
+      Server is listening on:
+        - localhost:443
+        - 192.168.0.11:443 (for other devices on the same network)
+    ```
+  - Answer by copying & pasting your IP (last line) AND port, in this case it would be `192.168.0.11:443`
+
+2. Paste the absolute or relative (to gpt-llama.cpp folder) path to your llama.cpp model .bin file
+  - Example relative path: `../llama.cpp/models/vicuna/13B/ggml-vicuna-unfiltered-13b-4bit.bin`
+  - Example absolute path: `C:/Users/bob/Desktop/llama.cpp/models/13b/ggml-vicuna-13b-4bit-rev1.bin`
+
+3. Start gpt-llama.cpp with `npm start` in `gpt-llama.cpp` folder or however else you're running it
+
+4. Call Siri for shortcut: 
+  - Hands-free: say "Hey Siri, Quick Question"
+  - Hands-on: *hold down power/home button, siri pops up* -> say "Quick question"
+  - Voice-less: Add the shortcut to homepage or tap on it in the shortcuts apps
+
+That's it! Make sure that `gpt-llama.cpp` is always running on a separate terminal/cmd window while doing this, or else it won't work.
 
 ## Demo
 
