@@ -81,8 +81,6 @@ export const getModelPath = (req, res) => {
   }
   // We're using API_KEY as a slot to provide the "llama.cpp" model path
   const modelPath = API_KEY.split(" ")[1];
-  console.log(modelPath);
-  console.log(normalizePath(modelPath));
   return normalizePath(modelPath);
 };
 
