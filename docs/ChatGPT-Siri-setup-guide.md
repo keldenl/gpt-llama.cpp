@@ -3,12 +3,12 @@
 ## Guide
 @keldenl made a `ChatGPT-Siri` fork based on the Yue Yang's [original 1.2.5 shortcut version](https://github.com/Yue-Yang/ChatGPT-Siri)
 
-⭐⭐ **Download the iOS shortcut [here](https://www.icloud.com/shortcuts/c50e0007261141be9bedbf99c976225c)** ⭐⭐
+⭐⭐ **Download the iOS shortcut [here](https://www.icloud.com/shortcuts/264982e6dd00449aaf0fd85e67bc7451)** ⭐⭐
 
 
 In the shortcut follow the setup instructions:
 
-1. **Paste the IP address and Port for gpt-llama.cpp (i.e. 192.168.0.69:443). It is displayed when you start the gpt-llama.cpp server.**
+1. **Paste the IP address and Port for gpt-llama.cpp (i.e. 192.168.0.69:443). It is displayed when you start the gpt-llama.cpp server**
     - To get this, run gpt-llama.cpp (`gpt-llama.cpp start`, or `npm start`, however you set it up earlier). You should see something like this in your terminal:
       ```bash
         gpt-llama.cpp % npm run dev
