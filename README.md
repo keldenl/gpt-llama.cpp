@@ -4,10 +4,10 @@
    <img src="https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/gpt-llama.jpeg" width="250"  alt="gpt-llama.cpp logo">
 </p>
 <p align="center">
-   <img src="https://img.shields.io/discord/1098490114893680652" alt="discord" href="https://discord.gg/aWHBQnJaFC">
-   <img src="https://img.shields.io/npm/v/gpt-llama.cpp" alt="npm version" href="https://www.npmjs.com/package/gpt-llama.cpp">
-   <img src="https://img.shields.io/npm/dw/gpt-llama.cpp" alt="npm downloads" href="https://www.npmjs.com/package/gpt-llama.cpp">
-   <img src="https://img.shields.io/npm/l/gpt-llama.cpp" alt="license" href="https://github.com/keldenl/gpt-llama.cpp/blob/master/LICENSE">
+   <a href="https://discord.gg/aWHBQnJaFC"><img src="https://img.shields.io/discord/1098490114893680652" alt="discord"></a>
+   <a href="https://www.npmjs.com/package/gpt-llama.cpp"><img src="https://img.shields.io/npm/v/gpt-llama.cpp" alt="npm version"></a>
+   <a href="https://www.npmjs.com/package/gpt-llama.cpp"><img src="https://img.shields.io/npm/dw/gpt-llama.cpp" alt="npm downloads"></a>
+   <a href="https://github.com/keldenl/gpt-llama.cpp/blob/master/LICENSE"><img src="https://img.shields.io/npm/l/gpt-llama.cpp" alt="license"></a>
 </p>
 <p align="center">
    Replace OpenAi's GPT APIs with <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a>'s <a href="https://github.com/ggerganov/llama.cpp#description">supported models</a> locally
