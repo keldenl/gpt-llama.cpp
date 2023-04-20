@@ -1,7 +1,7 @@
 # 🦙 gpt-llama.cpp 🦙
 [![npm version](https://badge.fury.io/js/gpt-llama.cpp.svg)](https://badge.fury.io/js/gpt-llama.cpp)
 
-Avoid using OpenAi's GPT APIs and instead use [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description) locally
+Replace OpenAi's GPT APIs with [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description) locally
 
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
@@ -49,17 +49,23 @@ _See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/
 ## Quickstart
 
 ### Prerequisite
+⚠️ THIS IS REQUIRED ⚠️
 Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
 
-Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may move on to 1 of the 2 below methods to get up and running.
+Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may now move on to 1 of the 2 below methods to get up and running.
 
 ### Running gpt-llama.cpp
 #### NPM Package
 
 ```bash
+# run the latest version
 npx gpt-llama.cpp start
+
+# alternatively, you can install it globally
+npm gpt-llama.cpp i -g
+gpt-llama.cpp start
 ```
-That's it! npx will automatically pull the latest version and run the API server!
+That's it!
 
 #### Run Locally
 
@@ -99,7 +105,7 @@ That's it! npx will automatically pull the latest version and run the API server
 
    ```bash
    curl --location --request POST 'http://localhost:443/v1/chat/completions' \
-   --header 'Authorization: Bearer ../llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin' \
+   --header 'Authorization: Bearer <REPLACE_THIS_WITH_THE_PATH_TO_YOUR_MODEL>' \
    --header 'Content-Type: application/json' \
    --data-raw '{
       "model": "gpt-3.5-turbo",
