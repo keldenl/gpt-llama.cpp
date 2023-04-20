@@ -1,21 +1,25 @@
 # gpt-llama.cpp
-<p align="center">
-   <img src="https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/gpt-llama.cpp.jpeg" width="250"  alt="gpt-llama.cpp logo">
-   
-   [![discord](https://img.shields.io/discord/1098490114893680652)](https://discord.gg/aWHBQnJaFC)
-   [![npm version](https://img.shields.io/npm/v/gpt-llama.cpp)](https://www.npmjs.com/package/gpt-llama.cpp)
-   [![npm downloads](https://img.shields.io/npm/dw/gpt-llama.cpp)](https://www.npmjs.com/package/gpt-llama.cpp)
-   [![license](https://img.shields.io/npm/l/gpt-llama.cpp)](https://github.com/keldenl/gpt-llama.cpp/blob/master/LICENSE)
 
-   Replace OpenAi's GPT APIs with [`llama.cpp`](https://github.com/ggerganov/llama.cpp)'s [supported models](https://github.com/ggerganov/llama.cpp#description) locally
+<p align="center">
+   <img src="https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/gpt-llama.jpeg" width="250"  alt="gpt-llama.cpp logo">
+</p>
+<p align="center">
+   <img src="https://img.shields.io/discord/1098490114893680652" alt="discord" href="https://discord.gg/aWHBQnJaFC">
+   <img src="https://img.shields.io/npm/v/gpt-llama.cpp" alt="npm version" href="https://www.npmjs.com/package/gpt-llama.cpp">
+   <img src="https://img.shields.io/npm/dw/gpt-llama.cpp" alt="npm downloads" href="https://www.npmjs.com/package/gpt-llama.cpp">
+   <img src="https://img.shields.io/npm/l/gpt-llama.cpp" alt="license" href="https://github.com/keldenl/gpt-llama.cpp/blob/master/LICENSE">
+</p>
+<p align="center">
+   Replace OpenAi's GPT APIs with <a href="https://github.com/ggerganov/llama.cpp">llama.cpp</a>'s <a href="https://github.com/ggerganov/llama.cpp#description">supported models</a> locally
 </p>
 
-
 ## Demo
+
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
 ### 🔥 Hot Topics (4/19/2023)
+
 - 🔥🔥 WE MADE A DISCORD CHANNEL, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥
 - On-going testing for cross-platform [windows support](https://github.com/keldenl/gpt-llama.cpp/issues/6)
 - [Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)
@@ -30,15 +34,16 @@ It is designed to be a drop-in replacement for GPT-based applications, meaning t
 The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoint and use local models, which decreases cost (free) and ensures privacy (local only).
 
 ### Tested platforms
+
 - [x] macOS (ARM)
 - [x] Windows
 - [ ] macOS (Intel)
 - [ ] Linux
 
-
 ## Features
 
 `gpt-llama.cpp` provides the following features:
+
 - Drop-in replacement for GPT-based applications
 - Interactive mode supported, which means that requests within the same chat context will have blazing-fast responses
 - Automatic adoption of new improvements from [`llama.cpp`](https://github.com/ggerganov/llama.cpp)
@@ -48,26 +53,26 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 ## Supported applications
 
 The following applications (list growing) have been tested and confirmed to work with `gpt-llama.cpp`:
-- mckaywrigley's [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
-    - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
-- Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
-    - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
-- ☘️ _WORKS WITH FORK:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
-    - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
-    - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/Auto-GPT-setup-guide.md)
-- ☘️ _WORKS WITH FORK:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
-    - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/3)
-- yoheinakajima's [babyagi](https://github.com/yoheinakajima/babyagi)
 
+- mckaywrigley's [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
+  - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
+- Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
+  - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
+- ☘️ _WORKS WITH FORK:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
+  - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
+  - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/Auto-GPT-setup-guide.md)
+- ☘️ _WORKS WITH FORK:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
+  - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/3)
+- yoheinakajima's [babyagi](https://github.com/yoheinakajima/babyagi)
 
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 
 _See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
-
 ## Quickstart Installation
 
 ### Prerequisite
+
 ⚠️ **THIS IS REQUIRED** ⚠️
 
 Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
@@ -76,8 +81,8 @@ Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the ins
 
 Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may now move on to 1 of the 2 below methods to get up and running.
 
-
 ### Running gpt-llama.cpp
+
 #### NPM Package
 
 ```bash
@@ -88,6 +93,7 @@ npx gpt-llama.cpp start
 npm gpt-llama.cpp i -g
 gpt-llama.cpp start
 ```
+
 That's it!
 
 #### Run Locally
@@ -100,14 +106,14 @@ That's it!
    ```
 
    - Here's my suggested folder structure
-      ```
-         documents
-         ├── llama.cpp
-         │   ├── models
-         │   │   └── <YOUR_.BIN_MODEL_FILES_HERE>
-         │   └── main
-         └── gpt-llama.cpp
-      ```
+     ```
+        documents
+        ├── llama.cpp
+        │   ├── models
+        │   │   └── <YOUR_.BIN_MODEL_FILES_HERE>
+        │   └── main
+        └── gpt-llama.cpp
+     ```
 
 2. Install the required dependencies:
 
@@ -124,15 +130,15 @@ That's it!
 ## Usage
 
 1. To set up the GPT-powered app, there are 2 ways:
-    - To use with a documented GPT-powered application, follow [supported applications](https://github.com/keldenl/gpt-llama.cpp#Supported-applications) directions.
-    - To use with a undocumented GPT-powered application, please do the following:
-        - Update the `openai_api_key` slot in the gpt-powered app to the absolute path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`).
-        - Change the `BASE_URL` for the OpenAi endpoint the app is calling to `localhost:443` or `localhost:443/v1`. This is sometimes provided in the `.env` file, or would require manual updating within the app OpenAi calls depending on the specific application.
+
+   - To use with a documented GPT-powered application, follow [supported applications](https://github.com/keldenl/gpt-llama.cpp#Supported-applications) directions.
+   - To use with a undocumented GPT-powered application, please do the following:
+     - Update the `openai_api_key` slot in the gpt-powered app to the absolute path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`).
+     - Change the `BASE_URL` for the OpenAi endpoint the app is calling to `localhost:443` or `localhost:443/v1`. This is sometimes provided in the `.env` file, or would require manual updating within the app OpenAi calls depending on the specific application.
 
 2. Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
 
 ![API Documentation](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/docs.png)
-
 
 3. (Optional) Test the server by sending a request to `http://localhost:443/v1/chat/completions` with the following cURL command:
 
