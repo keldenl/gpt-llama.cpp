@@ -6,6 +6,11 @@ Replace OpenAi's GPT APIs with [`llama.cpp`](https://github.com/ggerganov/llama.
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
+### 🔥 Hot Topics (4/19/2023)
+- On-going cross-platform (windows) compatibility support
+- Auto-GPT support
+- BabyAGI support
+
 ## Description
 
 `gpt-llama.cpp` is an API wrapper around [`llama.cpp`](https://github.com/ggerganov/llama.cpp). It runs a local API server that simulates OpenAI's API GPT endpoints but uses local llama-based models to process requests.
@@ -17,7 +22,8 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 ### Tested platforms
 - [x] macOS (ARM)
 - [ ] macOS (Intel) _(untested)_
-- [ ] Windows _(untested)_
+- [x] Windows
+- [] Linux
 
 
 ## Features
@@ -50,9 +56,11 @@ _See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/
 
 ### Prerequisite
 ⚠️ THIS IS REQUIRED ⚠️
+
 Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
 
 Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may now move on to 1 of the 2 below methods to get up and running.
+
 
 ### Running gpt-llama.cpp
 #### NPM Package
@@ -75,6 +83,16 @@ That's it!
    git clone https://github.com/keldenl/gpt-llama.cpp.git
    cd gpt-llama.cpp
    ```
+
+   - Here's my suggested folder structure
+      ```
+         documents
+         ├── llama.cpp
+         │   ├── models
+         │   │   └── <YOUR_.BIN_MODEL_FILES_HERE>
+         │   └── main
+         └── gpt-llama.cpp
+      ```
 
 2. Install the required dependencies:
 
