@@ -62,6 +62,8 @@ _See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/
 
 Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
 
+_IF YOU'RE HAVING ISSUES GETTING LLAMA.CPP WORKING ON WINDOWS, DOWNLOAD THE LATEST RELEASE AVX ZIP FROM https://github.com/ggerganov/llama.cpp/releases. EXTRACT. COPY TO \LLAMA.CPP\ FOLDER. THAT SHOULD WORK._
+
 Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may now move on to 1 of the 2 below methods to get up and running.
 
 
