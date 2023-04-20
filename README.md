@@ -35,7 +35,7 @@ The following applications (list growing) have been tested and confirmed to work
 - mckaywrigley's [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
     - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
 - Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
-    - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-SIRI-setup-guide.md)
+    - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
 - _WIP:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
     - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
 - _WIP:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
