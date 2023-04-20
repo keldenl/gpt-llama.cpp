@@ -1,6 +1,6 @@
-import express from "express";
-import { getModelPath, getModelName } from "../utils.js";
-import { gptModelNames } from "../defaults.js";
+import express from 'express';
+import { getModelPath, getModelName } from '../utils.js';
+import { gptModelNames } from '../defaults.js';
 
 const router = express.Router();
 
@@ -47,42 +47,46 @@ const router = express.Router();
  *                 "permission": []
  *               }]
  */
-router.get("/", async (req, res) => {
-  const modelPath = getModelPath(req, res);
-  if (!modelPath) {
-    return res.status(403).send('Missing API_KEY. Please set up your API_KEY (in this case path to model .bin in your ./llama.cpp folder). ')
-  }
-  const modelName = getModelName(modelPath);
-  // Map the user-defined model to gpt-3-turbo
-  const data = [
-    {
-      id: gptModelNames["3.5"],
-      object: modelName,
-      owned_by: "user",
-      permission: [],
-    },
-  ];
+router.get('/', async (req, res) => {
+	const modelPath = getModelPath(req, res);
+	if (!modelPath) {
+		return res
+			.status(403)
+			.send(
+				'Missing API_KEY. Please set up your API_KEY (in this case path to model .bin in your ./llama.cpp folder). '
+			);
+	}
+	const modelName = getModelName(modelPath);
+	// Map the user-defined model to gpt-3-turbo
+	const data = [
+		{
+			id: gptModelNames['3.5'],
+			object: modelName,
+			owned_by: 'user',
+			permission: [],
+		},
+	];
 
-  res.status(200).json({ data });
+	res.status(200).json({ data });
 
-  // Commented out below approach – this will get you all local models but right now isn't
-  // very compatible with GPT applications
-  //
-  // (async () => {
-  //   const models = [];
-  //   for await (const f of getFiles(`${llamaPath}/models/`)) {
-  //     models.push(f.split("llama.cpp/models")[1]); // only return relative
-  //   }
-  //   console.log(models);
-  // const data = models.map((m) => ({
-  //   id: m,
-  //   object: m,
-  //   owned_by: "user",
-  //   permission: [],
-  // }));
-  //   console.log({ data });
-  //   res.status(200).json({ data });
-  // })();
+	// Commented out below approach – this will get you all local models but right now isn't
+	// very compatible with GPT applications
+	//
+	// (async () => {
+	//   const models = [];
+	//   for await (const f of getFiles(`${llamaPath}/models/`)) {
+	//     models.push(f.split("llama.cpp/models")[1]); // only return relative
+	//   }
+	//   console.log(models);
+	// const data = models.map((m) => ({
+	//   id: m,
+	//   object: m,
+	//   owned_by: "user",
+	//   permission: [],
+	// }));
+	//   console.log({ data });
+	//   res.status(200).json({ data });
+	// })();
 });
 
 export default router;

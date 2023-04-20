@@ -1,12 +1,12 @@
-import express from "express";
-import { spawn } from "child_process";
-import { join } from "path";
+import express from 'express';
+import { spawn } from 'child_process';
+import { join } from 'path';
 import {
-  stripAnsiCodes,
-  getLlamaPath,
-  getModelPath,
-  dataToEmbeddingResponse,
-} from "../utils.js";
+	stripAnsiCodes,
+	getLlamaPath,
+	getModelPath,
+	dataToEmbeddingResponse,
+} from '../utils.js';
 
 const router = express.Router();
 
@@ -59,61 +59,61 @@ const router = express.Router();
  *                             description: Additional metadata about the completion
  */
 
-router.post("/", async (req, res) => {
-  const modelId = req.body.model; // TODO: Implement model somehow
-  const llamaPath = getLlamaPath(req, res);
-  const modelPath = getModelPath(req, res);
-  const scriptPath = join(llamaPath, 'embedding');
+router.post('/', async (req, res) => {
+	const modelId = req.body.model; // TODO: Implement model somehow
+	const llamaPath = getLlamaPath(req, res);
+	const modelPath = getModelPath(req, res);
+	const scriptPath = join(llamaPath, 'embedding');
 
-  if (!modelPath) {
-    return res.status(500).send("re-run Herd with MODEL= variable set.");
-  }
+	if (!modelPath) {
+		return res.status(500).send('re-run Herd with MODEL= variable set.');
+	}
 
-  const input = Array.isArray(req.body.input)
-    ? req.body.input.join(" ")
-    : req.body.input;
-  const scriptArgs = ["-m", modelPath, "-p", input.replace(/"/g, '\\"')];
+	const input = Array.isArray(req.body.input)
+		? req.body.input.join(' ')
+		: req.body.input;
+	const scriptArgs = ['-m', modelPath, '-p', input.replace(/"/g, '\\"')];
 
-  global.childProcess = spawn(scriptPath, scriptArgs);
-  console.log(
-    `Child process spawned with command: ${scriptPath} ${scriptArgs.join(" ")}`
-  );
+	global.childProcess = spawn(scriptPath, scriptArgs);
+	console.log(
+		`Child process spawned with command: ${scriptPath} ${scriptArgs.join(' ')}`
+	);
 
-  const stdoutStream = global.childProcess.stdout;
-  let outputString = "";
-  let output = [];
-  const readable = new ReadableStream({
-    start(controller) {
-      const decoder = new TextDecoder();
-      const onData = (chunk) => {
-        const data = stripAnsiCodes(decoder.decode(chunk));
-        outputString += data;
-      };
+	const stdoutStream = global.childProcess.stdout;
+	let outputString = '';
+	let output = [];
+	const readable = new ReadableStream({
+		start(controller) {
+			const decoder = new TextDecoder();
+			const onData = (chunk) => {
+				const data = stripAnsiCodes(decoder.decode(chunk));
+				outputString += data;
+			};
 
-      const onClose = () => {
-        global.childProcess.kill("SIGINT");
-        output = outputString.split(" ").flatMap((d) => {
-          const validFloatRegex = /^[-+]?[0-9]*\.?[0-9]+$/;
-          return validFloatRegex.test(d) ? parseFloat(d) : [];
-        });
-        // See llama model embedding sizes: https://huggingface.co/shalomma/llama-7b-embeddings#quantitative-analysis
-        res.status(200).json(dataToEmbeddingResponse(output));
-        controller.close();
-        console.log("Readable Stream: CLOSED");
-        console.log(dataToEmbeddingResponse(output));
-      };
+			const onClose = () => {
+				global.childProcess.kill('SIGINT');
+				output = outputString.split(' ').flatMap((d) => {
+					const validFloatRegex = /^[-+]?[0-9]*\.?[0-9]+$/;
+					return validFloatRegex.test(d) ? parseFloat(d) : [];
+				});
+				// See llama model embedding sizes: https://huggingface.co/shalomma/llama-7b-embeddings#quantitative-analysis
+				res.status(200).json(dataToEmbeddingResponse(output));
+				controller.close();
+				console.log('Readable Stream: CLOSED');
+				console.log(dataToEmbeddingResponse(output));
+			};
 
-      const onError = (error) => {
-        console.log("Readable Stream: ERROR");
-        console.log(error);
-        controller.error(error);
-      };
+			const onError = (error) => {
+				console.log('Readable Stream: ERROR');
+				console.log(error);
+				controller.error(error);
+			};
 
-      stdoutStream.on("data", onData);
-      stdoutStream.on("close", onClose);
-      stdoutStream.on("error", onError);
-    },
-  });
+			stdoutStream.on('data', onData);
+			stdoutStream.on('close', onClose);
+			stdoutStream.on('error', onError);
+		},
+	});
 });
 
 export default router;
