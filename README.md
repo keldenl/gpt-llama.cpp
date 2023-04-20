@@ -42,11 +42,13 @@ The following applications (list growing) have been tested and confirmed to work
     - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
 - Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
     - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
-- _WIP:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
+- ☘️ _WORKS WITH FORK:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
     - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
     - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/Auto-GPT-setup-guide.md)
-- _WIP:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
+- ☘️ _WORKS WITH FORK:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
     - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/3)
+- yoheinakajima's [babyagi](https://github.com/yoheinakajima/babyagi)
+
 
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 
