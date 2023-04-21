@@ -74,7 +74,7 @@ app.use('/v1/embeddings', embeddingsRoutes);
 
 // Load the SSL/TLS certificate and key files
 const ssl_options = {
-  cert: fs.readFileSync('./cert/certificate.crt'),
+  cert: fs.readFileSync('./cert/cert.crt'),
   key: fs.readFileSync('./cert/private.key')
 };
 
