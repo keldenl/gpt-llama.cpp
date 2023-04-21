@@ -96,6 +96,13 @@ gpt-llama.cpp start
 
 That's it!
 
+Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready:
+
+   ```bash
+   # Mac
+   sh ./test-installation.sh
+   ```
+
 #### Run Locally
 
 1. Clone the repository:
@@ -125,6 +132,13 @@ That's it!
 
    ```bash
    npm start
+   ```
+
+4. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready:
+
+   ```bash
+   # Mac
+   sh ./test-installation.sh
    ```
 
 ## Usage
