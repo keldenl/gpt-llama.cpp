@@ -18,11 +18,11 @@
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
-### 🔥 Hot Topics (4/19/2023)
+### 🔥 Hot Topics (4/20/2023)
 
 - 🔥🔥 WE MADE A DISCORD CHANNEL, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥
-- On-going testing for cross-platform [windows support](https://github.com/keldenl/gpt-llama.cpp/issues/6)
-- [Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)
+- ~~On-going testing for cross-platform [windows support](https://github.com/keldenl/gpt-llama.cpp/issues/6)~~ Windows should be supported now
+- ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support should be complete!
 - BabyAGI support
 
 ## Description
@@ -36,9 +36,9 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 ### Tested platforms
 
 - [x] macOS (ARM)
+- [x] macOS (Intel)
 - [x] Windows
-- [ ] macOS (Intel)
-- [ ] Linux
+- [x] Linux (Port :443 blocked by default, may have to change the port to 8000 to get working)
 
 ## Features
 
