@@ -75,10 +75,22 @@ _See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/
 
 ⚠️ **THIS IS REQUIRED** ⚠️
 
-Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions in the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions below. This is based on the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
 
+#### Mac
+``` bash
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
+make
+
+# install Python dependencies
+python3 -m pip install -r requirements.txt
+```
+
+#### Windows
 🔴🔴 _WINDOWS USERS: IF YOU'RE HAVING ISSUES GETTING GPT-LLAMA.CPP OR LLAMA.CPP WORKING (MISSING MAKE.EXE FILE?), YOU CAN INSTEAD DOWNLOAD THE LATEST RELEASE AVX ZIP FROM https://github.com/ggerganov/llama.cpp/releases. EXTRACT. COPY TO \LLAMA.CPP\ FOLDER. PROFIT. THAT SHOULD WORK. YOU'RE WELCOME._ 🔴🔴
 
+#### Test llama.cpp
 Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may now move on to 1 of the 2 below methods to get up and running.
 
 ### Running gpt-llama.cpp
