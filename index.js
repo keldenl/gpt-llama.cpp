@@ -1,4 +1,6 @@
 import express from 'express';
+import https from 'https';
+import fs from 'fs';
 import cors from 'cors';
 import IP from 'ip';
 import swaggerJsdoc from 'swagger-jsdoc';
@@ -70,7 +72,14 @@ app.use('/v1/models', modelsRoutes);
 app.use('/v1/chat', chatRoutes);
 app.use('/v1/embeddings', embeddingsRoutes);
 
-app.listen(PORT, () => {
+// Load the SSL/TLS certificate and key files
+const ssl_options = {
+  cert: fs.readFileSync('./cert/certificate.crt'),
+  key: fs.readFileSync('./cert/private.key')
+};
+
+// Create an HTTPS server with the certificate and key
+https.createServer(ssl_options, app).listen(PORT, () => {
 	const ipAddress = IP.address();
 	console.log(`Server is listening on:
   - localhost:${PORT}
