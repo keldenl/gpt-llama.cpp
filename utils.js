@@ -1,7 +1,8 @@
 import { sep, join, resolve } from 'path';
 import { nanoid } from 'nanoid';
 import { readdir } from 'fs/promises';
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 export async function* getFiles(dir) {
 	const dirents = await readdir(dir, { withFileTypes: true });

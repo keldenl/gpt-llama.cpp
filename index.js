@@ -14,7 +14,8 @@ import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
 
-require('dotenv').config();
+import dotenv from 'dotenv';
+dotenv.config();
 
 const PORT = process.env.PORT;
 
