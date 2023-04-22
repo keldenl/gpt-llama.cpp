@@ -6,11 +6,17 @@ import IP from 'ip';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
+import {
+	normalizePath,
+} from 'utils.js';
+
 import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
 
-const PORT = 443;
+require('dotenv').config();
+
+const PORT = process.env.PORT;
 
 const options = {
 	definition: {
@@ -72,16 +78,26 @@ app.use('/v1/models', modelsRoutes);
 app.use('/v1/chat', chatRoutes);
 app.use('/v1/embeddings', embeddingsRoutes);
 
-// Load the SSL/TLS certificate and key files
-const ssl_options = {
-  cert: fs.readFileSync('./cert/cert.crt'),
-  key: fs.readFileSync('./cert/private.key')
-};
+if(process.env.SSL === true) {
+	// Load the SSL/TLS certificate and key files
+	const ssl_options = {
+		cert: fs.readFileSync(normalizePath(process.env.SSL_CERT)),
+		key: fs.readFileSync(normalizePath(process.env.SSL_KEY))
+	};
 
-// Create an HTTPS server with the certificate and key
-https.createServer(ssl_options, app).listen(PORT, () => {
-	const ipAddress = IP.address();
-	console.log(`Server is listening on:
-  - localhost:${PORT}
-  - ${ipAddress}:${PORT} (for other devices on the same network)`);
-});
+	// Create an HTTPS server with the certificate and key
+	https.createServer(ssl_options, app).listen(PORT, () => {
+		const ipAddress = IP.address();
+		console.log(`Server is listening on:
+		- localhost:${PORT}
+		- ${ipAddress}:${PORT} (for other devices on the same network)`);
+	});
+}else{
+	// Create HTTP server
+	app.listen(PORT, () => {
+		const ipAddress = IP.address();
+		console.log(`Server is listening on:
+		- localhost:${PORT}
+		- ${ipAddress}:${PORT} (for other devices on the same network)`);
+	});
+}

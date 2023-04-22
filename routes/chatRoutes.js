@@ -76,7 +76,7 @@ const router = express.Router();
 
 router.post('/completions', async (req, res) => {
 	const modelId = req.body.model; // TODO: Implement model somehow
-	const llamaPath = getLlamaPath(req, res);
+	const llamaPath = getLlamaPath();
 	const modelPath = getModelPath(req, res);
 	const scriptPath = join(llamaPath, 'main');
 

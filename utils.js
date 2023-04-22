@@ -1,6 +1,7 @@
 import { sep, join, resolve } from 'path';
 import { nanoid } from 'nanoid';
 import { readdir } from 'fs/promises';
+require('dotenv').config();
 
 export async function* getFiles(dir) {
 	const dirents = await readdir(dir, { withFileTypes: true });
@@ -96,10 +97,8 @@ export const getModelName = (path) => {
 	return modelArr[modelArr.length - 1];
 };
 
-export const getLlamaPath = (req, res) => {
-	const modelPath = getModelPath(req, res);
-	const path = modelPath.split('llama.cpp')[0]; // only
-	return join(path, 'llama.cpp');
+export const getLlamaPath = () => {
+	return normalizePath(process.env.LLAMA_PATH);
 };
 
 export const compareArrays = (arr1, arr2) => {

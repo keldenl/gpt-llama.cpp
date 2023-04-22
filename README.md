@@ -140,13 +140,24 @@ Open another terminal window and test the installation by running the below scri
    npm install
    ```
 
-3. Start the server!
+3. Configure GPT-LLAMA:
+    1. Create a copy of `.env.template` and call it `.env`
+    2. Open the `.env` file in a text editor.
+    3. Find the line that says `LLAMA_PATH=`
+    4. Enter between the quotes the full installation path of `llama.cpp`, for example: `LLAMA_PATH="/mnt/set/this/to/llama.cpp"`
+    5. You can also set the `PORT` for GPT_LLAMA to listen on.
+    6. Only set `SSL` to `SSL=true` if you need it and know what you're doing.
+    7. Don't forget to save your `.env` file!
+    
+
+
+4. Start the server!
 
    ```bash
    npm start
    ```
 
-4. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready:
+5. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready:
 
    ```bash
    # Mac
