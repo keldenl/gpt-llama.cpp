@@ -1,6 +1,7 @@
 import { sep, join, resolve } from 'path';
 import { nanoid } from 'nanoid';
 import { readdir } from 'fs/promises';
+import fs from 'fs';
 
 if (!fs.existsSync('.env')) {
   console.error('.env file not found. Please create a .env file.');
