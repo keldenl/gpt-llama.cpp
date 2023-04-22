@@ -102,7 +102,7 @@ Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the
 npx gpt-llama.cpp start
 
 # alternatively, you can install it globally
-npm gpt-llama.cpp i -g
+npm i gpt-llama.cpp -g
 gpt-llama.cpp start
 ```
 
