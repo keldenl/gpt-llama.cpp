@@ -8,7 +8,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import {
 	normalizePath,
-} from 'utils.js';
+} from './utils.js';
 
 import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
