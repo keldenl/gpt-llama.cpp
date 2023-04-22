@@ -8,6 +8,7 @@ set /p modelpath=Please drag and drop the location of your Llama-based Model (.b
 REM Check if the file exists
 if not exist "%modelpath%" (
     echo Error: The file does not exist. Please make sure you have provided the correct path.
+    pause
     exit /b 1
 )
 
@@ -15,18 +16,14 @@ REM Check if the file has a .bin extension
 set "ext=%modelpath:~-4%"
 if not "%ext%" == ".bin" (
     echo Error: The file extension is not .bin. Please make sure you have provided the correct file.
+    pause
     exit /b 1
 )
-
-REM Validate that the file is a child of the /llama.cpp/models/ directory
-REM echo %modelpath% | findstr /i /c:"\llama.cpp\models\" >nul || echo %modelpath% | findstr /i /r /c:"%cd%\\llama.cpp\\models\\.*" >nul || (
-REM     echo Error: The file must be a child of the \llama.cpp\models\ directory. Please move your model file and try again.
-REM     exit /b 1
-REM )
 
 set "validpath=\llama.cpp\models\"
 if not exist "%validpath%%modelname%" (
    echo Error: The file must be a child of the \llama.cpp\models\ directory. Please move your model file and try again.
+   pause
    exit /b 1
 )
 
@@ -58,9 +55,4 @@ if %errorlevel% == 0 (
 
 exit /b %errorlevel%
 
-
-set "validpath=\llama.cpp\models\"
-if not exist "%validpath%%modelname%" (
-   echo Error: The file must be a child of the \llama.cpp\models\ directory. Please move your model file and try again.
-   exit /b 1
-)
+pasue
