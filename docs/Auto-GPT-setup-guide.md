@@ -1,5 +1,8 @@
 # [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT#-installation) setup guide
 
+## Prerequisite
+PLEASE make sure that `gpt-llama.cpp` is installed and running already! See https://github.com/keldenl/gpt-llama.cpp#quickstart-installation if you haven't yet or don't know what I just referred to.
+
 ## Guide
 ~~Follow on with the install instruction of the `Auto-GPT` based on the [official installation guide on their repo](https://github.com/Significant-Gravitas/Auto-GPT#-installation)~~
 NOTE: For now, install `Auto-GPT` based on the DGdev91's [PR #2594](https://github.com/Significant-Gravitas/Auto-GPT/pull/2594). You can do this by:

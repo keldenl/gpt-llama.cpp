@@ -1,5 +1,8 @@
 # [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) setup guide
 
+## Prerequisite
+PLEASE make sure that `gpt-llama.cpp` is installed and running already! See https://github.com/keldenl/gpt-llama.cpp#quickstart-installation if you haven't yet or don't know what I just referred to.
+
 ## Guide
 Install `chatbot-ui` based on the [official installation guide on their repo](https://github.com/mckaywrigley/chatbot-ui#running-locally), but with some modifications:
 
