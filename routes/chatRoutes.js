@@ -105,7 +105,7 @@ router.post('/completions', async (req, res) => {
 		'###',
 	];
 
-	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
+    const stopArgs = ['--reverse-prompt', stopPrompts[0]];
 	const args = getArgs(req.body);
 	const initPrompt = `### Instructions
 ${instructions}
