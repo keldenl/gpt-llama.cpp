@@ -6,18 +6,21 @@ $path = Read-Host "Please drag and drop the location of your Llama-based Model (
 # Check if the file exists
 if (-not (Test-Path $path)) {
     Write-Host "Error: The file does not exist. Please make sure you have provided the correct path."
+    Read-Host "Press any key to exit."
     exit 1
 }
 
 # Check if the file has a .bin extension
 if (-not ($path.EndsWith(".bin"))) {
     Write-Host "Error: The file extension is not .bin. Please make sure you have provided the correct file."
+    Read-Host "Press any key to exit."
     exit 1
 }
 
 # Validate that the file is a child of the /llama.cpp/models/ directory
 if ($path -notlike "*\llama.cpp\models\*") {
     Write-Host "Error: The file must be a child of the /llama.cpp/models/ directory. Please move your model file and try again."
+    Read-Host "Press any key to exit."
     exit 1
 }
 
@@ -54,3 +57,5 @@ if ($LASTEXITCODE -eq 0) {
     Write-Host "Is the gpt-llama.cpp server running? Try starting the server and running this script again."
     Write-Host "Please check for any errors in the terminal window running the gpt-llama.cpp server."
 }
+
+Read-Host "Press any key to exit."
