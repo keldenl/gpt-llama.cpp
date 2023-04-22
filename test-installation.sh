@@ -1,8 +1,10 @@
 #!/bin/bash
+port=443
 
 # Prompt the user to drag and drop the location of the Llama-based model (.bin) and read it from standard input
 echo "--GPT-LLAMA.CPP TEST INSTALLATION SCRIPT LAUNCHED--"
 echo "PLEASE MAKE SURE THAT A LOCAL GPT-LLAMA.CPP SERVER IS STARTED. OPEN A SEPARATE TERMINAL WINDOW START IT.\n"
+read -p "What port is your server running on? (press enter for default 443 port): " port
 read -p "Please drag and drop the location of your Llama-based Model (.bin) here and press enter: " path
 
 # Check if the file exists
@@ -24,7 +26,7 @@ if [[ "$path" != *"/llama.cpp/models/"* ]]; then
 fi
 
 # Wait for the curl command to finish and capture the response
-response=$(curl --location --request POST 'http://localhost:443/v1/chat/completions' \
+response=$(curl --location --request POST "http://localhost:$port/v1/chat/completions" \
 --header "Authorization: Bearer $path" \
 --header 'Content-Type: application/json' \
 --data-raw '{
@@ -55,5 +57,6 @@ else
     echo ""
     echo "Error: Curl command failed!"
     echo "Is the gpt-llama.cpp server running? Try starting the server and running this script again."
+    echo "Make sure you are testing on the right port. The Curl commmand server error port should match your port in the gpt-llama.cpp window."
     echo "Please check for any errors in the terminal window running the gpt-llama.cpp server."
 fi

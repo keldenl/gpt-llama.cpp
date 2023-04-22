@@ -8,7 +8,7 @@ import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
 
-const PORT = 443;
+const PORT = process.env.PORT || 443;
 const isWin = process.platform === 'win32';
 
 const getServerRunningMsg = () => {
