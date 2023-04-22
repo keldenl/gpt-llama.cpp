@@ -1,10 +1,10 @@
 #!/bin/bash
-port=443
 
 # Prompt the user to drag and drop the location of the Llama-based model (.bin) and read it from standard input
 echo "--GPT-LLAMA.CPP TEST INSTALLATION SCRIPT LAUNCHED--"
 echo "PLEASE MAKE SURE THAT A LOCAL GPT-LLAMA.CPP SERVER IS STARTED. OPEN A SEPARATE TERMINAL WINDOW START IT.\n"
 read -p "What port is your server running on? (press enter for default 443 port): " port
+port=${port:-443} # default port 443
 read -p "Please drag and drop the location of your Llama-based Model (.bin) here and press enter: " path
 
 # Check if the file exists
