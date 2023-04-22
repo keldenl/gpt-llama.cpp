@@ -31,7 +31,7 @@ Install `chatbot-ui` based on the [official installation guide on their repo](ht
 
     # FOR WINDOWS
     # cmd
-    set OPEN_API_HOST=http://localhost:443
+    set OPENAI_API_HOST=http://localhost:443
     npm run dev
     ```
 
