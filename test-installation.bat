@@ -20,7 +20,7 @@ if not "%ext%" == ".bin" (
     exit /b 1
 )
 
-set "validpath=\llama.cpp\models\"
+set "validpath=llama.cpp\models\"
 if not exist "%validpath%%modelname%" (
    echo Error: The file must be a child of the \llama.cpp\models\ directory. Please move your model file and try again.
    pause
