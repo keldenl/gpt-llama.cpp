@@ -55,4 +55,4 @@ if %errorlevel% == 0 (
 
 exit /b %errorlevel%
 
-pasue
+pause
