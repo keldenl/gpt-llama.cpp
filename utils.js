@@ -1,6 +1,12 @@
 import { sep, join, resolve } from 'path';
 import { nanoid } from 'nanoid';
 import { readdir } from 'fs/promises';
+
+if (!fs.existsSync('.env')) {
+  console.error('.env file not found. Please create a .env file.');
+  process.exit(1);
+}
+
 import dotenv from 'dotenv';
 dotenv.config();
 

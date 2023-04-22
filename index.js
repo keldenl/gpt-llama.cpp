@@ -6,6 +6,11 @@ import IP from 'ip';
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
+if (!fs.existsSync('.env')) {
+  console.error('.env file not found. Please create a .env file.');
+  process.exit(1);
+}
+
 import {
 	normalizePath,
 } from './utils.js';
