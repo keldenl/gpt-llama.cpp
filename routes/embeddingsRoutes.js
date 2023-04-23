@@ -74,6 +74,8 @@ router.post('/', async (req, res) => {
 		: req.body.input;
 	const scriptArgs = ['-m', modelPath, '-p', input.replace(/"/g, '\\"')];
 
+
+	!!global.childProcess && global.childProcess.kill('SIGINT'); // kill previous childprocess
 	global.childProcess = spawn(scriptPath, scriptArgs);
 	console.log(
 		`Child process spawned with command: ${scriptPath} ${scriptArgs.join(' ')}`
