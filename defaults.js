@@ -29,7 +29,7 @@ export const getArgs = (args) => {
 		}
 	});
 	const params = { ...defaultParams, ...convertedArgs };
-	return Object.keys(params).flatMap((pKey) => [pKey, params[pKey]]);
+	return Object.keys(params).flatMap((pKey) => !!params[pKey] ? [pKey, params[pKey]] : []);
 };
 
 export const gptModelNames = {
