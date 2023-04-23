@@ -21,9 +21,9 @@ _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbo
 ### 🔥 Hot Topics (4/20/2023)
 
 - 🔥🔥 WE MADE A DISCORD CHANNEL, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥
-- ~~On-going testing for cross-platform [windows support](https://github.com/keldenl/gpt-llama.cpp/issues/6)~~ Windows should be supported now
-- ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support should be complete!
-- BabyAGI support
+- ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support should be complete. Continued optimizatino work..
+- BabyAGI/TeenageAGI support
+- Discord bot!
 
 ## Description
 
@@ -54,16 +54,13 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 
 The following applications (list growing) have been tested and confirmed to work with `gpt-llama.cpp`:
 
-- mckaywrigley's [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
-  - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
-- Yue-Yang's [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
-  - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
-- ☘️ _WORKS WITH FORK:_ Significant-Gravitas's [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT)
-  - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
-  - gpt-llama.cpp setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/Auto-GPT-setup-guide.md)
-- ☘️ _WORKS WITH FORK:_ mckaywrigley's [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
+- [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) - [setup guide](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
+- [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri) - [setup guide](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
+- ☘️ _WORKS WITH FORK:_ [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) - setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/Auto-GPT-setup-guide.md)
+  - Issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
+- ☘️ _WORKS WITH FORK:_ [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
   - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/3)
-- yoheinakajima's [babyagi](https://github.com/yoheinakajima/babyagi)
+- [babyagi](https://github.com/yoheinakajima/babyagi)
 
 More applications are currently being tested, and welcome requests for verification or fixes by opening a new issue in the repo.
 
@@ -138,7 +135,7 @@ That's it!
    cd gpt-llama.cpp
    ```
 
-   - Here's my suggested folder structure
+   - Recommended folder structure
      ```
         documents
         ├── llama.cpp
@@ -190,7 +187,7 @@ That's it!
 ![API Documentation](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/docs.png)
 
 
-## Obtaining and verifying the Facebook LLaMA original model and Stanford Alpaca model data
+#### Obtaining and verifying the Facebook LLaMA original model and Stanford Alpaca model data
 
 - Under no circumstances should IPFS, magnet links, or any other links to model downloads be shared anywhere in this repository, including in issues, discussions, or pull requests. They will be immediately deleted.
 
