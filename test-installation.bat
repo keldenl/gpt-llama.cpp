@@ -20,11 +20,14 @@ if not "%ext%" == ".bin" (
     exit /b 1
 )
 
-set "validpath=llama.cpp\models\"
-if not exist "%validpath%%modelname%" (
-   echo Error: The file must be a child of the \llama.cpp\models\ directory. Please move your model file and try again.
-   pause
-   exit /b 1
+REM Check if the file is located inside the llama.cpp\models\ directory
+set "validpath=*llama.cpp\models\*"
+if not "%modelpath%"=="%modelpath:%validpath%=%" (
+    echo The file is located inside the llama.cpp\models\ directory.
+) else (
+    echo Error: The file must be inside the llama.cpp\models\ directory. Please move your model file and try again.
+    pause
+    exit /b 1
 )
 
 
