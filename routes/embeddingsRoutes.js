@@ -60,6 +60,8 @@ const router = express.Router();
  */
 
 router.post('/', async (req, res) => {
+	console.log(`\n=====  EMBEDDING REQUEST  =====`);
+
 	const modelId = req.body.model; // TODO: Implement model somehow
 	const llamaPath = getLlamaPath(req, res);
 	const modelPath = getModelPath(req, res);
@@ -77,9 +79,10 @@ router.post('/', async (req, res) => {
 
 	!!global.childProcess && global.childProcess.kill('SIGINT'); // kill previous childprocess
 	global.childProcess = spawn(scriptPath, scriptArgs);
-	console.log(
-		`Child process spawned with command: ${scriptPath} ${scriptArgs.join(' ')}`
-	);
+	console.log(`\n=====  LLAMA.CPP SPAWNED  =====`);
+	console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
+	console.log(`\n=====  REQUEST  =====\n${input}`);
+
 
 	const stdoutStream = global.childProcess.stdout;
 	let outputString = '';
@@ -101,6 +104,7 @@ router.post('/', async (req, res) => {
 				// See llama model embedding sizes: https://huggingface.co/shalomma/llama-7b-embeddings#quantitative-analysis
 				res.status(200).json(dataToEmbeddingResponse(output));
 				controller.close();
+				console.log('Embedding Request DONE');
 				console.log('Readable Stream: CLOSED');
 				console.log(dataToEmbeddingResponse(output));
 			};

@@ -75,6 +75,8 @@ const router = express.Router();
  */
 
 router.post('/completions', async (req, res) => {
+	console.log(`\n=====  CHAT COMPLETION REQUEST  =====`);
+
 	const modelId = req.body.model; // TODO: Implement model somehow
 	const llamaPath = getLlamaPath(req, res);
 	const modelPath = getModelPath(req, res);
@@ -153,11 +155,11 @@ assistant:`;
 		];
 
 		global.childProcess = spawn(scriptPath, scriptArgs);
-		console.log(`\n--LLAMA.CPP SPAWNED--`);
+		console.log(`\n=====  LLAMA.CPP SPAWNED  =====`);
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
 
-	console.log(`\n--REQUEST--\n${messagesToString([lastMessage])}`);
+	console.log(`\n=====  REQUEST  =====\n${messagesToString([lastMessage])}`);
 
 	let stdoutStream = global.childProcess.stdout;
 
@@ -169,7 +171,7 @@ assistant:`;
 				// Don't return initial prompt
 				if (data.includes(`### Response`)) {
 					responseStart = true;
-					console.log('\n--RESPONSE--');
+					console.log('\n=====  RESPONSE  =====');
 					return;
 				}
 
@@ -179,7 +181,7 @@ assistant:`;
 						dataToResponse(data, promptTokens, completionTokens, stream)
 					);
 				} else {
-					console.log('--RESPONSE LOADING...--');
+					console.log('=====  PROCESSING PROMPT...  =====');
 				}
 			};
 
