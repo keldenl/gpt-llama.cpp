@@ -47,7 +47,7 @@ export const dataToResponse = (
 	reason = null
 ) => {
 	const currDate = new Date();
-	const contentData = { content: data };
+	const contentData = { content: data, role: 'assistant', };
 	const contentName = stream ? 'delta' : 'message';
 
 	return {
