@@ -73,9 +73,9 @@ _See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/
 
 ### Prerequisite
 
-⚠️ **THIS IS REQUIRED** ⚠️
+🔴🔴 ⚠️ **DO NOT SKIP THIS STEP** ⚠️ 🔴🔴
 
-Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions below. This is based on the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage).
+Setup [`llama.cpp`](https://github.com/ggerganov/llama.cpp) by following the instructions below. This is based on the [llama.cpp README](https://github.com/ggerganov/llama.cpp#usage). You may skip if you have `llama.cpp` set up already.
 
 #### Mac
 ``` bash
@@ -88,17 +88,37 @@ python3 -m pip install -r requirements.txt
 ```
 
 #### Windows
-🔴🔴 _WINDOWS USERS: IF YOU'RE HAVING ISSUES GETTING GPT-LLAMA.CPP OR LLAMA.CPP WORKING (MISSING MAKE.EXE FILE?), YOU CAN INSTEAD DOWNLOAD THE LATEST RELEASE AVX ZIP FROM https://github.com/ggerganov/llama.cpp/releases. EXTRACT. COPY TO \LLAMA.CPP\ FOLDER. PROFIT. THAT SHOULD WORK. YOU'RE WELCOME._ 🔴🔴
+``` bash
+git clone https://github.com/ggerganov/llama.cpp
+cd llama.cpp
+```
+- Then, download the latest release of llama.cpp [here](https://github.com/ggerganov/llama.cpp/releases)
+I do not know if there is a simple way to tell if you should download `avx`, `avx2` or `avx512`, but oldest chip for `avx` and newest chip for `avx512`, so pick the one that you think will work with your machine. (lets try to automate this step into the future)
+- Extract the contents of the zip file and copy everything in the folder (which should include `main.exe`) into your llama.cpp folder that you had just cloned. Now back to the command line
+
+``` bash
+# install Python dependencies
+python3 -m pip install -r requirements.txt
+```
 
 #### Test llama.cpp
-Confirm that `llama.cpp` works by running an example `./examples/chat.sh` in the `llama.cpp` project folder. Once confirmed, you may now move on to 1 of the 2 below methods to get up and running.
+Confirm that `llama.cpp` works by running an example. Replace <YOUR_MODEL_BIN> with your llama model, typically named something like `ggml-model-q4_0.bin`
+```bash
+# Mac
+./main -m models/7B/<YOUR_MODEL_BIN> -p "the sky is"
+
+# Windows
+main -m models/7B/<YOUR_MODEL_BIN> -p "the sky is"
+```
+
+It'll start spitting random BS, but you're golden if it's responding. You may now move on to 1 of the 2 below methods to get up and running.
 
 ### Running gpt-llama.cpp
 
 #### NPM Package
 
 ```bash
-# run the latest version
+# run without installing
 npx gpt-llama.cpp start
 
 # alternatively, you can install it globally
@@ -108,12 +128,6 @@ gpt-llama.cpp start
 
 That's it!
 
-Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready:
-
-   ```bash
-   # Mac
-   sh ./test-installation.sh
-   ```
 
 #### Run Locally
 
@@ -143,14 +157,16 @@ Open another terminal window and test the installation by running the below scri
 3. Start the server!
 
    ```bash
-   npm start
-   ```
+   # Basic usage
+   npm start 
 
-4. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready:
-
-   ```bash
+   # To run on a diffrent port
    # Mac
-   sh ./test-installation.sh
+   PORT=8000 npm start
+
+   # Windows cmd
+   set PORT=8000
+   npm start
    ```
 
 ## Usage
@@ -162,30 +178,23 @@ Open another terminal window and test the installation by running the below scri
      - Update the `openai_api_key` slot in the gpt-powered app to the absolute path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`).
      - Change the `BASE_URL` for the OpenAi endpoint the app is calling to `localhost:443` or `localhost:443/v1`. This is sometimes provided in the `.env` file, or would require manual updating within the app OpenAi calls depending on the specific application.
 
-2. Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
+2. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready. Test the server by running the `test-installation` script
+
+   ```bash
+   # Mac
+   sh ./test-installion.sh
+   ```
+
+3. (Optional) Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.
 
 ![API Documentation](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/docs.png)
 
-3. (Optional) Test the server by sending a request to `http://localhost:443/v1/chat/completions` with the following cURL command:
 
-   ```bash
-   curl --location --request POST 'http://localhost:443/v1/chat/completions' \
-   --header 'Authorization: Bearer <REPLACE_THIS_WITH_THE_PATH_TO_YOUR_MODEL>' \
-   --header 'Content-Type: application/json' \
-   --data-raw '{
-      "model": "gpt-3.5-turbo",
-      "messages": [
-         {
-            "role": "system",
-            "content": "You are ChatGPT, a helpful assistant developed by OpenAI."
-         },
-         {
-            "role": "user",
-            "content": "How are you doing today?"
-         }
-      ]
-   }'
-   ```
+## Obtaining and verifying the Facebook LLaMA original model and Stanford Alpaca model data
+
+- Under no circumstances should IPFS, magnet links, or any other links to model downloads be shared anywhere in this repository, including in issues, discussions, or pull requests. They will be immediately deleted.
+
+- The LLaMA models are officially distributed by Facebook and will never be provided through this repository.
 
 ## Contributing
 
