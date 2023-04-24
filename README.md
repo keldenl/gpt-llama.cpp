@@ -18,12 +18,11 @@
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
-### 🔥 Hot Topics (4/20/2023)
+### 🔥 Hot Topics (4/23/2023)
 
-- 🔥🔥 WE MADE A DISCORD CHANNEL, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥
-- ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support should be complete. Continued optimizatino work..
+- 🔥🔥 WE MADE A DISCORD SERVER, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥 _Update: gpt-llama.cpp bot running vicuna 7b live on the server for use!_
+- ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support complete. Continued optimization work ongoing (new updates on 4/22, 4/23), track progress on this [github issue](https://github.com/keldenl/gpt-llama.cpp/issues/2)
 - BabyAGI/TeenageAGI support
-- Discord bot!
 
 ## Description
 
