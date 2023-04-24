@@ -80,6 +80,11 @@ export const dataToEmbeddingResponse = (output) => {
 			},
 		],
 		embeddingSize: output.length,
+		usage: {
+			prompt_tokens: 0,
+			completion_tokens: 0,
+			total_tokens: 0,
+		},
 	};
 };
 
