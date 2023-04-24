@@ -162,8 +162,36 @@ assistant:`;
 	console.log(`\n=====  REQUEST  =====\n${messagesToString([lastMessage])}`);
 
 	let stdoutStream = global.childProcess.stdout;
+	let stderrStream = global.childProcess.stderr;
 
-	const readable = new ReadableStream({
+	const stderr = new ReadableStream({
+	    start(controller) {
+		const decoder = new TextDecoder();
+		const onData = (chunk) => {
+		    const data = stripAnsiCodes(decoder.decode(chunk));
+		    // Handle stderr data here
+		    console.error('=====  STDERR  =====');
+		    console.error(data);
+		};
+
+		const onClose = () => {
+		    console.log('stderr Readable Stream: CLOSED');
+		    controller.close();
+		};
+
+		const onError = (error) => {
+		    console.log('stderr Readable Stream: ERROR');
+		    console.log(error);
+		    controller.error(error);
+		};
+
+		stderrStream.on('data', onData);
+		stderrStream.on('close', onClose);
+		stderrStream.on('error', onError);
+	    },
+	});
+
+	const stdout = new ReadableStream({
 		start(controller) {
 			const decoder = new TextDecoder();
 			const onData = (chunk) => {
@@ -226,7 +254,7 @@ assistant:`;
 					stopPrompts.includes(last2Content)
 				) {
 					console.log('Request DONE');
-					res.write('event: data\n');
+					res.write('event: data\n\n');
 					res.write(
 						`data: ${JSON.stringify(
 							dataToResponse(
@@ -238,8 +266,9 @@ assistant:`;
 							)
 						)}\n\n`
 					);
-					res.write('event: data\n');
-					res.write('data: [DONE]\n\n');
+					res.write('event: data\n\n');
+					res.write('data: [DONE]');
+					res.end();
 					global.lastRequest = {
 						type: 'chat',
 						messages: [
@@ -250,7 +279,7 @@ assistant:`;
 					};
 					stdoutStream.removeAllListeners();
 				} else {
-					res.write('event: data\n');
+					res.write('event: data\n\n');
 					res.write(`data: ${JSON.stringify(chunk)}\n\n`);
 					lastChunk = chunk;
 					completionTokens++;
@@ -259,7 +288,7 @@ assistant:`;
 			},
 		});
 
-		readable.pipeTo(writable);
+		stdout.pipeTo(writable);
 	}
 	// Return a single json response instead of streaming
 	else {
@@ -306,7 +335,7 @@ assistant:`;
 				}
 			},
 		});
-		readable.pipeTo(writable);
+		stdout.pipeTo(writable);
 	}
 });
 
