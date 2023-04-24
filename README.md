@@ -20,7 +20,7 @@ _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbo
 
 ### 🔥 Hot Topics (4/23/2023)
 
-- 🔥🔥 WE MADE A DISCORD SERVER, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥 _Update: gpt-llama.cpp bot running vicuna 7b live on the server for use!_
+- 🔥🔥 WE MADE A DISCORD SERVER, JOIN HERE: [https://discord.gg/yseR47MqpN](https://discord.gg/yseR47MqpN) 🔥🔥 _Update: gpt-llama.cpp bot running vicuna 7b live on the server for use!_
 - ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support complete. Continued optimization work ongoing (new updates on 4/22, 4/23), track progress on this [github issue](https://github.com/keldenl/gpt-llama.cpp/issues/2)
 - BabyAGI/TeenageAGI support
 
