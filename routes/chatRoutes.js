@@ -75,6 +75,7 @@ const router = express.Router();
  */
 
 router.post('/completions', async (req, res) => {
+	global.serverBusy = true;
 	console.log(`\n===== CHAT COMPLETION REQUEST =====`);
 	const modelId = req.body.model; // TODO: Implement model somehow
 	const llamaPath = getLlamaPath();
@@ -185,6 +186,7 @@ assistant:`;
 			};
 
 			const onClose = () => {
+				global.serverBusy = false;
 				console.log('Readable Stream: CLOSED');
 				controller.close();
 			};
@@ -201,6 +203,7 @@ assistant:`;
 		},
 	});
 
+	let debounceTimer;
 	if (stream) {
 		// If streaming, return an event-stream
 		res.writeHead(200, {
@@ -247,13 +250,23 @@ assistant:`;
 							{ role: 'assistant', content: responseContent },
 						],
 					};
+					global.serverBusy = false;
 					stdoutStream.removeAllListeners();
+					clearTimeout(debounceTimer);
 				} else {
 					res.write('event: data\n');
 					res.write(`data: ${JSON.stringify(chunk)}\n\n`);
 					lastChunk = chunk;
 					completionTokens++;
 					responseContent += currContent;
+					!!debounceTimer && clearTimeout(debounceTimer);
+
+					debounceTimer = setTimeout(() => {
+						console.log(
+							'> LLAMA.CPP UNRESPONSIVE FOR 20 SECS. ATTEMPTING TO RESUME GENERATION..'
+						);
+						global.childProcess.stdin.write('\n');
+					}, 20000);
 				}
 			},
 		});
@@ -297,11 +310,21 @@ assistant:`;
 							{ role: 'assistant', content: responseContent },
 						],
 					};
+					global.serverBusy = false;
 					stdoutStream.removeAllListeners();
+					clearTimeout(debounceTimer);
 				} else {
 					responseContent += currContent;
 					lastChunk = chunk;
 					completionTokens++;
+					!!debounceTimer && clearTimeout(debounceTimer);
+
+					debounceTimer = setTimeout(() => {
+						console.log(
+							'> LLAMA.CPP UNRESPONSIVE FOR 20 SECS. ATTEMPTING TO RESUME GENERATION..'
+						);
+						global.childProcess.stdin.write('\n');
+					}, 20000);
 				}
 			},
 		});

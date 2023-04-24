@@ -60,6 +60,7 @@ const router = express.Router();
  */
 
 router.post('/', async (req, res) => {
+	global.serverBusy = true;
 	console.log(`\n===== EMBEDDING REQUEST =====`);
 	const modelId = req.body.model; // TODO: Implement model somehow
 	const llamaPath = getLlamaPath();
@@ -100,10 +101,10 @@ router.post('/', async (req, res) => {
 				});
 				// See llama model embedding sizes: https://huggingface.co/shalomma/llama-7b-embeddings#quantitative-analysis
 				res.status(200).json(dataToEmbeddingResponse(output));
+				console.log(dataToEmbeddingResponse(output))
 				controller.close();
 				console.log('Embedding Request DONE');
-				console.log('Readable Stream: CLOSED');
-				console.log(dataToEmbeddingResponse(output));
+				global.serverBusy = false;
 			};
 
 			const onError = (error) => {
