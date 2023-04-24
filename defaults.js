@@ -25,7 +25,11 @@ export const getArgs = (args) => {
 	const convertedArgs = {};
 	Object.keys(args).forEach((a) => {
 		if (!!openAiToLlamaMapping[a]) {
-			convertedArgs[openAiToLlamaMapping[a]] = args[a];
+			if (a === 'max_tokens' && args[a] === null) {
+				convertedArgs[openAiToLlamaMapping[a]] = -1;
+			} else {
+				convertedArgs[openAiToLlamaMapping[a]] = args[a];
+			}
 		}
 	});
 	const params = { ...defaultParams, ...convertedArgs };
