@@ -146,7 +146,7 @@ app.use(
 );
 app.use('/v1/models', modelsRoutes);
 app.use('/v1/chat', chatRoutes);
-app.use('/v1/embeddings', embeddingsRoutes);
+app.use(/^\/v1(?:\/.+)?\/embeddings$/, embeddingsRoutes);
 app.get('/', (req, res) =>
 	res.type('text/plain').send(`
 ################################################################################
