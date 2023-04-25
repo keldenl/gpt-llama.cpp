@@ -128,7 +128,7 @@ export const compareArrays = (arr1, arr2) => {
 };
 
 // _ don't need to be escaped
-export const unescapeWrongEscapes = (input) => {
+export const unescapeWrongEscapes = (input = '') => {
 	const output = input.replace(/\\_/g, '_');
 	if (output.length < input.length) {
 		console.log(`\n> FIXED ${input.length - output.length} ESCAPED CHARACTER(S)\n`)
