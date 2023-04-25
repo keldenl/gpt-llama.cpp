@@ -77,8 +77,6 @@ router.post('/', async (req, res) => {
 		: req.body.input;
 	const scriptArgs = ['-m', modelPath, '-p', input.replace(/"/g, '\\"')];
 	const promptTokens = Math.ceil(input.length / 4);
-	let completionTokens = 0;
-
 
 	!!global.childProcess && global.childProcess.kill('SIGINT'); // kill previous childprocess
 	global.childProcess = spawn(scriptPath, scriptArgs);
@@ -96,7 +94,6 @@ router.post('/', async (req, res) => {
 			const onData = (chunk) => {
 				const data = stripAnsiCodes(decoder.decode(chunk));
 				outputString += data;
-				completionTokens++;
 			};
 
 			const onClose = () => {
@@ -109,12 +106,10 @@ router.post('/', async (req, res) => {
 				res.status(200).json(dataToEmbeddingResponse(
 					output,
 					promptTokens,
-					completionTokens
 				));
 				console.log(dataToEmbeddingResponse(
 					output,
 					promptTokens,
-					completionTokens
 				))
 				controller.close();
 				console.log('Embedding Request DONE');
