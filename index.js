@@ -18,9 +18,16 @@ import {
 import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
+import { validateAndReturnUserArgs } from './defaults.js';
 
 import dotenv from 'dotenv';
 dotenv.config();
+
+// Check that the user args are valid
+const { errors } = validateAndReturnUserArgs();
+if (errors.length > 0) {
+	process.exit();
+}
 
 const PORT = process.env.PORT;
 
