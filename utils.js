@@ -38,7 +38,7 @@ export const dataToResponse = (
 	reason = null
 ) => {
 	const currDate = new Date();
-	const contentData = { content: data, role: 'assistant' };
+	const contentData = { content: unescapeWrongEscapes(data), role: 'assistant' };
 	const contentName = stream ? 'delta' : 'message';
 
 	return {
@@ -119,3 +119,12 @@ export const compareArrays = (arr1, arr2) => {
 
 	return true;
 };
+
+// _ don't need to be escaped
+export const unescapeWrongEscapes = (input) => {
+	const output = input.replace(/\\_/g, '_');
+	if (output.length < input.length) {
+		console.log(`\n> FIXED ${input.length - output.length} ESCAPED CHARACTER(S)\n`)
+	}
+	return output;
+}

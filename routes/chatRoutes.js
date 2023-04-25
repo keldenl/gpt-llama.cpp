@@ -83,7 +83,7 @@ router.post('/completions', async (req, res) => {
 	const modelPath = getModelPath(req, res);
 	const scriptPath = join(llamaPath, 'main');
 
-	const stream = req.body.stream;
+	const stream = req.body.stream || false;
 
 	if (!modelPath) {
 		return res.status(500).send('re-run Herd with MODEL= variable set.');
@@ -163,14 +163,16 @@ assistant:`;
 	console.log(`\n=====  REQUEST  =====\n${messagesToString([lastMessage])}`);
 
 	let stdoutStream = global.childProcess.stdout;
-
+	let initData = ""
 	const readable = new ReadableStream({
 		start(controller) {
 			const decoder = new TextDecoder();
 			const onData = (chunk) => {
 				const data = stripAnsiCodes(decoder.decode(chunk));
+				initData = initData + data;
+
 				// Don't return initial prompt
-				if (data.includes(`### Response`)) {
+				if (!responseStart && initData.includes(`### Response`)) {
 					responseStart = true;
 					console.log('\n=====  RESPONSE  =====');
 					return;
@@ -180,9 +182,9 @@ assistant:`;
 					process.stdout.write(data);
 					controller.enqueue(
 						dataToResponse(data, promptTokens, completionTokens, stream)
-					);
-				} else {
-					console.log('=====  PROCESSING PROMPT...  =====');
+						);
+					} else {
+						console.log('=====  PROCESSING PROMPT...  =====');
 				}
 			};
 
@@ -296,7 +298,7 @@ assistant:`;
 						.status(200)
 						.json(
 							dataToResponse(
-								responseContent,
+								responseContent.trim(),
 								promptTokens,
 								completionTokens,
 								stream,
