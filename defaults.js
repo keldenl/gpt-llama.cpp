@@ -21,14 +21,20 @@ const openAiToLlamaMapping = {
 	top_p: '--top_p',
 };
 
-const supportedUserArgsToTypes = {
-	threads: 'number',
-	ctx_size: 'number',
-	repeat_penalty: 'number',
-	mlock: 'undefined',
-	lora: 'string',
-	'lora-base': 'string',
+const userArgByName = {
+	threads: { type: 'number', description: 'number of threads to use during computation' },
+	ctx_size: { type: 'number', description: 'size of the prompt context' },
+	repeat_penalty: { type: 'number', description: 'penalize repeat sequence of tokens' },
+	mlock: { type: 'undefined', description: 'force system to keep model in RAM rather than swapping or compressing' },
+	help: { type: 'undefined', description: 'show this help message and exit' },
+	lora: { type: 'string', description: 'apply LoRA adapter (implies --no-mmap)' },
+	'lora-base': {type: 'string', description: 'optional model to use as a base for the layers modified by the LoRA adapter'},
 };
+
+export const getHelpList = Object.keys(userArgByName).map(name => {
+	const {type, description} = userArgByName[name]
+	return `${name}${type !== 'undefined' ? ` (${type})` : ''}: ${description}`
+}).join('\n')
 
 export const validateAndReturnUserArgs = () => {
 	const processArgs = process.argv.slice(2);
@@ -36,8 +42,8 @@ export const validateAndReturnUserArgs = () => {
 
 	processArgs.forEach((arg, i) => {
 		// Check if the argument is supported
-		if (Object.keys(supportedUserArgsToTypes).includes(arg)) {
-			const expectedType = supportedUserArgsToTypes[arg];
+		if (Object.keys(userArgByName).includes(arg)) {
+			const expectedType = userArgByName[arg].type;
 
 			// Check if the argument doesn't require a value
 			if (expectedType === 'undefined') {
@@ -45,7 +51,7 @@ export const validateAndReturnUserArgs = () => {
 				if (i < processArgs.length - 1) {
 					const argValue = processArgs[i + 1];
 					// If next value != an arg, that means it's a value. This arg didn't need a value so add error
-					if (!Object.keys(supportedUserArgsToTypes).includes(argValue)) {
+					if (!Object.keys(userArgByName).includes(argValue)) {
 						errors.push(`${arg} does not require a value.`);
 						return;
 					}
@@ -57,7 +63,7 @@ export const validateAndReturnUserArgs = () => {
 			if (i < processArgs.length - 1) {
 				const argValue = processArgs[i + 1];
 				// If next arg is an user arg, that means we're missing a value
-				if (Object.keys(supportedUserArgsToTypes).includes(argValue)) {
+				if (Object.keys(userArgByName).includes(argValue)) {
 					errors.push(`${arg} is missing a value.`);
 					return;
 				}
@@ -80,7 +86,7 @@ export const validateAndReturnUserArgs = () => {
 			// If this isn't a valid arg, it must be a value. That means prev arg must be a valid arg.
 			if (i > 0) {
 				const prevArg = processArgs[i - 1];
-				if (!Object.keys(supportedUserArgsToTypes).includes(prevArg)) {
+				if (!Object.keys(userArgByName).includes(prevArg)) {
 					errors.push(`${arg} is not a valid argument.`);
 				}
 			} else {
@@ -99,7 +105,7 @@ export const validateAndReturnUserArgs = () => {
 	// Map the user arguments that works with llama.cpp
 	return {
 		userArgs: processArgs.map((arg) => {
-			if (Object.keys(supportedUserArgsToTypes).includes(arg)) {
+			if (Object.keys(userArgByName).includes(arg)) {
 				return `--${arg}`;
 			}
 			return `${arg}`;
