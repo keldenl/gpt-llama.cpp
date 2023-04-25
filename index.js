@@ -7,9 +7,17 @@ import swaggerUi from 'swagger-ui-express';
 import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
+import { validateAndReturnUserArgs } from './defaults.js';
 
 const PORT = process.env.PORT || 443;
 const isWin = process.platform === 'win32';
+
+
+// Check that the user args are valid
+const { errors } = validateAndReturnUserArgs();
+if (errors.length > 0) {
+	process.exit();
+}
 
 const getServerRunningMsg = () => {
 	const ipAddress = IP.address();
