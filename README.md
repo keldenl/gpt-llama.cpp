@@ -156,13 +156,16 @@ That's it!
    # Basic usage
    npm start 
 
-   # To run on a diffrent port
+   # To run on a different port
    # Mac
    PORT=8000 npm start
 
    # Windows cmd
    set PORT=8000
    npm start
+
+   # Use llama.cpp flags (use it without the "--", so instead of "--mlock" do "mlock")
+   npm start mlock threads 8 ctx_size 1000 repeat_penalty 1 lora ../path/lora
    ```
 
 ## Usage
