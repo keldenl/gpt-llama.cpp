@@ -60,7 +60,11 @@ export const dataToResponse = (
 	};
 };
 
-export const dataToEmbeddingResponse = (output) => {
+export const dataToEmbeddingResponse = (
+	output,
+	promptTokens,
+	completionTokens
+) => {
 	return {
 		object: 'list',
 		data: [
@@ -71,6 +75,11 @@ export const dataToEmbeddingResponse = (output) => {
 			},
 		],
 		embeddingSize: output.length,
+		usage: {
+			prompt_tokens: promptTokens,
+			completion_tokens: completionTokens,
+			total_tokens: promptTokens + completionTokens,
+		},
 	};
 };
 
