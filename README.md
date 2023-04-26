@@ -168,20 +168,52 @@ That's it!
    npm start mlock threads 8 ctx_size 1000 repeat_penalty 1 lora ../path/lora
    ```
 
+## Quickstart Installation (with docker)
+
+### Prerequisites
+
+Download appropriate llama models, typically named something like `ggml-model-q4_0.bin`
+
+### Steps
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/keldenl/gpt-llama.cpp.git
+   ```
+
+2. Build the image:
+
+    ```bash
+   cd gpt-llama.cpp
+   docker build -t gpt-llama .
+    ```
+
+3. Run the image to start the server!
+
+    ```bash
+    docker run --name gpt-llama -v <YOUR MODEL DIRECTORY>:/llama.cpp/models -p <YOUR PORT>:443 gpt-llama
+    ```
+
+    Replace <YOUR MODEL DIRECTORY> to the directory you placed the downloaded models and replace <YOUR PORT> to the port you want to expose, like 8000.
+
 ## Usage
 
 1. To set up the GPT-powered app, there are 2 ways:
 
    - To use with a documented GPT-powered application, follow [supported applications](https://github.com/keldenl/gpt-llama.cpp#Supported-applications) directions.
    - To use with a undocumented GPT-powered application, please do the following:
-     - Update the `openai_api_key` slot in the gpt-powered app to the absolute path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`).
+     - Update the `openai_api_key` slot in the gpt-powered app to the absolute path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`). Note that for docker usage, the path should be started with `/llama.cpp/models`, like `"/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`
      - Change the `BASE_URL` for the OpenAi endpoint the app is calling to `localhost:443` or `localhost:443/v1`. This is sometimes provided in the `.env` file, or would require manual updating within the app OpenAi calls depending on the specific application.
 
 2. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready. Test the server by running the `test-installation` script
 
    ```bash
-   # Mac
-   sh ./test-installion.sh
+   # Mac & Linux
+   bash ./test-installation.sh
+
+   # Mac & Linux with docker
+   ENV=docker bash ./test-installation.sh
    ```
 
 3. (Optional) Access the Swagger API docs at `http://localhost:443/docs` to test requests using the provided interface. Note that the authentication token needs to be set to the path of your local llama-based model (i.e. for mac, `"/Users/<YOUR_USERNAME>/Documents/llama.cpp/models/vicuna/7B/ggml-vicuna-7b-4bit-rev1.bin"`) for the requests to work properly.

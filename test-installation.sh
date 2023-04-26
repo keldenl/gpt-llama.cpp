@@ -8,7 +8,7 @@ port=${port:-443} # default port 443
 read -p "Please drag and drop the location of your Llama-based Model (.bin) here and press enter: " path
 
 # Check if the file exists
-if [ ! -f "$path" ]; then
+if [[ "$ENV" != "docker" && ! -f "$path" ]]; then
     echo "Error: The file does not exist. Please make sure you have provided the correct path."
     exit 1
 fi
