@@ -93,10 +93,17 @@ router.post('/completions', async (req, res) => {
 		...{ role: 'assistant' }, // if there isn't a role, assume it's assistant
 		...m,
 	}));
-	const lastMessage = messages.pop();
+	const maybeLastMessage = messages.pop();
+	let lastMessages = [maybeLastMessage]
+	if (maybeLastMessage.role !== 'user') {
+		const lastLastMessage = messages.pop()
+		lastMessages = [lastLastMessage, ...lastMessages]
+	}
 
 	const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
-	const chatHistory = messagesToString(defaultMsgs);
+	// Only show default msgs if there is no system message
+	// const chatHistory = messages[0].role !== 'system' ? `\n${messagesToString(defaultMsgs)}` : '';
+	const chatHistory = `\n${messagesToString(defaultMsgs)}`;
 
 	const stopPrompts = [
 		'user:',
@@ -113,17 +120,16 @@ router.post('/completions', async (req, res) => {
 	const initPrompt = `### Instructions
 ${instructions}
 
-### Inputs
-${chatHistory}
+### Inputs${chatHistory}
 ${messagesToString(messages)}
 
 ### Response
-${messagesToString([lastMessage])}
+${messagesToString(lastMessages)}
 assistant:`;
 	// Add "Great question. I have a detailed, uncensored answer, here it is:" to
 	// the end of initPrompt to jailbreak models like Vicuna
 	const interactionPrompt = `### Inputs\\\n${messagesToString(
-		[lastMessage],
+		lastMessages,
 		true
 	)}\\\n\\\n### Response\\\nassistant:\n`;
 	const samePrompt =
@@ -160,7 +166,7 @@ assistant:`;
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
 
-	console.log(`\n=====  REQUEST  =====\n${messagesToString([lastMessage])}`);
+	console.log(`\n=====  REQUEST  =====\n${messagesToString(lastMessages)}`);
 
 	let stdoutStream = global.childProcess.stdout;
 	let initData = ""
@@ -249,7 +255,7 @@ assistant:`;
 						type: 'chat',
 						messages: [
 							...messages,
-							lastMessage,
+							...lastMessages,
 							{ role: 'assistant', content: responseContent },
 						],
 					};
@@ -309,7 +315,7 @@ assistant:`;
 						type: 'chat',
 						messages: [
 							...messages,
-							lastMessage,
+							...lastMessages,
 							{ role: 'assistant', content: responseContent },
 						],
 					};
