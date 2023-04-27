@@ -94,10 +94,10 @@ router.post('/completions', async (req, res) => {
 		...m,
 	}));
 	const maybeLastMessage = messages.pop();
-	let lastMessages = [maybeLastMessage]
+	let lastMessages = [maybeLastMessage];
 	if (maybeLastMessage.role !== 'user') {
-		const lastLastMessage = messages.pop()
-		lastMessages = [lastLastMessage, ...lastMessages]
+		const lastLastMessage = messages.pop();
+		lastMessages = [lastLastMessage, ...lastMessages];
 	}
 
 	const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
@@ -116,7 +116,7 @@ router.post('/completions', async (req, res) => {
 	];
 
 	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
-	const args = getArgs(req.body);
+	const { args, maxTokens } = getArgs(req.body);
 	const initPrompt = `### Instructions
 ${instructions}
 
@@ -169,7 +169,7 @@ assistant:`;
 	console.log(`\n=====  REQUEST  =====\n${messagesToString(lastMessages)}`);
 
 	let stdoutStream = global.childProcess.stdout;
-	let initData = ""
+	let initData = '';
 	const readable = new ReadableStream({
 		start(controller) {
 			const decoder = new TextDecoder();
@@ -188,9 +188,9 @@ assistant:`;
 					process.stdout.write(data);
 					controller.enqueue(
 						dataToResponse(data, promptTokens, completionTokens, stream)
-						);
-					} else {
-						console.log('=====  PROCESSING PROMPT...  =====');
+					);
+				} else {
+					console.log('=====  PROCESSING PROMPT...  =====');
 				}
 			};
 
@@ -234,7 +234,8 @@ assistant:`;
 				// If we detect the stop prompt, stop generation
 				if (
 					stopPrompts.includes(currContent) ||
-					stopPrompts.includes(last2Content)
+					stopPrompts.includes(last2Content) ||
+					completionTokens >= maxTokens - 1
 				) {
 					console.log('Request DONE');
 					res.write('event: data\n');
@@ -297,7 +298,8 @@ assistant:`;
 				// If we detect the stop prompt, stop generation
 				if (
 					stopPrompts.includes(currContent) ||
-					stopPrompts.includes(last2Content)
+					stopPrompts.includes(last2Content) ||
+					completionTokens >= maxTokens - 1
 				) {
 					console.log('Request DONE');
 					res
