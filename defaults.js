@@ -6,7 +6,7 @@ export const defaultMsgs = [
 
 const defaultParams = {
 	'--temp': '0.7',
-	'--n_predict': '512',
+	'--n_predict': '4000',
 	'--top_p': '0.1',
 	'--top_k': '40',
 	'-b': '512',
@@ -22,19 +22,38 @@ const openAiToLlamaMapping = {
 };
 
 const userArgByName = {
-	threads: { type: 'number', description: 'number of threads to use during computation' },
+	threads: {
+		type: 'number',
+		description: 'number of threads to use during computation',
+	},
 	ctx_size: { type: 'number', description: 'size of the prompt context' },
-	repeat_penalty: { type: 'number', description: 'penalize repeat sequence of tokens' },
-	mlock: { type: 'undefined', description: 'force system to keep model in RAM rather than swapping or compressing' },
+	repeat_penalty: {
+		type: 'number',
+		description: 'penalize repeat sequence of tokens',
+	},
+	mlock: {
+		type: 'undefined',
+		description:
+			'force system to keep model in RAM rather than swapping or compressing',
+	},
 	help: { type: 'undefined', description: 'show this help message and exit' },
-	lora: { type: 'string', description: 'apply LoRA adapter (implies --no-mmap)' },
-	'lora-base': {type: 'string', description: 'optional model to use as a base for the layers modified by the LoRA adapter'},
+	lora: {
+		type: 'string',
+		description: 'apply LoRA adapter (implies --no-mmap)',
+	},
+	'lora-base': {
+		type: 'string',
+		description:
+			'optional model to use as a base for the layers modified by the LoRA adapter',
+	},
 };
 
-export const getHelpList = Object.keys(userArgByName).map(name => {
-	const {type, description} = userArgByName[name]
-	return `${name}${type !== 'undefined' ? ` (${type})` : ''}: ${description}`
-}).join('\n')
+export const getHelpList = Object.keys(userArgByName)
+	.map((name) => {
+		const { type, description } = userArgByName[name];
+		return `${name}${type !== 'undefined' ? ` (${type})` : ''}: ${description}`;
+	})
+	.join('\n');
 
 export const validateAndReturnUserArgs = () => {
 	const processArgs = process.argv.slice(2);
@@ -124,12 +143,15 @@ export const getArgs = (args) => {
 	const { userArgs } = validateAndReturnUserArgs();
 
 	const params = { ...defaultParams, ...convertedArgs };
-	return [
-		...Object.keys(params).flatMap((pKey) =>
-			!!params[pKey] ? [pKey, params[pKey]] : []
-		),
-		...userArgs,
-	];
+	return {
+		args: [
+			...Object.keys(params).flatMap((pKey) =>
+				!!params[pKey] ? [pKey, params[pKey]] : []
+			),
+			...userArgs,
+		],
+		maxTokens: params['--n_predict'],
+	};
 };
 
 export const gptModelNames = {

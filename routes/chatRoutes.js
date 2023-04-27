@@ -116,7 +116,7 @@ router.post('/completions', async (req, res) => {
 	];
 
 	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
-	const args = getArgs(req.body);
+	const { args, maxTokens } = getArgs(req.body);
 	const initPrompt = `### Instructions
 ${instructions}
 
@@ -234,7 +234,8 @@ assistant:`;
 				// If we detect the stop prompt, stop generation
 				if (
 					stopPrompts.includes(currContent) ||
-					stopPrompts.includes(last2Content)
+					stopPrompts.includes(last2Content) ||
+					completionTokens >= maxTokens - 1
 				) {
 					console.log('Request DONE');
 					res.write('event: data\n');
@@ -297,7 +298,8 @@ assistant:`;
 				// If we detect the stop prompt, stop generation
 				if (
 					stopPrompts.includes(currContent) ||
-					stopPrompts.includes(last2Content)
+					stopPrompts.includes(last2Content) ||
+					completionTokens >= maxTokens - 1
 				) {
 					console.log('Request DONE');
 					res
