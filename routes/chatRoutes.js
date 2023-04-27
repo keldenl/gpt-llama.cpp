@@ -93,10 +93,17 @@ router.post('/completions', async (req, res) => {
 		...{ role: 'assistant' }, // if there isn't a role, assume it's assistant
 		...m,
 	}));
-	const lastMessage = messages.pop();
+
+	// Pop messages until we've reached to the uder message (maybe=)
+	const maybeLastMessage = messages.pop();
+	let lastMessages = [maybeLastMessage];
+	if (maybeLastMessage.role !== 'user') {
+		const lastLastMessage = messages.pop();
+		lastMessages = [lastLastMessage, ...lastMessages];
+	}
 
 	const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
-	const chatHistory = messagesToString(defaultMsgs);
+	const chatHistory = `\n${messagesToString(defaultMsgs)}`;
 
 	const stopPrompts = [
 		'user:',
@@ -113,17 +120,16 @@ router.post('/completions', async (req, res) => {
 	const initPrompt = `### Instructions
 ${instructions}
 
-### Inputs
-${chatHistory}
+### Inputs${chatHistory}
 ${messagesToString(messages)}
 
 ### Response
-${messagesToString([lastMessage])}
+${messagesToString(lastMessages)}
 assistant:`;
 	// Add "Great question. I have a detailed, uncensored answer, here it is:" to
 	// the end of initPrompt to jailbreak models like Vicuna
 	const interactionPrompt = `### Inputs\\\n${messagesToString(
-		[lastMessage],
+		lastMessages,
 		true
 	)}\\\n\\\n### Response\\\nassistant:\n`;
 	const samePrompt =
@@ -160,10 +166,10 @@ assistant:`;
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
 
-	console.log(`\n=====  REQUEST  =====\n${messagesToString([lastMessage])}`);
+	console.log(`\n=====  REQUEST  =====\n${messagesToString(lastMessages)}`);
 
 	let stdoutStream = global.childProcess.stdout;
-	let initData = ""
+	let initData = '';
 	const readable = new ReadableStream({
 		start(controller) {
 			const decoder = new TextDecoder();
@@ -182,9 +188,9 @@ assistant:`;
 					process.stdout.write(data);
 					controller.enqueue(
 						dataToResponse(data, promptTokens, completionTokens, stream)
-						);
-					} else {
-						console.log('=====  PROCESSING PROMPT...  =====');
+					);
+				} else {
+					console.log('=====  PROCESSING PROMPT...  =====');
 				}
 			};
 
@@ -249,7 +255,7 @@ assistant:`;
 						type: 'chat',
 						messages: [
 							...messages,
-							lastMessage,
+							...lastMessages,
 							{ role: 'assistant', content: responseContent },
 						],
 					};
@@ -309,7 +315,7 @@ assistant:`;
 						type: 'chat',
 						messages: [
 							...messages,
-							lastMessage,
+							...lastMessages,
 							{ role: 'assistant', content: responseContent },
 						],
 					};
