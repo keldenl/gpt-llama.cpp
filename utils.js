@@ -25,7 +25,8 @@ export const messagesToString = (messages, newLine = false) => {
 	const whitespace = newLine ? `\\\n` : ` `;
 	return messages
 		.map((m) => {
-			return `${m.role || 'assistant'}:${whitespace}${m.content}`;
+			const name = !!m.name ? `(${m.name})` : ''
+			return `${m.role || 'assistant'}${name}:${whitespace}${m.content}`;
 		})
 		.join('\n');
 };
