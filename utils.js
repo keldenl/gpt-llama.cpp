@@ -61,6 +61,34 @@ export const dataToResponse = (
 	};
 };
 
+export const dataToCompletionResponse = (
+	data,
+	promptTokens,
+	completionTokens,
+	reason = null
+) => {
+	const currDate = new Date();
+
+	return {
+		id: nanoid(),
+		object: 'text_completion',
+		created: currDate.getTime(),
+		choices: [
+			{
+				text: {content: !!data ? unescapeWrongEscapes(data) : ''},
+				finish_reason: reason,
+				index: 0,
+				logprobs: null,
+			},
+		],
+		usage: {
+			prompt_tokens: promptTokens,
+			completion_tokens: completionTokens,
+			total_tokens: promptTokens + completionTokens,
+		},
+	};
+};
+
 export const dataToEmbeddingResponse = (
 	output,
 	promptTokens,
@@ -130,7 +158,7 @@ export const compareArrays = (arr1, arr2) => {
 
 // _ don't need to be escaped
 export const unescapeWrongEscapes = (input = '') => {
-	const output = input.replace(/\\_/g, '_');
+	const output = input.replace(/\\_/g, '_').replaceAll('�', '');
 	if (output.length < input.length) {
 		console.log(`\n> FIXED ${input.length - output.length} ESCAPED CHARACTER(S)\n`)
 	}

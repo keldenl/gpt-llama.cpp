@@ -6,6 +6,7 @@ import swaggerUi from 'swagger-ui-express';
 
 import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import completionsRoutes from './routes/completionsRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
 import { getHelpList, validateAndReturnUserArgs } from './defaults.js';
 
@@ -151,6 +152,7 @@ app.use(
 );
 app.use('/v1/models', modelsRoutes);
 app.use('/v1/chat', chatRoutes);
+app.use('/v1/completions', completionsRoutes);
 app.use(/^\/v1(?:\/.+)?\/embeddings$/, embeddingsRoutes);
 app.get('/', (req, res) =>
 	res.type('text/plain').send(`
