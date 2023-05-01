@@ -166,6 +166,14 @@ That's it!
 
    # Use llama.cpp flags (use it without the "--", so instead of "--mlock" do "mlock")
    npm start mlock threads 8 ctx_size 1000 repeat_penalty 1 lora ../path/lora
+
+   # To use sentence transformers instead of llama.cpp based embedding set EMBEDDINGS env var to "py"
+   # Mac
+   EMBEDDINGS=py npm start
+
+   # Windows cmd
+   set PORT=EMBEDDINGS=py
+   npm start
    ```
 
 ## Usage
