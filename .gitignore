@@ -5,10 +5,17 @@
 /.pnp
 .pnp.js
 
+# python
+extensions/embeddings/__pycache__
+extensions/embeddings/input.txt
+extensions/embeddings/output.txt
+
+
 # testing
 /coverage
 
 # production
+
 
 # misc
 .DS_Store

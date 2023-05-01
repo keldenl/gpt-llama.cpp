@@ -7,7 +7,8 @@
     "scripts": {
         "start": "node index.js",
         "dev": "nodemon index.js",
-        "precommit": "prettier --write ."
+        "precommit": "prettier --write .",
+        "postinstall": "cd extensions/embeddings/ && python -m pip install -r requirements.txt"
     },
     "author": "kelden",
     "license": "MIT",
