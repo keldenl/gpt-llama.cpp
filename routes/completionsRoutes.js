@@ -112,7 +112,7 @@ router.post('/', async (req, res) => {
 	console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 
 	console.log(`\n=====  REQUEST  =====`);
-	console.log(prompt)
+	console.log(`"${prompt}"`)
 
 	let stdoutStream = global.childProcess.stdout;
 	let initData = '';
@@ -184,6 +184,7 @@ router.post('/', async (req, res) => {
 					stopPrompts.includes(last2Content) ||
 					completionTokens >= maxTokens - 1
 				) {
+					global.childProcess.kill('SIGINT');
 					console.log('Request DONE');
 					res.write('event: data\n');
 					res.write(
@@ -245,6 +246,7 @@ router.post('/', async (req, res) => {
 					stopPrompts.includes(last2Content) ||
 					completionTokens >= maxTokens - 1
 				) {
+					global.childProcess.kill('SIGINT');
 					console.log('Request DONE');
 					res
 						.status(200)
