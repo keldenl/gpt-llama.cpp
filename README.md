@@ -172,7 +172,7 @@ That's it!
    EMBEDDINGS=py npm start
 
    # Windows cmd
-   set PORT=EMBEDDINGS=py
+   set EMBEDDINGS=py
    npm start
    ```
 
