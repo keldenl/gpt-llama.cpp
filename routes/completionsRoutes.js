@@ -168,9 +168,9 @@ router.post('/', async (req, res) => {
 		let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
 		const writable = new WritableStream({
 			write(chunk) {
-				const currContent = chunk.choices[0].delta.content;
+				const currContent = chunk.choices[0].text;
 				const lastContent = !!lastChunk
-					? lastChunk.choices[0].delta.content
+					? lastChunk.choices[0].text
 					: undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
@@ -230,9 +230,9 @@ router.post('/', async (req, res) => {
 		let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
 		const writable = new WritableStream({
 			write(chunk) {
-				const currContent = chunk.choices[0].message.content;
+				const currContent = chunk.choices[0].text;
 				const lastContent = !!lastChunk
-					? lastChunk.choices[0].message.content
+					? lastChunk.choices[0].text
 					: undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
