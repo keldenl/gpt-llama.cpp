@@ -199,6 +199,7 @@ router.post('/', async (req, res) => {
 					);
 					res.write('event: data\n');
 					res.write('data: [DONE]\n\n');
+					res.end();
 					global.lastRequest = {
 						type: 'completion',
 						prompt: prompt,
