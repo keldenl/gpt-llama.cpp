@@ -252,6 +252,7 @@ assistant:`;
 					);
 					res.write('event: data\n');
 					res.write('data: [DONE]\n\n');
+					res.end();
 					global.lastRequest = {
 						type: 'chat',
 						messages: [
