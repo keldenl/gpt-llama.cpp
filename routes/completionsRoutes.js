@@ -132,7 +132,7 @@ router.post('/', async (req, res) => {
 				if (responseStart) {
 					process.stdout.write(data);
 					controller.enqueue(
-						dataToResponse(data, promptTokens, completionTokens, stream)
+						dataToCompletionResponse(data, promptTokens, completionTokens, stream)
 					);
 				} else {
 					console.log('=====  PROCESSING PROMPT...  =====');
