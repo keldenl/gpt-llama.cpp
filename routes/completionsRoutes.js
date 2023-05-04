@@ -91,7 +91,7 @@ router.post('/', async (req, res) => {
 	}
 
 	const prompt = req.body.prompt;
-	const stopPrompts = typeof req.body.stop === 'string' ? [req.body.stop] : req.body.stop || ['\n'];
+	const stopPrompts = typeof req.body.stop === 'string' ? [req.body.stop] : req.body.stop || ['\n\n'];
 	console.log(stopPrompts)
 	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
 	console.log(stopArgs);
