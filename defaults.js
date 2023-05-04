@@ -47,6 +47,10 @@ const userArgByName = {
 		description:
 			'optional model to use as a base for the layers modified by the LoRA adapter',
 	},
+	mirostat: {
+		type: 'number',
+		description: 'use Mirostat sampling (default: 0, 0=disabled, 1=Mirostat, 2=Mirostat 2.0)'
+	}
 };
 
 export const getHelpList = Object.keys(userArgByName)
@@ -121,6 +125,13 @@ export const validateAndReturnUserArgs = () => {
 		console.log('Please double check that your npm arguments are correct.');
 		return { errors, userArgs: [] };
 	}
+
+	console.log(processArgs.map((arg) => {
+		if (Object.keys(userArgByName).includes(arg)) {
+			return `--${arg}`;
+		}
+		return `${arg}`;
+	}))
 
 	// Map the user arguments that works with llama.cpp
 	return {
