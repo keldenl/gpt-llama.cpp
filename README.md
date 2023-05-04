@@ -21,6 +21,7 @@ _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbo
 ### 🔥 Hot Topics (5/3/2023)
 
 - LANGCHAIN SUPPORT 🔥🔥
+- AUTO-ADD SUPPORT FOR GPT-POWERED APPS WITH PYTHON `add-api-base.py` SCRIPT🔥🔥
 - Embeddings support added (non-llama based, higher accuracy)
 - Text Completion support added
 - 🔥🔥 HIGHLY CUSTOMIZED gpt-llama.cpp POWERED BOT free to use in the server!! [https://discord.gg/yseR47MqpN](https://discord.gg/yseR47MqpN) 
