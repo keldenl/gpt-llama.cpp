@@ -75,7 +75,7 @@ export const dataToCompletionResponse = (
 		created: currDate.getTime(),
 		choices: [
 			{
-				text: {content: !!data ? unescapeWrongEscapes(data) : ''},
+				text: !!data ? unescapeWrongEscapes(data) : '',
 				finish_reason: reason,
 				index: 0,
 				logprobs: null,
