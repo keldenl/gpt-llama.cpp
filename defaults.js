@@ -6,7 +6,7 @@ export const defaultMsgs = [
 
 const defaultParams = {
 	'--temp': '0.7',
-	'--n_predict': '4000',
+	'--n_predict': '-1',
 	'--top_p': '0.1',
 	'--top_k': '40',
 	'-b': '2000',
@@ -148,12 +148,11 @@ export const validateAndReturnUserArgs = () => {
 export const getArgs = (args) => {
 	const convertedArgs = {};
 	Object.keys(args).forEach((a) => {
-		if (!!openAiToLlamaMapping[a]) {
+		if (!!openAiToLlamaMapping[a] && !!args[a]) {
 			convertedArgs[openAiToLlamaMapping[a]] = args[a];
 		}
 	});
 	const { userArgs } = validateAndReturnUserArgs();
-
 	const params = { ...defaultParams, ...convertedArgs };
 	return {
 		args: [
