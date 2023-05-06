@@ -176,9 +176,8 @@ assistant:`;
 			const onData = (chunk) => {
 				const data = stripAnsiCodes(decoder.decode(chunk));
 				initData = initData + data;
-
 				// Don't return initial prompt
-				if (!responseStart && initData.includes(`### Response`)) {
+				if (!responseStart && initData.length > initPrompt.length) {
 					responseStart = true;
 					console.log('\n=====  RESPONSE  =====');
 					return;
