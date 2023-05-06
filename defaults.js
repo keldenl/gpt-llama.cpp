@@ -148,8 +148,12 @@ export const validateAndReturnUserArgs = () => {
 export const getArgs = (args) => {
 	const convertedArgs = {};
 	Object.keys(args).forEach((a) => {
-		if (!!openAiToLlamaMapping[a] && !!args[a]) {
-			convertedArgs[openAiToLlamaMapping[a]] = args[a];
+		if (!!openAiToLlamaMapping[a]) {
+			if (a === 'max_tokens' && args[a] === null) {
+				convertedArgs[openAiToLlamaMapping[a]] = -1;
+			} else if (!!args[a]) {
+				convertedArgs[openAiToLlamaMapping[a]] = args[a];
+			}
 		}
 	});
 	const { userArgs } = validateAndReturnUserArgs();
