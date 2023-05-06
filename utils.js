@@ -25,7 +25,8 @@ export const messagesToString = (messages, newLine = false) => {
 	const whitespace = newLine ? `\\\n` : ` `;
 	return messages
 		.map((m) => {
-			return `${m.role || 'assistant'}:${whitespace}${m.content}`;
+			const name = !!m.name ? `(${m.name})` : ''
+			return `${m.role || 'assistant'}${name}:${whitespace}${m.content}`;
 		})
 		.join('\n');
 };
@@ -38,7 +39,7 @@ export const dataToResponse = (
 	reason = null
 ) => {
 	const currDate = new Date();
-	const contentData = { content: data, role: 'assistant', };
+	const contentData = { content: unescapeWrongEscapes(data), role: 'assistant' };
 	const contentName = stream ? 'delta' : 'message';
 
 	return {
@@ -60,7 +61,38 @@ export const dataToResponse = (
 	};
 };
 
-export const dataToEmbeddingResponse = (output) => {
+export const dataToCompletionResponse = (
+	data,
+	promptTokens,
+	completionTokens,
+	reason = null
+) => {
+	const currDate = new Date();
+
+	return {
+		id: nanoid(),
+		object: 'text_completion',
+		created: currDate.getTime(),
+		choices: [
+			{
+				text: !!data ? unescapeWrongEscapes(data) : '',
+				finish_reason: reason,
+				index: 0,
+				logprobs: null,
+			},
+		],
+		usage: {
+			prompt_tokens: promptTokens,
+			completion_tokens: completionTokens,
+			total_tokens: promptTokens + completionTokens,
+		},
+	};
+};
+
+export const dataToEmbeddingResponse = (
+	output,
+	promptTokens,
+) => {
 	return {
 		object: 'list',
 		data: [
@@ -71,6 +103,10 @@ export const dataToEmbeddingResponse = (output) => {
 			},
 		],
 		embeddingSize: output.length,
+		usage: {
+			prompt_tokens: promptTokens,
+			total_tokens: promptTokens,
+		},
 	};
 };
 
@@ -119,3 +155,12 @@ export const compareArrays = (arr1, arr2) => {
 
 	return true;
 };
+
+// _ don't need to be escaped
+export const unescapeWrongEscapes = (input = '') => {
+	const output = input.replace(/\\_/g, '_').replaceAll('�', '');
+	if (output.length < input.length) {
+		console.log(`\n> FIXED ${input.length - output.length} ESCAPED CHARACTER(S)\n`)
+	}
+	return output;
+}

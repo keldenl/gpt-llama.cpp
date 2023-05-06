@@ -1,13 +1,14 @@
 {
     "name": "gpt-llama.cpp",
-    "version": "0.1.9",
+    "version": "0.2.3",
     "description": "A llama.cpp drop-in replacement for OpenAI's GPT endpoints, allowing GPT-powered apps to run off local llama.cpp models instead of OpenAi.",
     "main": "index.js",
     "type": "module",
     "scripts": {
         "start": "node index.js",
         "dev": "nodemon index.js",
-        "precommit": "prettier --write ."
+        "precommit": "prettier --write .",
+        "postinstall": "cd extensions/embeddings/ && python -m pip install -r requirements.txt"
     },
     "author": "kelden",
     "license": "MIT",
@@ -34,6 +35,6 @@
         "node": ">=18.0.0"
     },
     "bin": {
-        "gpt-llama.cpp": "node bin/cli.cjs"
+        "gpt-llama.cpp": "./bin/cli.cjs"
     }
 }

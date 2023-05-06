@@ -37,7 +37,26 @@ NOTE: For now, install `Auto-GPT` based on the DGdev91's [PR #2594](https://gith
         python -m autogpt
     ```
 
-That's it! Make sure to also run `gpt-llama.cpp` in a separate terminal/cmd window.
+Make sure to also run `gpt-llama.cpp` in a separate terminal/cmd window. 
+
+### EMBEDDING IMPROVEMENTS
+You may also want to run the sentence transformers extension for `gpt-llama.cpp` instead of relying on `llama.cpp`-based embeddings (I've seen it fail on huge inputs). It's the recommended way to do this and here's how to set it up and do it:
+
+```bash
+# Make sure you npm install, which triggers the pip/python requirements.txt installation
+npm install 
+
+# Note that first time running an embedding may require installation of the sentence transformer. 
+# So it may take a while
+
+# To use sentence transformers instead of llama.cpp based embedding set EMBEDDINGS env var to "py"
+# Mac
+EMBEDDINGS=py npm start
+
+# Windows cmd
+set EMBEDDINGS=py
+npm start
+```
 
 ## Demo
 

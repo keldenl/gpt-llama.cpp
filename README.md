@@ -18,12 +18,14 @@
 ![Demo GIF](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
 _Real-time speedy interaction mode demo of using `gpt-llama.cpp`'s API + [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) (GPT-powered app) running on a M1 Mac with local `Vicuna-7B` model. See all demos [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/demos.md)._
 
-### 🔥 Hot Topics (4/20/2023)
+### 🔥 Hot Topics (5/3/2023)
 
-- 🔥🔥 WE MADE A DISCORD CHANNEL, JOIN HERE: [https://discord.gg/aWHBQnJaFC](https://discord.gg/aWHBQnJaFC) 🔥🔥
-- ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support should be complete. Continued optimizatino work..
-- BabyAGI/TeenageAGI support
-- Discord bot!
+- LANGCHAIN SUPPORT 🔥🔥
+- AUTO-ADD SUPPORT FOR GPT-POWERED APPS WITH PYTHON `add-api-base.py` SCRIPT🔥🔥
+- Embeddings support added (non-llama based, higher accuracy)
+- Text Completion support added
+- 🔥🔥 HIGHLY CUSTOMIZED gpt-llama.cpp POWERED BOT free to use in the server!! [https://discord.gg/yseR47MqpN](https://discord.gg/yseR47MqpN) 
+- ~~[Auto-GPT support](https://github.com/keldenl/gpt-llama.cpp/issues/2)~~ Basic support complete. Continued optimization work ongoing (new updates on 4/22, 4/23), track progress on this [github issue](https://github.com/keldenl/gpt-llama.cpp/issues/2)
 
 ## Description
 
@@ -55,8 +57,9 @@ The purpose is to enable GPT-powered apps without relying on OpenAI's GPT endpoi
 The following applications (list growing) have been tested and confirmed to work with `gpt-llama.cpp`:
 
 - [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui) - [setup guide](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/chatbot-ui-setup-guide.md)
-- [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri) - [setup guide](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
+- ☘️ _NEW_ [langchain](https://github.com/hwchase17/langchain) - (minimal) SETUP GUIDE SOON
 - ☘️ _WORKS WITH FORK:_ [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT) - setup guide [here](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/Auto-GPT-setup-guide.md)
+- [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri) - [setup guide](https://github.com/keldenl/gpt-llama.cpp/blob/master/docs/ChatGPT-Siri-setup-guide.md)
   - Issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/2)
 - ☘️ _WORKS WITH FORK:_ [ai-code-translator](https://github.com/mckaywrigley/ai-code-translator)
   - See issue tracking this [here](https://github.com/keldenl/gpt-llama.cpp/issues/3)
@@ -157,12 +160,23 @@ That's it!
    # Basic usage
    npm start 
 
-   # To run on a diffrent port
+   # To run on a different port
    # Mac
    PORT=8000 npm start
 
    # Windows cmd
    set PORT=8000
+   npm start
+
+   # Use llama.cpp flags (use it without the "--", so instead of "--mlock" do "mlock")
+   npm start mlock threads 8 ctx_size 1000 repeat_penalty 1 lora ../path/lora
+
+   # To use sentence transformers instead of llama.cpp based embedding set EMBEDDINGS env var to "py"
+   # Mac
+   EMBEDDINGS=py npm start
+
+   # Windows cmd
+   set EMBEDDINGS=py
    npm start
    ```
 

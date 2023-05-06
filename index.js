@@ -6,10 +6,24 @@ import swaggerUi from 'swagger-ui-express';
 
 import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import completionsRoutes from './routes/completionsRoutes.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
+import { getHelpList, validateAndReturnUserArgs } from './defaults.js';
 
 const PORT = process.env.PORT || 443;
 const isWin = process.platform === 'win32';
+
+// Check that the user args are valid
+const { errors, userArgs } = validateAndReturnUserArgs();
+if (errors.length > 0) {
+	process.exit();
+}
+if (userArgs.includes('--help')) {
+	console.log('=====  LIST OF AVAILABLE ARGS  ======');
+	console.log(getHelpList);
+	console.log();
+	process.exit();
+}
 
 const getServerRunningMsg = () => {
 	const ipAddress = IP.address();
@@ -22,10 +36,10 @@ See Docs
 
 Test your installation
   - ${
-	isWin
-		? 'double click the test-installation.ps1 (powershell) or test-installation.bat (cmd) file'
-		: 'open another terminal window and run sh ./test-installation.sh'
-}
+		isWin
+			? 'double click the test-installation.ps1 (powershell) or test-installation.bat (cmd) file'
+			: 'open another terminal window and run sh ./test-installation.sh'
+	}
 
 See https://github.com/keldenl/gpt-llama.cpp#usage for more guidance.`;
 };
@@ -72,6 +86,7 @@ const options = {
 
 const specs = swaggerJsdoc(options);
 
+global.serverBusy = false;
 global.childProcess = undefined;
 global.lastRequest = undefined;
 
@@ -79,6 +94,55 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// MIDDLEWARE CODE TO LIMIT REQUESTS TO 1 AT A TIME
+let requestQueue = [];
+
+function processNextRequest() {
+	if (requestQueue.length === 0) {
+		return;
+	}
+	// check if server is currently processing a request
+	if (!global.serverBusy) {
+		let nextRequest = requestQueue.shift();
+		processRequest(nextRequest.req, nextRequest.res, nextRequest.next);
+	} else {
+		console.log('> SERVER BUSY, REQUEST QUEUED');
+	}
+}
+
+// create a function to process the requests
+function processRequest(req, res, next) {
+	// do the work for this request here
+	console.log(`> PROCESSING NEXT REQUEST FOR ${req.url}`);
+
+	// call the next middleware
+	next();
+}
+
+// create a middleware function to handle incoming requests
+function requestHandler(req, res, next) {
+	console.log('> REQUEST RECEIVED');
+	requestQueue.push({ req, res, next });
+	processNextRequest();
+
+	const jitter = Math.floor(Math.random() * 1000);
+	const busyInterval = setInterval(() => {
+		if (global.serverBusy) {
+			// still working on previos request
+			return;
+		}
+		console.log('> PROCESS COMPLETE');
+		clearInterval(busyInterval);
+		if (requestQueue.length > 0) {
+			console.log(
+				`> ${requestQueue.length} REQUEST(S) IN QUEUE. STARTING NEXT REQUEST...`
+			);
+			processNextRequest();
+		}
+	}, 2500 + jitter);
+}
+
+app.use(requestHandler);
 app.use(
 	'/docs',
 	swaggerUi.serve,
@@ -88,14 +152,17 @@ app.use(
 );
 app.use('/v1/models', modelsRoutes);
 app.use('/v1/chat', chatRoutes);
-app.use('/v1/embeddings', embeddingsRoutes);
-app.get('/', (req, res) => res.type('text/plain').send(`
+app.use('/v1/completions', completionsRoutes);
+app.use(/^\/v1(?:\/.+)?\/embeddings$/, embeddingsRoutes);
+app.get('/', (req, res) =>
+	res.type('text/plain').send(`
 ################################################################################
 ### WELCOME TO GPT-LLAMA!!
 ################################################################################
 
 
-${getServerRunningMsg()}`));
+${getServerRunningMsg()}`)
+);
 
 app.listen(PORT, () => {
 	console.log(getServerRunningMsg());
