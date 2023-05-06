@@ -171,23 +171,27 @@ assistant:`;
 	let stdoutStream = global.childProcess.stdout;
 	let stderrStream = global.childProcess.stderr;
 
+	let lastErr = '';
+
 	const stderr = new ReadableStream({
 		start(controller) {
 			const decoder = new TextDecoder();
 			const onData = (chunk) => {
 				const data = stripAnsiCodes(decoder.decode(chunk));
-				// Handle stderr data here
-				console.error('=====  STDERR  =====');
-				console.error(data);
+				lastErr = data;
 			};
 
 			const onClose = () => {
+				console.error('\n=====  STDERR  =====');
 				console.log('stderr Readable Stream: CLOSED');
+				console.log(lastErr);
 				controller.close();
 			};
-
+			
 			const onError = (error) => {
+				console.error('\n=====  STDERR  =====');
 				console.log('stderr Readable Stream: ERROR');
+				console.log(lastErr);
 				console.log(error);
 				controller.error(error);
 			};
