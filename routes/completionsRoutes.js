@@ -132,7 +132,7 @@ router.post('/', async (req, res) => {
 				if (responseStart) {
 					process.stdout.write(data);
 					controller.enqueue(
-						dataToResponse(data, promptTokens, completionTokens, stream)
+						dataToCompletionResponse(data, promptTokens, completionTokens, stream)
 					);
 				} else {
 					console.log('=====  PROCESSING PROMPT...  =====');
@@ -168,9 +168,9 @@ router.post('/', async (req, res) => {
 		let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
 		const writable = new WritableStream({
 			write(chunk) {
-				const currContent = chunk.choices[0].delta.content;
+				const currContent = chunk.choices[0].text;
 				const lastContent = !!lastChunk
-					? lastChunk.choices[0].delta.content
+					? lastChunk.choices[0].text
 					: undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
@@ -199,6 +199,7 @@ router.post('/', async (req, res) => {
 					);
 					res.write('event: data\n');
 					res.write('data: [DONE]\n\n');
+					res.end();
 					global.lastRequest = {
 						type: 'completion',
 						prompt: prompt,
@@ -230,9 +231,9 @@ router.post('/', async (req, res) => {
 		let lastChunk; // in case stop prompts are longer, lets combine the last 2 chunks to check
 		const writable = new WritableStream({
 			write(chunk) {
-				const currContent = chunk.choices[0].message.content;
+				const currContent = chunk.choices[0].text;
 				const lastContent = !!lastChunk
-					? lastChunk.choices[0].message.content
+					? lastChunk.choices[0].text
 					: undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
