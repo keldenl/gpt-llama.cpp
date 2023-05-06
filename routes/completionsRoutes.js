@@ -92,9 +92,7 @@ router.post('/', async (req, res) => {
 
 	const prompt = req.body.prompt;
 	const stopPrompts = typeof req.body.stop === 'string' ? [req.body.stop] : req.body.stop || ['\n\n'];
-	console.log(stopPrompts)
 	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
-	console.log(stopArgs);
 	const { args, maxTokens } = getArgs(req.body);
 
 	// important variables
@@ -115,8 +113,40 @@ router.post('/', async (req, res) => {
 	console.log(`"${prompt}"`)
 
 	let stdoutStream = global.childProcess.stdout;
+	let stderrStream = global.childProcess.stderr;
+
+	let lastErr = '';
+	const stderr = new ReadableStream({
+		start(controller) {
+			const decoder = new TextDecoder();
+			const onData = (chunk) => {
+				const data = stripAnsiCodes(decoder.decode(chunk));
+				lastErr = data;
+			};
+
+			const onClose = () => {
+				console.error('\n=====  STDERR  =====');
+				console.log('stderr Readable Stream: CLOSED');
+				console.log(lastErr);
+				controller.close();
+			};
+			
+			const onError = (error) => {
+				console.error('\n=====  STDERR  =====');
+				console.log('stderr Readable Stream: ERROR');
+				console.log(lastErr);
+				console.log(error);
+				controller.error(error);
+			};
+
+			stderrStream.on('data', onData);
+			stderrStream.on('close', onClose);
+			stderrStream.on('error', onError);
+		},
+	});
+
 	let initData = '';
-	const readable = new ReadableStream({
+	const stdout = new ReadableStream({
 		start(controller) {
 			const decoder = new TextDecoder();
 			const onData = (chunk) => {
@@ -224,7 +254,7 @@ router.post('/', async (req, res) => {
 			},
 		});
 
-		readable.pipeTo(writable);
+		stdout.pipeTo(writable);
 	}
 	// Return a single json response instead of streaming
 	else {
@@ -280,7 +310,7 @@ router.post('/', async (req, res) => {
 				}
 			},
 		});
-		readable.pipeTo(writable);
+		stdout.pipeTo(writable);
 	}
 });
 
