@@ -9,8 +9,7 @@ const defaultParams = {
 	'--n_predict': '1000',
 	'--top_p': '0.1',
 	'--top_k': '40',
-	// '-b': '2000',
-	// '-c': '4096',
+	'-c': '2048',
 	'--seed': '-1',
 	'--repeat_penalty': '1.1764705882352942',
 };
@@ -125,13 +124,6 @@ export const validateAndReturnUserArgs = () => {
 		console.log('Please double check that your npm arguments are correct.');
 		return { errors, userArgs: [] };
 	}
-
-	console.log(processArgs.map((arg) => {
-		if (Object.keys(userArgByName).includes(arg)) {
-			return `--${arg}`;
-		}
-		return `${arg}`;
-	}))
 
 	// Map the user arguments that works with llama.cpp
 	return {
