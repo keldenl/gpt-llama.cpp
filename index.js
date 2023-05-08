@@ -6,7 +6,9 @@ import swaggerUi from 'swagger-ui-express';
 
 import modelsRoutes from './routes/modelsRoutes.js';
 import chatRoutes from './routes/chatRoutes.js';
+import chatRoutesGGML from './routes/chatRoutes-ggml.js';
 import completionsRoutes from './routes/completionsRoutes.js';
+import completionsRoutesGGML from './routes/completionsRoutes-ggml.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
 import { getHelpList, validateAndReturnUserArgs } from './defaults.js';
 
@@ -24,6 +26,9 @@ if (userArgs.includes('--help')) {
 	console.log();
 	process.exit();
 }
+
+const configChatRoutes = userArgs.includes('--ggml') ? chatRoutesGGML : chatRoutes
+const configCompletionRoutes = userArgs.includes('--ggml') ? completionsRoutesGGML : completionsRoutes
 
 const getServerRunningMsg = () => {
 	const ipAddress = IP.address();
@@ -151,8 +156,8 @@ app.use(
 	})
 );
 app.use('/v1/models', modelsRoutes);
-app.use('/v1/chat', chatRoutes);
-app.use('/v1/completions', completionsRoutes);
+app.use('/v1/chat', configChatRoutes);
+app.use('/v1/completions', configCompletionRoutes);
 app.use(/^\/v1(?:\/.+)?\/embeddings$/, embeddingsRoutes);
 app.get('/', (req, res) =>
 	res.type('text/plain').send(`
