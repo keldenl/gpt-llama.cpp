@@ -126,17 +126,34 @@ export const normalizePath = (path) =>
 
 const splitPath = (path) => path.split(/[\/\\]/);
 
+
 export const getModelName = (path) => {
 	const normalizedPath = normalizePath(path);
 	const modelArr = splitPath(normalizedPath);
 	return modelArr[modelArr.length - 1];
 };
 
+// LLAMA.CPP
 export const getLlamaPath = (req, res) => {
 	const modelPath = getModelPath(req, res);
-	const path = modelPath.split('llama.cpp')[0]; // only
+	const path = modelPath.split('llama.cpp')[0];
 	return join(path, 'llama.cpp');
 };
+
+// GGML
+export const getGgmlModelType = (req, res) => {
+	const modelPath = getModelPath(req, res);
+	const path = modelPath.split('models')[1];
+	const modelArr = splitPath(path);
+	return modelArr[1];
+};
+
+export const getGgmlPath = (req, res) => {
+	const modelPath = getModelPath(req, res);
+	const path = modelPath.split('build')[0];
+	return join(path, 'build', 'bin');
+};
+
 
 export const compareArrays = (arr1, arr2) => {
 	if (arr1.length !== arr2.length) {
