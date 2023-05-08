@@ -5,10 +5,11 @@ import {
 	stripAnsiCodes,
 	messagesToString,
 	dataToResponse,
-	getLlamaPath,
 	getModelPath,
 	compareArrays,
 	dataToCompletionResponse,
+	getGgmlModelType,
+	getGgmlPath,
 } from '../utils.js';
 import { defaultMsgs, getArgs } from '../defaults.js';
 
@@ -80,9 +81,13 @@ router.post('/', async (req, res) => {
 	console.log(`\n=====  TEXT COMPLETION REQUEST  =====`);
 
 	const modelId = req.body.model; // TODO: Implement model somehow
-	const llamaPath = getLlamaPath(req, res);
+	// const llamaPath = getLlamaPath(req, res);
+
+	const ggmlPath = getGgmlPath(req, res);
 	const modelPath = getModelPath(req, res);
-	const scriptPath = join(llamaPath, 'main');
+	const modelType = getGgmlModelType(req, res);
+	const scriptPath = join(ggmlPath, modelType);
+
 
 	const stream = req.body.stream || false;
 
@@ -91,9 +96,12 @@ router.post('/', async (req, res) => {
 	}
 
 	const prompt = req.body.prompt;
-	// const stopPrompts = typeof req.body.stop === 'string' ? [req.body.stop] : req.body.stop || ['\n\n'];
-	const stopPrompts = ['human>:', '\n\n\n', '<human', '\n<'];
-	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
+	// ['human>:', '\n\n\n', '<human', '\n<'] = RPJ-Chat-3B
+	const stopPrompts =
+		typeof req.body.stop === 'string'
+			? [req.body.stop]
+			: req.body.stop || ['human>:', '\n\n\n', '<human', '\n<'];
+	// const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
 	const { args, maxTokens } = getArgs(req.body);
 
 	// important variables
@@ -106,22 +114,21 @@ router.post('/', async (req, res) => {
 	!!global.childProcess && global.childProcess.kill('SIGINT');
 	const scriptArgs = [
 		'-m',
-		// '../ggml/build/models/Dante_1.3B/ggml-model-q4_1.bin',
-		'../ggml/build/models/RedPajama-INCITE-Chat-3B-v1/ggml-model-q5_1.bin',
+		modelPath, // i.e. '../ggml/build/models/redpajama/RedPajama-INCITE-Instruct-3B-v1/ggml-model-q5_1.bin'
 		// ...args,
 		// ...stopArgs,
 		'-p',
 		prompt,
 	];
 
-
-	global.childProcess = spawn('../ggml/build/bin/redpajama', scriptArgs);
+	global.childProcess = spawn(scriptPath, scriptArgs);
 
 	// global.childProcess = spawn(scriptPath, scriptArgs);
-	console.log(`\n=====  LLAMA.CPP SPAWNED  =====`);
+	console.log(`\n=====  GGML SPAWNED  =====`);
 	console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 
 	console.log(`\n=====  REQUEST  =====`);
+	console.log(`"${prompt}"`);
 
 	let stdoutStream = global.childProcess.stdout;
 	let stderrStream = global.childProcess.stderr;
@@ -141,7 +148,7 @@ router.post('/', async (req, res) => {
 				console.log(lastErr);
 				controller.close();
 			};
-			
+
 			const onError = (error) => {
 				console.error('\n=====  STDERR  =====');
 				console.log('stderr Readable Stream: ERROR');
@@ -164,8 +171,13 @@ router.post('/', async (req, res) => {
 				const data = stripAnsiCodes(decoder.decode(chunk));
 				initData = initData + data;
 				// Don't return initial prompt
-				console.log(`"${data}"`)
-				if (!responseStart && data !== '.' && !data.includes('model_load') && !data.includes('main: token')) {
+				if (
+					!responseStart &&
+					data !== '.' &&
+					!data.includes('model_load') &&
+					!data.includes('main: token') &&
+					initData.includes(prompt)
+				) {
 					responseStart = true;
 					console.log('\n=====  RESPONSE  =====');
 					return;
@@ -176,8 +188,6 @@ router.post('/', async (req, res) => {
 					controller.enqueue(
 						dataToCompletionResponse(data, promptTokens, completionTokens)
 					);
-				} else {
-					console.log('=====  PROCESSING PROMPT...  =====');
 				}
 			};
 
@@ -211,9 +221,7 @@ router.post('/', async (req, res) => {
 		const writable = new WritableStream({
 			write(chunk) {
 				const currContent = chunk.choices[0].text;
-				const lastContent = !!lastChunk
-					? lastChunk.choices[0].text
-					: undefined;
+				const lastContent = !!lastChunk ? lastChunk.choices[0].text : undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
 					: currContent;
@@ -274,9 +282,7 @@ router.post('/', async (req, res) => {
 		const writable = new WritableStream({
 			write(chunk) {
 				const currContent = chunk.choices[0].text;
-				const lastContent = !!lastChunk
-					? lastChunk.choices[0].text
-					: undefined;
+				const lastContent = !!lastChunk ? lastChunk.choices[0].text : undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
 					: currContent;
