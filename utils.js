@@ -164,6 +164,10 @@ export const compareArrays = (arr1, arr2) => {
 		const obj1 = arr1[i];
 		const obj2 = arr2[i];
 
+		// Lets trim it to give it some leeway
+		obj1['content'] = obj1['content'].trim()
+		obj2['content'] = obj2['content'].trim()
+
 		if (JSON.stringify(obj1) !== JSON.stringify(obj2)) {
 			console.log(`${JSON.stringify(obj1)} !== ${JSON.stringify(obj2)}`);
 			return false;
