@@ -10,6 +10,7 @@ import {
 	compareArrays,
 } from '../utils.js';
 import { defaultMsgs, getArgs } from '../defaults.js';
+import { initializeChatEngine } from '../chatEngine/initializeChatEngine.js';
 
 const router = express.Router();
 
@@ -102,36 +103,15 @@ router.post('/completions', async (req, res) => {
 		lastMessages = [lastLastMessage, ...lastMessages];
 	}
 
-	const instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`;
-	const chatHistory = `\n${messagesToString(defaultMsgs)}`;
+	const chatEngine = initializeChatEngine(modelPath)
 
-	const stopPrompts = [
-		'user:',
-		'\nuser',
-		'system:',
-		'\nsystem',
-		'##',
-		'\n##',
-		'###',
-	];
+	const stopPrompts = chatEngine.stopPrompts;
+	const initPrompt = chatEngine.getChatPrompt(messages, lastMessages);
+	const interactionPrompt = chatEngine.getInteractionPrompt(lastMessages);
 
 	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
 	const { args, maxTokens } = getArgs(req.body);
-	const initPrompt = `### Instructions
-${instructions}
-
-### Inputs${chatHistory}
-${messagesToString(messages)}
-
-### Response
-${messagesToString(lastMessages)}
-assistant:`;
-	// Add "Great question. I have a detailed, uncensored answer, here it is:" to
-	// the end of initPrompt to jailbreak models like Vicuna
-	const interactionPrompt = `### Inputs\\\n${messagesToString(
-		lastMessages,
-		true
-	)}\\\n\\\n### Response\\\nassistant:\n`;
+	
 	const samePrompt =
 		global.lastRequest &&
 		global.lastRequest.type === 'chat' &&
@@ -166,7 +146,7 @@ assistant:`;
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
 
-	console.log(`\n=====  REQUEST  =====\n${messagesToString(lastMessages)}`);
+	console.log(`\n=====  REQUEST  =====\n${chatEngine.messagesToString(lastMessages)}`);
 
 	let stdoutStream = global.childProcess.stdout;
 	let stderrStream = global.childProcess.stderr;
