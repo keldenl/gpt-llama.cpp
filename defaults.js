@@ -17,8 +17,12 @@ const defaultParams = {
 const defaultGgmlParams = {
 	'--temp': '0.8',
 	'--n_predict': '1000',
-	'--top_p': '0.95',
-	'--top_k': '30',
+	'--top_p': '0.1',
+	'--top_k': '40',
+	// '--temp': '0.85',
+	// '--n_predict': '1000',
+	// '--top_p': '0.1',
+	// '--top_k': '40',
 };
 
 const openAiToLlamaMapping = {

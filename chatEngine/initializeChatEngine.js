@@ -15,8 +15,6 @@ export function initializeChatEngine(modelPath) {
 		default: ChatEngine,
 	};
 
-  console.log('MODEL PATH: ', modelPath)
-
 	for (const keyword of Object.keys(engineMap)) {
 		if (modelPath.toLowerCase().includes(keyword.toLowerCase())) {
       console.log(`> ${keyword.toUpperCase()} MODEL DETECTED. LOADING ${keyword.toUpperCase()} ENGINE...`)

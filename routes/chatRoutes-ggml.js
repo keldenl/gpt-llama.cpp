@@ -8,6 +8,8 @@ import {
 	getLlamaPath,
 	getModelPath,
 	compareArrays,
+	getGgmlModelType,
+	getGgmlPath,
 } from '../utils.js';
 import { defaultMsgs, getArgs } from '../defaults.js';
 import { initializeChatEngine } from '../chatEngine/initializeChatEngine.js';
@@ -79,10 +81,10 @@ router.post('/completions', async (req, res) => {
 	global.serverBusy = true;
 	console.log(`\n=====  CHAT COMPLETION REQUEST  =====`);
 
-	const modelId = req.body.model; // TODO: Implement model somehow
-	const llamaPath = getLlamaPath(req, res);
+	const ggmlPath = getGgmlPath(req, res);
 	const modelPath = getModelPath(req, res);
-	const scriptPath = join(llamaPath, 'main');
+	const modelType = getGgmlModelType(req, res);
+	const scriptPath = join(ggmlPath, modelType);
 
 	const stream = req.body.stream || false;
 
@@ -130,6 +132,7 @@ router.post('/completions', async (req, res) => {
 	if (continuedInteraction) {
 		global.childProcess.stdin.write(interactionPrompt);
 	} else {
+		console.log('CHILD PROCESS: ', global.childProcess)
 		!!global.childProcess && global.childProcess.kill('SIGINT');
 		const scriptArgs = [
 			'-m',
@@ -150,8 +153,8 @@ router.post('/completions', async (req, res) => {
 		console.log(`\n=====  GGML SPAWNED  =====`);
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
-
-	console.log(`\n=====  REQUEST  =====\n${chatEngine.messagesToString(lastMessages)}`);
+	
+	console.log(`\n=====  REQUEST  =====\n"${chatEngine.messagesToString(lastMessages)}"`);
 
 	let stdoutStream = global.childProcess.stdout;
 	let stderrStream = global.childProcess.stderr;
@@ -305,7 +308,6 @@ router.post('/completions', async (req, res) => {
 					completionTokens++;
 					responseContent += currContent;
 					!!debounceTimer && clearTimeout(debounceTimer);
-					res.end();
 
 					debounceTimer = setTimeout(() => {
 						console.log(

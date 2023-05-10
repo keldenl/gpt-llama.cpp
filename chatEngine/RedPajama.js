@@ -9,7 +9,7 @@ export class RedPajamaEngine extends ChatEngine {
 		super({
 			instructions: ' ',
 			roleMap: { assistant: '<bot>', user: '<human>', system: '<system>' },
-			stopPrompts: ['human>:', '\n\n', '<human', '\n<'],
+			stopPrompts: ['human>:', '\n\n\n', '<human', '\n<'],
 			// Need few-shot prompting or else it goes off the rails and generates chinese in 3B
 			defaultMsgs:[
 				{ role: 'user', content: 'Hello' },
