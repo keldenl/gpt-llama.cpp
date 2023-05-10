@@ -19,7 +19,7 @@ export function initializeChatEngine(modelPath) {
 
 	for (const keyword of Object.keys(engineMap)) {
 		if (modelPath.toLowerCase().includes(keyword.toLowerCase())) {
-      console.log(`> ${keyword.toUpperCase()} MODEL DETECTED. LOADING ${keyword.toUpperCase()}ENGINE...`)
+      console.log(`> ${keyword.toUpperCase()} MODEL DETECTED. LOADING ${keyword.toUpperCase()} ENGINE...`)
 			return new engineMap[keyword.toLowerCase()]();
 		}
 	}

@@ -14,9 +14,22 @@ const defaultParams = {
 	'--repeat_penalty': '1.1764705882352942',
 };
 
+const defaultGgmlParams = {
+	'--temp': '0.8',
+	'--n_predict': '1000',
+	'--top_p': '0.95',
+	'--top_k': '30',
+};
+
 const openAiToLlamaMapping = {
 	temperature: '--temp',
 	stop: '--reverse-prompt', // string or string array
+	max_tokens: '--n_predict',
+	top_p: '--top_p',
+};
+
+const openAiToGgmlMapping = {
+	temperature: '--temp',
 	max_tokens: '--n_predict',
 	top_p: '--top_p',
 };
@@ -48,12 +61,13 @@ const userArgByName = {
 	},
 	mirostat: {
 		type: 'number',
-		description: 'use Mirostat sampling (default: 0, 0=disabled, 1=Mirostat, 2=Mirostat 2.0)'
+		description:
+			'use Mirostat sampling (default: 0, 0=disabled, 1=Mirostat, 2=Mirostat 2.0)',
 	},
 	ggml: {
 		type: 'undefined',
-		description: 'use ggml instead of llama.cpp'
-	}
+		description: 'use ggml instead of llama.cpp',
+	},
 };
 
 export const getHelpList = Object.keys(userArgByName)
@@ -141,19 +155,28 @@ export const validateAndReturnUserArgs = () => {
 	};
 };
 
-export const getArgs = (args) => {
+export const getArgs = (args, inference = 'llama.cpp') => {
 	const convertedArgs = {};
+	const openAiMapping = 'llama.cpp'
+		? openAiToLlamaMapping
+		: openAiToGgmlMapping;
 	Object.keys(args).forEach((a) => {
-		if (!!openAiToLlamaMapping[a]) {
+		if (!!openAiMapping[a]) {
 			if (a === 'max_tokens' && args[a] === null) {
-				convertedArgs[openAiToLlamaMapping[a]] = -1;
+				convertedArgs[openAiMapping[a]] = -1;
 			} else if (!!args[a]) {
-				convertedArgs[openAiToLlamaMapping[a]] = args[a];
+				convertedArgs[openAiMapping[a]] = args[a];
 			}
 		}
 	});
-	const { userArgs } = validateAndReturnUserArgs();
-	const params = { ...defaultParams, ...convertedArgs };
+
+	const { userArgs } = inference === 'llama.cpp'
+		? validateAndReturnUserArgs()
+		: { userArgs: [] };
+
+	const defaultInferenceParams =
+		inference === 'llama.cpp' ? defaultParams : defaultGgmlParams;
+	const params = { ...defaultInferenceParams, ...convertedArgs };
 	return {
 		args: [
 			...Object.keys(params).flatMap((pKey) =>
@@ -169,18 +192,3 @@ export const gptModelNames = {
 	3.5: 'gpt-3.5-turbo',
 	4: 'gpt-4',
 };
-
-// export const defaultArgs = [
-//   "--temp",
-//   "0.7",
-//   "-b",
-//   "512",
-//   "-n",
-//   "512",
-//   "--top_k",
-//   "40",
-//   "--top_p",
-//   "0.1",
-//   "--repeat_penalty",
-//   "1.1764705882352942",
-// ];

@@ -108,15 +108,16 @@ router.post('/completions', async (req, res) => {
 	const initPrompt = chatEngine.getChatPrompt(messages, lastMessages);
 	const interactionPrompt = chatEngine.getInteractionPrompt(lastMessages);
 
-	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
-	const { args, maxTokens } = getArgs(req.body);
+	// const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
+	const { args, maxTokens } = getArgs(req.body, 'ggml');
 
+	const supportsInteractive = false; // GGML DOESN'T SUPPORT INTERACTIVE MODE YET
 	const samePrompt =
 		global.lastRequest &&
 		global.lastRequest.type === 'chat' &&
 		compareArrays(global.lastRequest.messages, messages);
 	const continuedInteraction =
-		!!global.childProcess && samePrompt && messages.length > 1;
+		supportsInteractive && !!global.childProcess && samePrompt && messages.length > 1;
 
 	// important variables
 	let responseStart = false;
@@ -135,7 +136,7 @@ router.post('/completions', async (req, res) => {
 			// '../ggml/build/models/Dante_1.3B/ggml-model-q4_1.bin',
 			// '../ggml/build/models/redpajama/RedPajama-INCITE-Chat-3B-v1/ggml-model-q5_1.bin',
 			modelPath,
-			// ...args,
+			...args,
 			// ...stopArgs,
 			// '-i',
 			'-p',
@@ -196,6 +197,12 @@ router.post('/completions', async (req, res) => {
 
 				const promptCount = initData.split(initPrompt).length - 1
 				const promptQuotesCount = initData.split(`'${initPrompt}'`).length - 1
+
+				// console.log(data !== '.')
+				// console.log(!data.includes('model_load'))
+				// console.log(!data.includes('main: token'))
+				// console.log(!data.includes('main: prompt'))
+				// console.log(promptCount > promptQuotesCount)
 				if (
 					!responseStart &&
 					data !== '.' &&
@@ -205,6 +212,7 @@ router.post('/completions', async (req, res) => {
 					promptCount > promptQuotesCount // make sure prompt is rendered first (and not just 'prompt')
 					// initData.includes(prompt)
 				) {
+					console.log('RESPONSE START!!!!!!')
 					responseStart = true;
 					console.log('\n=====  RESPONSE  =====');
 					return;
@@ -277,6 +285,8 @@ router.post('/completions', async (req, res) => {
 					res.write('event: data\n');
 					res.write('data: [DONE]\n\n');
 					res.end();
+					!!global.childProcess && global.childProcess.kill('SIGINT');
+
 					global.lastRequest = {
 						type: 'chat',
 						messages: [
@@ -295,6 +305,7 @@ router.post('/completions', async (req, res) => {
 					completionTokens++;
 					responseContent += currContent;
 					!!debounceTimer && clearTimeout(debounceTimer);
+					res.end();
 
 					debounceTimer = setTimeout(() => {
 						console.log(
@@ -320,6 +331,7 @@ router.post('/completions', async (req, res) => {
 				const last2Content = !!lastContent
 					? lastContent + currContent
 					: currContent;
+
 				// If we detect the stop prompt, stop generation
 				if (
 					stopPrompts.includes(currContent) ||
@@ -331,13 +343,15 @@ router.post('/completions', async (req, res) => {
 						.status(200)
 						.json(
 							dataToResponse(
-								responseContent.trim(),
+								responseContent,
 								promptTokens,
 								completionTokens,
 								stream,
 								'stop'
 							)
 						);
+					res.end()
+					!!global.childProcess && global.childProcess.kill('SIGINT');
 					global.lastRequest = {
 						type: 'chat',
 						messages: [
