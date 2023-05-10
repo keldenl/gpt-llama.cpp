@@ -8,7 +8,7 @@ export class ChatEngine {
 			{ role: 'user', content: 'How are you?' },
 			{ role: 'assistant', content: 'Hi, how may I help you today?' },
 		],
-		instructions = `Complete the following chat conversation between the user and the assistant. System messages should be strictly followed as additional instructions.`,
+		instructions = '',
 		instructionsPrefix = '',
 		historyPrefix = '',
 		responsePrefix = '',
@@ -18,7 +18,7 @@ export class ChatEngine {
 		this.roleMap = roleMap;
 		this.stopPrompts = stopPrompts;
 		this.defaultMsgs = defaultMsgs;
-		this.instructions = instructions;
+		this.instructions = !!instructions ? instructions : `Complete the following chat conversation between the ${roleMap.user} and the ${roleMap.assistant}. ${roleMap.system} messages should be strictly followed as additional instructions.`;
 		this.instructionsPrefix = instructionsPrefix;
 		this.historyPrefix = historyPrefix;
 		this.responsePrefix = responsePrefix;
@@ -45,7 +45,7 @@ ${this.historyPrefix.length > 0 ? this.historyPrefix + '\n' : ''}${chatHistory}
 ${this.messagesToString(messages)}
 ${this.messagesToString(lastMessages)}
 ${
-	this.responsePrefix.length > 0 ? '\n' + this.responsePrefix : ''
+	this.responsePrefix.length > 0 ? '\n' + this.responsePrefix  + '\n': ''
 }${this.messageToString({ content: '' })}`;
 	}
 

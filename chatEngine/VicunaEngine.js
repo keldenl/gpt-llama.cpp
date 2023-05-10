@@ -1,5 +1,9 @@
 import { ChatEngine } from './index.js';
 
+/**
+ * This works for the following models (but is not limited to):
+ * Vicuna (original), Stable-Vicuna
+ */
 export class VicunaEngine extends ChatEngine {
 	constructor() {
 		super({
@@ -10,9 +14,5 @@ export class VicunaEngine extends ChatEngine {
 			// responsePrefix: '### Response',
 		});
 		this.stopPrompts = [...this.stopPrompts, '##', '\n##', '###', '\n\n'];
-	}
-
-	isModel(path) {
-		return path.contains('vicuna');
 	}
 }
