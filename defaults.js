@@ -68,10 +68,6 @@ const userArgByName = {
 		description:
 			'use Mirostat sampling (default: 0, 0=disabled, 1=Mirostat, 2=Mirostat 2.0)',
 	},
-	ggml: {
-		type: 'undefined',
-		description: 'use ggml instead of llama.cpp',
-	},
 };
 
 export const getHelpList = Object.keys(userArgByName)

@@ -25,7 +25,7 @@ export const messagesToString = (messages, newLine = false) => {
 	const whitespace = newLine ? `\\\n` : ` `;
 	return messages
 		.map((m) => {
-			const name = !!m.name ? `(${m.name})` : ''
+			const name = !!m.name ? `(${m.name})` : '';
 			return `${m.role || 'assistant'}${name}:${whitespace}${m.content}`;
 		})
 		.join('\n');
@@ -39,7 +39,10 @@ export const dataToResponse = (
 	reason = null
 ) => {
 	const currDate = new Date();
-	const contentData = { content: unescapeWrongEscapes(data), role: 'assistant' };
+	const contentData = {
+		content: unescapeWrongEscapes(data),
+		role: 'assistant',
+	};
 	const contentName = stream ? 'delta' : 'message';
 
 	return {
@@ -89,10 +92,7 @@ export const dataToCompletionResponse = (
 	};
 };
 
-export const dataToEmbeddingResponse = (
-	output,
-	promptTokens,
-) => {
+export const dataToEmbeddingResponse = (output, promptTokens) => {
 	return {
 		object: 'list',
 		data: [
@@ -126,11 +126,23 @@ export const normalizePath = (path) =>
 
 const splitPath = (path) => path.split(/[\/\\]/);
 
-
 export const getModelName = (path) => {
 	const normalizedPath = normalizePath(path);
-	const modelArr = splitPath(normalizedPath);
-	return modelArr[modelArr.length - 1];
+	const pathArr = splitPath(normalizedPath);
+	return pathArr[pathArr.length - 1];
+};
+
+export const getInferenceEngine = (path) => {
+	const normalizedPath = normalizePath(path);
+	const pathArr = splitPath(normalizedPath);
+	const defaultEngine = 'llama.cpp';
+	const supportedEngines = ['ggml', 'llama.cpp'];
+	for (const engine of supportedEngines) {
+		if (pathArr.includes(engine)) {
+			return engine;
+		}
+	}
+	return defaultEngine;
 };
 
 // LLAMA.CPP
@@ -154,7 +166,6 @@ export const getGgmlPath = (req, res) => {
 	return join(path, 'build', 'bin');
 };
 
-
 export const compareArrays = (arr1, arr2) => {
 	if (arr1.length !== arr2.length) {
 		return false;
@@ -165,8 +176,8 @@ export const compareArrays = (arr1, arr2) => {
 		const obj2 = arr2[i];
 
 		// Lets trim it to give it some leeway
-		obj1['content'] = obj1['content'].trim()
-		obj2['content'] = obj2['content'].trim()
+		obj1['content'] = obj1['content'].trim();
+		obj2['content'] = obj2['content'].trim();
 
 		if (JSON.stringify(obj1) !== JSON.stringify(obj2)) {
 			console.log(`${JSON.stringify(obj1)} !== ${JSON.stringify(obj2)}`);
@@ -181,7 +192,9 @@ export const compareArrays = (arr1, arr2) => {
 export const unescapeWrongEscapes = (input = '') => {
 	const output = input.replace(/\\_/g, '_').replaceAll('�', '');
 	if (output.length < input.length) {
-		console.log(`\n> FIXED ${input.length - output.length} ESCAPED CHARACTER(S)\n`)
+		console.log(
+			`\n> FIXED ${input.length - output.length} ESCAPED CHARACTER(S)\n`
+		);
 	}
 	return output;
-}
+};

@@ -11,6 +11,7 @@ import completionsRoutes from './routes/completionsRoutes.js';
 import completionsRoutesGGML from './routes/completionsRoutes-ggml.js';
 import embeddingsRoutes from './routes/embeddingsRoutes.js';
 import { getHelpList, validateAndReturnUserArgs } from './defaults.js';
+import { getInferenceEngine, getModelPath } from './utils.js';
 
 const PORT = process.env.PORT || 443;
 const isWin = process.platform === 'win32';
@@ -26,9 +27,6 @@ if (userArgs.includes('--help')) {
 	console.log();
 	process.exit();
 }
-
-const configChatRoutes = userArgs.includes('--ggml') ? chatRoutesGGML : chatRoutes
-const configCompletionRoutes = userArgs.includes('--ggml') ? completionsRoutesGGML : completionsRoutes
 
 const getServerRunningMsg = () => {
 	const ipAddress = IP.address();
@@ -156,8 +154,42 @@ app.use(
 	})
 );
 app.use('/v1/models', modelsRoutes);
-app.use('/v1/chat', configChatRoutes);
-app.use('/v1/completions', configCompletionRoutes);
+app.use('/v1/chat', (req, res, next) => {
+	const modelPath = getModelPath(req, res);
+	const inferenceEngine = getInferenceEngine(modelPath);
+	switch (inferenceEngine) {
+		case 'ggml':
+			console.log('> GGML DETECTED')
+			chatRoutesGGML(req, res, next);
+			break;
+			case 'llama.cpp':
+			console.log('> LLAMA.CPP DETECTED')
+			chatRoutes(req, res, next);
+			break;
+			default:
+			console.log('> NO INFERENCE ENGINE DETECTED, DEFAULTING TO LLAMA.CPP')
+			chatRoutes(req, res, next);
+			break;
+	}
+});
+app.use('/v1/completions',  (req, res, next) => {
+	const modelPath = getModelPath(req, res);
+	const inferenceEngine = getInferenceEngine(modelPath);
+	switch (inferenceEngine) {
+		case 'ggml':
+			console.log('> GGML DETECTED')
+			completionsRoutesGGML(req, res, next);
+			break;
+			case 'llama.cpp':
+			console.log('> LLAMA.CPP DETECTED')
+			completionsRoutes(req, res, next);
+			break;
+			default:
+			console.log('> NO INFERENCE ENGINE DETECTED, DEFAULTING TO LLAMA.CPP')
+			completionsRoutes(req, res, next);
+			break;
+	}
+});
 app.use(/^\/v1(?:\/.+)?\/embeddings$/, embeddingsRoutes);
 app.get('/', (req, res) =>
 	res.type('text/plain').send(`
