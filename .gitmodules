@@ -1,0 +1,3 @@
+[submodule "InferenceEngine/completion/ggml"]
+	path = InferenceEngine/completion/ggml
+	url = https://github.com/ggerganov/ggml

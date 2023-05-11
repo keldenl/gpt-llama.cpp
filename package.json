@@ -1,6 +1,6 @@
 {
     "name": "gpt-llama.cpp",
-    "version": "0.2.3",
+    "version": "0.2.4",
     "description": "A llama.cpp drop-in replacement for OpenAI's GPT endpoints, allowing GPT-powered apps to run off local llama.cpp models instead of OpenAi.",
     "main": "index.js",
     "type": "module",
@@ -8,7 +8,8 @@
         "start": "node index.js",
         "dev": "nodemon index.js",
         "precommit": "prettier --write .",
-        "postinstall": "cd extensions/embeddings/ && python -m pip install -r requirements.txt"
+        "postinstall": "npm run updateengines && cd InferenceEngine/embeddings/all-mpnet-base-v2 && python -m pip install -r requirements.txt",
+        "updateengines": "git submodule foreach git pull"
     },
     "author": "kelden",
     "license": "MIT",
