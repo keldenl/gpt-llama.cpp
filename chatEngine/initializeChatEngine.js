@@ -3,15 +3,15 @@ import { AlpacaEngine } from './AlpacaEngine.js';
 import { Vicuna1_1Engine } from './Vicuna1_1Engine.js';
 import { VicunaEngine } from './VicunaEngine.js';
 import { RedPajamaEngine } from './RedPajama.js';
+import { DanteEngine } from './Dante.js';
 
 export function initializeChatEngine(modelPath) {
 	const engineMap = {
-		default: ChatEngine,
-		// redpajama: RedPajamaEngine,
 		'vicuna1.1': Vicuna1_1Engine,
 		vicuna: VicunaEngine,
 		alpaca: AlpacaEngine,
-    redpajama: RedPajamaEngine,
+    	redpajama: RedPajamaEngine,
+    	dante: DanteEngine,
 		default: ChatEngine,
 	};
 

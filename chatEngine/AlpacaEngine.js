@@ -9,6 +9,7 @@ export class AlpacaEngine extends ChatEngine {
 		super({
 			historyPrefix: '### Inputs',
 			responsePrefix: '### Response',
+			hasAiResponsePrefix: false
 		});
 		this.instructions = `Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
 		
