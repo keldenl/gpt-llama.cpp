@@ -23,6 +23,7 @@ export class ChatEngine {
 		this.instructionsPrefix = instructionsPrefix;
 		this.historyPrefix = historyPrefix;
 		this.responsePrefix = responsePrefix;
+		this.hasAiResponsePrefix = hasAiResponsePrefix;
 		this.newLine = newLine;
 	}
 
