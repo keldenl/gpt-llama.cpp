@@ -1,7 +1,7 @@
 # gpt-llama.cpp demos
 
 ## [chatbot-ui](https://github.com/mckaywrigley/chatbot-ui)
-![chatbot-ui](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/demo.gif)
+![chatbot-ui](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/docs/assets/demo.gif)
 
 **Author:** mckaywrigley
 
@@ -13,7 +13,7 @@ _Note: Due to interactive mode support, the followup responses are very fast._
 
 
 ## [ChatGPT-Siri](https://github.com/Yue-Yang/ChatGPT-Siri)
-![ChatGPT-Siri](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/chatgpt-siri-demo.gif)
+![ChatGPT-Siri](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/docs/assets/chatgpt-siri-demo.gif)
 
 **Author:** Yue Yang
 
@@ -24,7 +24,7 @@ _Note: Due to interactive mode support, the followup responses are very fast._
 _Note: Due to interactive mode support, the followup responses are very fast._
 
 ## [Auto-GPT](https://github.com/Significant-Gravitas/Auto-GPT#-installation)
-![Auto-GPT](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/assets/auto-gpt-short-demo.gif)
+![Auto-GPT](https://raw.githubusercontent.com/keldenl/gpt-llama.cpp/master/docs/assets/auto-gpt-short-demo.gif)
 
 **Author:** Significant Gravitas
 
