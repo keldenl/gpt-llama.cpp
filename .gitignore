@@ -6,9 +6,9 @@
 .pnp.js
 
 # python
-extensions/embeddings/__pycache__
-extensions/embeddings/input.txt
-extensions/embeddings/output.txt
+InferenceEngine/embeddings/all-mpnet-base-v2/__pycache__
+InferenceEngine/embeddings/all-mpnet-base-v2/input.txt
+InferenceEngine/embeddings/all-mpnet-base-v2/output.txt
 
 
 # testing

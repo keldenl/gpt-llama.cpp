@@ -63,31 +63,33 @@ const router = express.Router();
 router.post('/', async (req, res) => {
 	global.serverBusy = true;
 	console.log(`\n=====  EMBEDDING REQUEST  =====`);
-
 	!!global.childProcess && global.childProcess.kill('SIGINT'); // kill previous childprocess
-	console.log(process.env.EMBEDDINGS)
+	
 	const input = Array.isArray(req.body.input)
-	? req.body.input.join(' ')
-	: req.body.input;
+		? req.body.input.join(' ')
+		: req.body.input;
 	const useLlamaEmbeddings = process.env.EMBEDDINGS || 'llama'; // py for python extension for embeddings
 	if (useLlamaEmbeddings == 'py') {
 		console.log(`\n=====  PYTHON EMBEDDING EXTENSION SPAWNED  =====`);
 		const scriptPath = join(
 			process.cwd(),
-			'extensions',
+			'InferenceEngine',
 			'embeddings',
+			'all-mpnet-base-v2',
 			'main.py'
 		);
 		const scriptOutput = join(
 			process.cwd(),
-			'extensions',
+			'InferenceEngine',
 			'embeddings',
+			'all-mpnet-base-v2',
 			'output.txt'
 		);
 		const scriptInput = join(
 			process.cwd(),
-			'extensions',
+			'InferenceEngine',
 			'embeddings',
+			'all-mpnet-base-v2',
 			'input.txt'
 		);
 		writeFile(scriptInput, input, (err) => {
@@ -140,9 +142,41 @@ router.post('/', async (req, res) => {
 		console.log(`\n=====  REQUEST  =====\n${input}`);
 
 		const stdoutStream = global.childProcess.stdout;
+		let stderrStream = global.childProcess.stderr;
+
+		let lastErr = '';
+		const stderr = new ReadableStream({
+			start(controller) {
+				const decoder = new TextDecoder();
+				const onData = (chunk) => {
+					const data = stripAnsiCodes(decoder.decode(chunk));
+					lastErr = data;
+				};
+
+				const onClose = () => {
+					console.error('\n=====  STDERR  =====');
+					console.log('stderr Readable Stream: CLOSED');
+					console.log(lastErr);
+					controller.close();
+				};
+
+				const onError = (error) => {
+					console.error('\n=====  STDERR  =====');
+					console.log('stderr Readable Stream: ERROR');
+					console.log(lastErr);
+					console.log(error);
+					controller.error(error);
+				};
+
+				stderrStream.on('data', onData);
+				stderrStream.on('close', onClose);
+				stderrStream.on('error', onError);
+			},
+		});
+
 		let outputString = '';
 		let output = [];
-		const readable = new ReadableStream({
+		const stdout = new ReadableStream({
 			start(controller) {
 				const decoder = new TextDecoder();
 				const onData = (chunk) => {
