@@ -161,7 +161,7 @@ export const validateAndReturnUserArgs = () => {
 
 export const getArgs = (args, inference = 'llama.cpp') => {
 	const convertedArgs = {};
-	const openAiMapping = 'llama.cpp'
+	const openAiMapping = inference === 'llama.cpp'
 		? openAiToLlamaMapping
 		: openAiToGgmlMapping;
 	Object.keys(args).forEach((a) => {
@@ -173,6 +173,7 @@ export const getArgs = (args, inference = 'llama.cpp') => {
 			}
 		}
 	});
+	console.log(convertedArgs)
 
 	const { userArgs } = inference === 'llama.cpp'
 		? validateAndReturnUserArgs()
