@@ -176,7 +176,7 @@ You're done! Here are some more advanced configs you can run:
 ## Usage
 ### Test your installation
 You have 2 options:
-1. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready. Test the server by running the `test-installation` script (currently only supports Mac)
+1. Open another terminal window and test the installation by running the below script, make sure you have a llama .bin model file ready. Test the server by running the `scripts/test-installation` script (currently only supports Mac)
 
    ```bash
    # Mac

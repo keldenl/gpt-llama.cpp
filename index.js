@@ -42,8 +42,8 @@ See Docs
 Test your installation
   - ${
 		isWin
-			? 'double click the test-installation.ps1 (powershell) or test-installation.bat (cmd) file'
-			: 'open another terminal window and run sh ./test-installation.sh'
+			? 'double click the scripts/test-installation.ps1 (powershell) or scripts/test-installation.bat (cmd) file'
+			: 'open another terminal window and run sh ./scripts/test-installation.sh'
 	}
 
 See https://github.com/keldenl/gpt-llama.cpp#usage for more guidance.`;
