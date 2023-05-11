@@ -149,11 +149,11 @@ router.post('/completions', async (req, res) => {
 
 		// '../ggml/build/bin/gpt-2'
 		// '../ggml/build/models/Dante_1.3B/ggml-model-q4_1.bin'
-		global.childProcess = spawn('../ggml/build/bin/redpajama', scriptArgs);
+		global.childProcess = spawn(`../ggml/build/bin/${modelType}`, scriptArgs);
 		console.log(`\n=====  GGML SPAWNED  =====`);
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
-	
+
 	console.log(`\n=====  REQUEST  =====\n"${chatEngine.messagesToString(lastMessages)}"`);
 
 	let stdoutStream = global.childProcess.stdout;
