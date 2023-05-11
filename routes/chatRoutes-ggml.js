@@ -3,15 +3,13 @@ import { spawn } from 'child_process';
 import { join } from 'path';
 import {
 	stripAnsiCodes,
-	messagesToString,
 	dataToResponse,
-	getLlamaPath,
 	getModelPath,
 	compareArrays,
 	getGgmlModelType,
 	getGgmlPath,
 } from '../utils.js';
-import { defaultMsgs, getArgs } from '../defaults.js';
+import { getArgs } from '../defaults.js';
 import { initializeChatEngine } from '../chatEngine/initializeChatEngine.js';
 
 const router = express.Router();
@@ -105,7 +103,7 @@ router.post('/completions', async (req, res) => {
 		lastMessages = [lastLastMessage, ...lastMessages];
 	}
 
-	const chatEngine = initializeChatEngine(modelPath)
+	const chatEngine = initializeChatEngine(modelPath);
 	const stopPrompts = chatEngine.stopPrompts;
 	const initPrompt = chatEngine.getChatPrompt(messages, lastMessages);
 	const interactionPrompt = chatEngine.getInteractionPrompt(lastMessages);
@@ -119,7 +117,10 @@ router.post('/completions', async (req, res) => {
 		global.lastRequest.type === 'chat' &&
 		compareArrays(global.lastRequest.messages, messages);
 	const continuedInteraction =
-		supportsInteractive && !!global.childProcess && samePrompt && messages.length > 1;
+		supportsInteractive &&
+		!!global.childProcess &&
+		samePrompt &&
+		messages.length > 1;
 
 	// important variables
 	let responseStart = false;
@@ -132,29 +133,17 @@ router.post('/completions', async (req, res) => {
 	if (continuedInteraction) {
 		global.childProcess.stdin.write(interactionPrompt);
 	} else {
-		console.log('CHILD PROCESS: ', global.childProcess)
 		!!global.childProcess && global.childProcess.kill('SIGINT');
-		const scriptArgs = [
-			'-m',
-			// '../ggml/build/models/Dante_1.3B/ggml-model-q4_1.bin',
-			// '../ggml/build/models/redpajama/RedPajama-INCITE-Chat-3B-v1/ggml-model-q5_1.bin',
-			modelPath,
-			...args,
-			// ...stopArgs,
-			// '-i',
-			'-p',
-			initPrompt,
-		];
+		const scriptArgs = ['-m', modelPath, ...args, '-p', initPrompt];
 
-
-		// '../ggml/build/bin/gpt-2'
-		// '../ggml/build/models/Dante_1.3B/ggml-model-q4_1.bin'
 		global.childProcess = spawn(`../ggml/build/bin/${modelType}`, scriptArgs);
 		console.log(`\n=====  GGML SPAWNED  =====`);
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
 
-	console.log(`\n=====  REQUEST  =====\n"${chatEngine.messagesToString(lastMessages)}"`);
+	console.log(
+		`\n=====  REQUEST  =====\n"${chatEngine.messagesToString(lastMessages)}"`
+	);
 
 	let stdoutStream = global.childProcess.stdout;
 	let stderrStream = global.childProcess.stderr;
@@ -175,7 +164,7 @@ router.post('/completions', async (req, res) => {
 				console.log(lastErr);
 				controller.close();
 			};
-			
+
 			const onError = (error) => {
 				console.error('\n=====  STDERR  =====');
 				console.log('stderr Readable Stream: ERROR');
@@ -198,8 +187,8 @@ router.post('/completions', async (req, res) => {
 				const data = stripAnsiCodes(decoder.decode(chunk));
 				initData = initData + data;
 
-				const promptCount = initData.split(initPrompt).length - 1
-				const promptQuotesCount = initData.split(`'${initPrompt}'`).length - 1
+				const promptCount = initData.split(initPrompt).length - 1;
+				const promptQuotesCount = initData.split(`'${initPrompt}'`).length - 1;
 
 				// console.log(data !== '.')
 				// console.log(!data.includes('model_load'))
@@ -215,7 +204,7 @@ router.post('/completions', async (req, res) => {
 					promptCount > promptQuotesCount // make sure prompt is rendered first (and not just 'prompt')
 					// initData.includes(prompt)
 				) {
-					console.log('RESPONSE START!!!!!!')
+					console.log('RESPONSE START!!!!!!');
 					responseStart = true;
 					console.log('\n=====  RESPONSE  =====');
 					return;
@@ -311,7 +300,7 @@ router.post('/completions', async (req, res) => {
 
 					debounceTimer = setTimeout(() => {
 						console.log(
-							'> LLAMA.CPP UNRESPONSIVE FOR 20 SECS. ATTEMPTING TO RESUME GENERATION..'
+							'> GGML UNRESPONSIVE FOR 20 SECS. ATTEMPTING TO RESUME GENERATION..'
 						);
 						global.childProcess.stdin.write('\n');
 					}, 20000);
@@ -352,7 +341,7 @@ router.post('/completions', async (req, res) => {
 								'stop'
 							)
 						);
-					res.end()
+					res.end();
 					!!global.childProcess && global.childProcess.kill('SIGINT');
 					global.lastRequest = {
 						type: 'chat',
@@ -373,7 +362,7 @@ router.post('/completions', async (req, res) => {
 
 					debounceTimer = setTimeout(() => {
 						console.log(
-							'> LLAMA.CPP UNRESPONSIVE FOR 20 SECS. ATTEMPTING TO RESUME GENERATION..'
+							'> GGML UNRESPONSIVE FOR 20 SECS. ATTEMPTING TO RESUME GENERATION..'
 						);
 						global.childProcess.stdin.write('\n');
 					}, 20000);
