@@ -10,7 +10,7 @@ import {
 	compareArrays,
 } from '../utils.js';
 import { defaultMsgs, getArgs } from '../defaults.js';
-import { initializeChatEngine } from '../chatEngine/initializeChatEngine.js';
+import { initializeChatEngine } from '../ChatEngine/initializeChatEngine.js';
 
 const router = express.Router();
 
@@ -103,7 +103,7 @@ router.post('/completions', async (req, res) => {
 		lastMessages = [lastLastMessage, ...lastMessages];
 	}
 
-	const chatEngine = initializeChatEngine(modelPath)
+	const chatEngine = initializeChatEngine(modelPath);
 
 	const stopPrompts = chatEngine.stopPrompts;
 	const initPrompt = chatEngine.getChatPrompt(messages, lastMessages);
@@ -111,7 +111,7 @@ router.post('/completions', async (req, res) => {
 
 	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
 	const { args, maxTokens } = getArgs(req.body);
-	
+
 	const samePrompt =
 		global.lastRequest &&
 		global.lastRequest.type === 'chat' &&
@@ -146,7 +146,9 @@ router.post('/completions', async (req, res) => {
 		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
 
-	console.log(`\n=====  REQUEST  =====\n${chatEngine.messagesToString(lastMessages)}`);
+	console.log(
+		`\n=====  REQUEST  =====\n${chatEngine.messagesToString(lastMessages)}`
+	);
 
 	let stdoutStream = global.childProcess.stdout;
 	let stderrStream = global.childProcess.stderr;
@@ -167,7 +169,7 @@ router.post('/completions', async (req, res) => {
 				console.log(lastErr);
 				controller.close();
 			};
-			
+
 			const onError = (error) => {
 				console.error('\n=====  STDERR  =====');
 				console.log('stderr Readable Stream: ERROR');

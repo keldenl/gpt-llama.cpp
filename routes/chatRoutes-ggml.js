@@ -10,7 +10,7 @@ import {
 	getGgmlPath,
 } from '../utils.js';
 import { getArgs } from '../defaults.js';
-import { initializeChatEngine } from '../chatEngine/initializeChatEngine.js';
+import { initializeChatEngine } from '../ChatEngine/initializeChatEngine.js';
 
 const router = express.Router();
 
