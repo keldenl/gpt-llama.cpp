@@ -8,7 +8,7 @@
         "start": "node index.js",
         "dev": "nodemon index.js",
         "precommit": "prettier --write .",
-        "postinstall": "npm run update-engines && cd InferenceEngine/embeddings/all-mpnet-base-v2 && python -m pip install -r requirements.txt",
+        "update-embeddings": "cd InferenceEngine/embeddings/all-mpnet-base-v2 && python -m pip install -r requirements.txt",
         "update-engines": "git submodule foreach git pull &&  npm run ggml-build",
         "ggml-build": "cd InferenceEngine/completion/ggml && mkdir -p build && cd build && cmake .. && make clean && make",
         "ggml-install-gpt-2": "cd models && mkdir -p ggml && cd ggml && mkdir -p gpt-2 && cd gpt-2 && ../../../scripts/InferenceEngine/ggml-installation/gpt-2/download-ggml-model.sh 117M",
