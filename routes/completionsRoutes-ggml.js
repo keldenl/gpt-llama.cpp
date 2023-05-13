@@ -113,7 +113,9 @@ router.post('/', async (req, res) => {
 		prompt,
 	];
 
-	global.childProcess = spawn(scriptPath, scriptArgs);
+	// global.childProcess = spawn(scriptPath, scriptArgs);
+	global.childProcess = spawn(`./InferenceEngine/completion/ggml/build/bin/${modelType}`, scriptArgs);
+
 
 	// global.childProcess = spawn(scriptPath, scriptArgs);
 	console.log(`\n=====  GGML SPAWNED  =====`);

@@ -124,7 +124,8 @@ export const getModelPath = (req, res) => {
 export const normalizePath = (path) =>
 	sep === '\\' ? path.replace(/\//g, '\\') : path.replace(/\\/g, '/');
 
-const splitPath = (path) => path.split(/[\/\\]/);
+const splitPath = (path) =>
+	path.split(/[\/\\]/).filter((p) => !!p && p.length > 0);
 
 export const getModelName = (path) => {
 	const normalizedPath = normalizePath(path);
@@ -155,9 +156,17 @@ export const getLlamaPath = (req, res) => {
 // GGML
 export const getGgmlModelType = (req, res) => {
 	const modelPath = getModelPath(req, res);
-	const path = modelPath.split('models')[1];
+	// old (non-inference)
+	// const path = modelPath.split('models')[1];
+	// return modelArr[1];
+	console.log('MODEL PATH: ', modelPath);
+	
+	// new (InferenceEngine)
+	const path = modelPath.split('ggml')[1];
+	console.log('PATH: ', path);
 	const modelArr = splitPath(path);
-	return modelArr[1];
+	console.log('modelArr: ', modelArr);
+	return modelArr[0];
 };
 
 export const getGgmlPath = (req, res) => {

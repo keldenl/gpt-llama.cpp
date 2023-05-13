@@ -1,6 +1,6 @@
 {
     "name": "gpt-llama.cpp",
-    "version": "0.2.5",
+    "version": "0.2.6",
     "description": "A llama.cpp drop-in replacement for OpenAI's GPT endpoints, allowing GPT-powered apps to run off local llama.cpp models instead of OpenAi.",
     "main": "index.js",
     "type": "module",
@@ -8,8 +8,11 @@
         "start": "node index.js",
         "dev": "nodemon index.js",
         "precommit": "prettier --write .",
-        "postinstall": "npm run updateengines && cd InferenceEngine/embeddings/all-mpnet-base-v2 && python -m pip install -r requirements.txt",
-        "updateengines": "git submodule foreach git pull"
+        "postinstall": "npm run update-engines && cd InferenceEngine/embeddings/all-mpnet-base-v2 && python -m pip install -r requirements.txt",
+        "update-engines": "git submodule foreach git pull &&  npm run ggml-build",
+        "ggml-build": "cd InferenceEngine/completion/ggml && mkdir -p build && cd build && cmake .. && make clean && make",
+        "ggml-install-gpt-2": "cd models && mkdir -p ggml && cd ggml && mkdir -p gpt-2 && cd gpt-2 && ../../../scripts/InferenceEngine/ggml-installation/gpt-2/download-ggml-model.sh 117M",
+        "ggml-install-gpt-j": "cd models && mkdir -p ggml && cd ggml && mkdir -p gpt-j && cd gpt-j && ../../../scripts/InferenceEngine/ggml-installation/gpt-j/download-ggml-model.sh 6B"
     },
     "author": "kelden",
     "license": "MIT",
