@@ -10,11 +10,9 @@ InferenceEngine/embeddings/all-mpnet-base-v2/__pycache__
 InferenceEngine/embeddings/all-mpnet-base-v2/input.txt
 InferenceEngine/embeddings/all-mpnet-base-v2/output.txt
 
-# submodules
-# InferenceEngine/completion/*
-
 # models
-models/*
+models/ggml/*
+models/llama.cpp/*
 
 
 # testing
