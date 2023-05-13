@@ -33,7 +33,14 @@ if [ "$#" -ne 1 ]; then
     exit 1
 fi
 
-model=$1
+# model=$1
+
+# prompt user to choose a model
+printf "Please choose a model to download:\n"
+list_models
+
+read -p "Enter model name: " model
+
 
 if [[ ! " ${models[@]} " =~ " ${model} " ]]; then
     printf "Invalid model: $model\n"
