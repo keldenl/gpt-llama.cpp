@@ -11,7 +11,7 @@ InferenceEngine/embeddings/all-mpnet-base-v2/input.txt
 InferenceEngine/embeddings/all-mpnet-base-v2/output.txt
 
 # submodules
-InferenceEngine/completion/*
+# InferenceEngine/completion/*
 
 # models
 models/*
