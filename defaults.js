@@ -42,7 +42,11 @@ const userArgByName = {
 	threads: {
 		type: 'number',
 		description: 'number of threads to use during computation',
-	},
+    },
+    n_gpu_layers: {
+        type: 'number',
+        description: 'number of layers to offload to GPU',
+    },
 	ctx_size: { type: 'number', description: 'size of the prompt context' },
 	repeat_penalty: {
 		type: 'number',
