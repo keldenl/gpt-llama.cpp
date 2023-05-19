@@ -1,3 +1,6 @@
 [submodule "InferenceEngine/completion/ggml"]
 	path = InferenceEngine/completion/ggml
 	url = https://github.com/ggerganov/ggml
+[submodule "InferenceEngine/completion/llama.cpp"]
+	path = InferenceEngine/completion/llama.cpp
+	url = git@github.com:ggerganov/llama.cpp.git
