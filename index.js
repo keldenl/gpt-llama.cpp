@@ -194,137 +194,137 @@ app.use('/v1/completions', (req, res, next) => {
 });
 app.use(/^\/v1(?:\/.+)?\/embeddings$/, embeddingsRoutes);
 
-app.post('/v1/images/generations', (req, res) => {
-	global.serverBusy = true;
-	// const modelId = req.body.model; // TODO: Implement model somehow
-	const prompt = req.body.prompt;
-	const scriptArgs = [
-		'--resource-path',
-		'./models/Counterfeit-V3.0_split-einsum',
-	];
-	const scriptPath = 'swift';
-	// const prompt = 'red riding hood visiting grandma';
-	const cwd = 'InferenceEngine/image/ml-stable-diffusion/';
-	const seed = Math.floor(Math.random() * 10000);
-	const commandArgs = [
-		'run',
-		'StableDiffusionSample',
-		'--negative-prompt',
-		'EasyNegativeV2',
-		'--guidance-scale',
-		10,
-		'--step-count',
-		75,
-		'--resource-path',
-		'models/Counterfeit-V3.0_split-einsum',
-		'--seed',
-		seed,
-		prompt,
-	];
+// app.post('/v1/images/generations', (req, res) => {
+// 	global.serverBusy = true;
+// 	// const modelId = req.body.model; // TODO: Implement model somehow
+// 	const prompt = req.body.prompt;
+// 	const scriptArgs = [
+// 		'--resource-path',
+// 		'./models/Counterfeit-V3.0_split-einsum',
+// 	];
+// 	const scriptPath = 'swift';
+// 	// const prompt = 'red riding hood visiting grandma';
+// 	const cwd = 'InferenceEngine/image/ml-stable-diffusion/';
+// 	const seed = Math.floor(Math.random() * 10000);
+// 	const commandArgs = [
+// 		'run',
+// 		'StableDiffusionSample',
+// 		'--negative-prompt',
+// 		'EasyNegativeV2',
+// 		'--guidance-scale',
+// 		10,
+// 		'--step-count',
+// 		75,
+// 		'--resource-path',
+// 		'models/Counterfeit-V3.0_split-einsum',
+// 		'--seed',
+// 		seed,
+// 		prompt,
+// 	];
 
-	global.childProcess = spawn(scriptPath, commandArgs, { cwd });
-	console.log(`\n=====  REQUEST  =====`);
-	console.log(`"${prompt}"`);
+// 	global.childProcess = spawn(scriptPath, commandArgs, { cwd });
+// 	console.log(`\n=====  REQUEST  =====`);
+// 	console.log(`"${prompt}"`);
 
-	let stdoutStream = global.childProcess.stdout;
-	let stderrStream = global.childProcess.stderr;
+// 	let stdoutStream = global.childProcess.stdout;
+// 	let stderrStream = global.childProcess.stderr;
 
-	let lastErr = '';
-	const stderr = new ReadableStream({
-		start(controller) {
-			const decoder = new TextDecoder();
-			const onData = (chunk) => {
-				const data = stripAnsiCodes(decoder.decode(chunk));
-				lastErr = data;
-			};
+// 	let lastErr = '';
+// 	const stderr = new ReadableStream({
+// 		start(controller) {
+// 			const decoder = new TextDecoder();
+// 			const onData = (chunk) => {
+// 				const data = stripAnsiCodes(decoder.decode(chunk));
+// 				lastErr = data;
+// 			};
 
-			const onClose = () => {
-				console.error('\n=====  STDERR  =====');
-				console.log('stderr Readable Stream: CLOSED');
-				console.log(lastErr);
-				controller.close();
-			};
+// 			const onClose = () => {
+// 				console.error('\n=====  STDERR  =====');
+// 				console.log('stderr Readable Stream: CLOSED');
+// 				console.log(lastErr);
+// 				controller.close();
+// 			};
 
-			const onError = (error) => {
-				console.error('\n=====  STDERR  =====');
-				console.log('stderr Readable Stream: ERROR');
-				console.log(lastErr);
-				console.log(error);
-				controller.error(error);
-			};
+// 			const onError = (error) => {
+// 				console.error('\n=====  STDERR  =====');
+// 				console.log('stderr Readable Stream: ERROR');
+// 				console.log(lastErr);
+// 				console.log(error);
+// 				controller.error(error);
+// 			};
 
-			stderrStream.on('data', onData);
-			stderrStream.on('close', onClose);
-			stderrStream.on('error', onError);
-		},
-	});
+// 			stderrStream.on('data', onData);
+// 			stderrStream.on('close', onClose);
+// 			stderrStream.on('error', onError);
+// 		},
+// 	});
 
-	const stdout = new ReadableStream({
-		start(controller) {
-			const decoder = new TextDecoder();
-			const onData = (chunk) => {
-				const data = stripAnsiCodes(decoder.decode(chunk));
-				// process.stdout.write(data);
-				// console.log(data)
-				controller.enqueue(data);
-				// if (!!data && data.includes('Saved')) {
-				// 	const fileName = `${prompt.split(' ').join('_')}.${seed}.final.png`
-				// 	console.log('filename: ', fileName)
-				// 	console.log(data)
-				// 	// console.log(data.split(' '))
-				// 	// console.log(data.split(' ')[1])
-				// }
-				// controller.enqueue(
-				// 	dataToCompletionResponse(data, promptTokens, completionTokens)
-				// );
-			};
+// 	const stdout = new ReadableStream({
+// 		start(controller) {
+// 			const decoder = new TextDecoder();
+// 			const onData = (chunk) => {
+// 				const data = stripAnsiCodes(decoder.decode(chunk));
+// 				// process.stdout.write(data);
+// 				// console.log(data)
+// 				controller.enqueue(data);
+// 				// if (!!data && data.includes('Saved')) {
+// 				// 	const fileName = `${prompt.split(' ').join('_')}.${seed}.final.png`
+// 				// 	console.log('filename: ', fileName)
+// 				// 	console.log(data)
+// 				// 	// console.log(data.split(' '))
+// 				// 	// console.log(data.split(' ')[1])
+// 				// }
+// 				// controller.enqueue(
+// 				// 	dataToCompletionResponse(data, promptTokens, completionTokens)
+// 				// );
+// 			};
 
-			const onClose = () => {
-				global.serverBusy = false;
-				console.log('Readable Stream: CLOSED');
-				controller.close();
-			};
+// 			const onClose = () => {
+// 				global.serverBusy = false;
+// 				console.log('Readable Stream: CLOSED');
+// 				controller.close();
+// 			};
 
-			const onError = (error) => {
-				console.log('Readable Stream: ERROR');
-				console.log(error);
-				controller.error(error);
-			};
+// 			const onError = (error) => {
+// 				console.log('Readable Stream: ERROR');
+// 				console.log(error);
+// 				controller.error(error);
+// 			};
 
-			stdoutStream.on('data', onData);
-			stdoutStream.on('close', onClose);
-			stdoutStream.on('error', onError);
-		},
-	});
+// 			stdoutStream.on('data', onData);
+// 			stdoutStream.on('close', onClose);
+// 			stdoutStream.on('error', onError);
+// 		},
+// 	});
 
-	const writable = new WritableStream({
-		write(chunk) {
-			// If we detect the stop prompt, stop generation
-			if (!!chunk && chunk.includes('Saved')) {
-				global.childProcess.kill('SIGINT');
-				// const fileName = `${prompt.split(' ').join('_')}.${seed}.final.png`;
-				console.log(`chunk: "${chunk}"`);
-				console.log('Request DONE');
-				const fileName = chunk.split("Saved ")[1].trim()
-				console.log('filename: ', fileName);
-				const dirName = path.resolve()
-				res.status(200).json({
-					data: [{ url: path.join(dirName, 'InferenceEngine', 'image', 'ml-stable-diffusion', fileName) }],
-				});
-				res.end();
-				global.lastRequest = {
-					type: 'image',
-					prompt: prompt,
-				};
-				global.serverBusy = false;
-				stdoutStream.removeAllListeners();
-			} else {
-				console.log('chunk: ', chunk);
-			}
-		},
-	});
-	stdout.pipeTo(writable);
-});
+// 	const writable = new WritableStream({
+// 		write(chunk) {
+// 			// If we detect the stop prompt, stop generation
+// 			if (!!chunk && chunk.includes('Saved')) {
+// 				global.childProcess.kill('SIGINT');
+// 				// const fileName = `${prompt.split(' ').join('_')}.${seed}.final.png`;
+// 				console.log(`chunk: "${chunk}"`);
+// 				console.log('Request DONE');
+// 				const fileName = chunk.split("Saved ")[1].trim()
+// 				console.log('filename: ', fileName);
+// 				const dirName = path.resolve()
+// 				res.status(200).json({
+// 					data: [{ url: path.join(dirName, 'InferenceEngine', 'image', 'ml-stable-diffusion', fileName) }],
+// 				});
+// 				res.end();
+// 				global.lastRequest = {
+// 					type: 'image',
+// 					prompt: prompt,
+// 				};
+// 				global.serverBusy = false;
+// 				stdoutStream.removeAllListeners();
+// 			} else {
+// 				console.log('chunk: ', chunk);
+// 			}
+// 		},
+// 	});
+// 	stdout.pipeTo(writable);
+// });
 
 app.get('/', (req, res) =>
 	res.type('text/plain').send(`
