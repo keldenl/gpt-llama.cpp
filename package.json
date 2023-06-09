@@ -10,6 +10,7 @@
         "precommit": "prettier --write .",
         "update-embeddings": "cd InferenceEngine/embeddings/all-mpnet-base-v2 && python -m pip install -r requirements.txt",
         "update-engines": "git submodule foreach git pull &&  npm run ggml-build",
+        "update-llama-cpp": "git submodule foreach git pull",
         "ggml-build": "cd InferenceEngine/completion/ggml && mkdir -p build && cd build && cmake .. && make clean && make",
         "ggml-install-gpt-2": "cd models && mkdir -p ggml && cd ggml && mkdir -p gpt-2 && cd gpt-2 && ../../../scripts/InferenceEngine/ggml-installation/gpt-2/download-ggml-model.sh 117M",
         "ggml-install-gpt-j": "cd models && mkdir -p ggml && cd ggml && mkdir -p gpt-j && cd gpt-j && ../../../scripts/InferenceEngine/ggml-installation/gpt-j/download-ggml-model.sh 6B"
