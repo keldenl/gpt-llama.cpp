@@ -91,7 +91,10 @@ router.post('/', async (req, res) => {
 	}
 
 	const prompt = req.body.prompt;
-	const stopPrompts = typeof req.body.stop === 'string' ? [req.body.stop] : req.body.stop || ['\n\n'];
+	const stopPrompts =
+		typeof req.body.stop === 'string'
+			? [req.body.stop]
+			: req.body.stop || ['\n\n'];
 	const stopArgs = stopPrompts.flatMap((s) => ['--reverse-prompt', s]);
 	const { args, maxTokens } = getArgs(req.body);
 
@@ -103,14 +106,23 @@ router.post('/', async (req, res) => {
 	let completionTokens = 0;
 
 	!!global.childProcess && global.childProcess.kill('SIGINT');
-	const scriptArgs = ['-m', modelPath, ...args, ...stopArgs, '--repeat_penalty', '1.3', '-p', prompt];
+	const scriptArgs = [
+		'-m',
+		modelPath,
+		...args,
+		...stopArgs,
+		'--repeat_penalty',
+		'1.3',
+		'-p',
+		prompt,
+	];
 
 	global.childProcess = spawn(scriptPath, scriptArgs);
 	console.log(`\n=====  LLAMA.CPP SPAWNED  =====`);
 	console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 
 	console.log(`\n=====  REQUEST  =====`);
-	console.log(`"${prompt}"`)
+	console.log(`"${prompt}"`);
 
 	let stdoutStream = global.childProcess.stdout;
 	let stderrStream = global.childProcess.stderr;
@@ -130,7 +142,7 @@ router.post('/', async (req, res) => {
 				console.log(lastErr);
 				controller.close();
 			};
-			
+
 			const onError = (error) => {
 				console.error('\n=====  STDERR  =====');
 				console.log('stderr Readable Stream: ERROR');
@@ -171,6 +183,26 @@ router.post('/', async (req, res) => {
 
 			const onClose = () => {
 				global.serverBusy = false;
+				global.childProcess.kill('SIGINT');
+				console.log('Request DONE');
+				res
+					.status(200)
+					.json(
+						dataToCompletionResponse(
+							responseContent.trim(),
+							promptTokens,
+							completionTokens,
+							'stop'
+						)
+					);
+				res.end()
+				global.lastRequest = {
+					type: 'completion',
+					prompt: prompt,
+				};
+				global.serverBusy = false;
+				stdoutStream.removeAllListeners();
+				!!debounceTimer && clearTimeout(debounceTimer);
 				console.log('Readable Stream: CLOSED');
 				controller.close();
 			};
@@ -199,9 +231,7 @@ router.post('/', async (req, res) => {
 		const writable = new WritableStream({
 			write(chunk) {
 				const currContent = chunk.choices[0].text;
-				const lastContent = !!lastChunk
-					? lastChunk.choices[0].text
-					: undefined;
+				const lastContent = !!lastChunk ? lastChunk.choices[0].text : undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
 					: currContent;
@@ -262,9 +292,7 @@ router.post('/', async (req, res) => {
 		const writable = new WritableStream({
 			write(chunk) {
 				const currContent = chunk.choices[0].text;
-				const lastContent = !!lastChunk
-					? lastChunk.choices[0].text
-					: undefined;
+				const lastContent = !!lastChunk ? lastChunk.choices[0].text : undefined;
 				const last2Content = !!lastContent
 					? lastContent + currContent
 					: currContent;
@@ -289,6 +317,7 @@ router.post('/', async (req, res) => {
 								'stop'
 							)
 						);
+					res.end();
 					global.lastRequest = {
 						type: 'completion',
 						prompt: prompt,
