@@ -10,6 +10,7 @@ export function initializeChatEngine(modelPath) {
 		'vicuna1.1': Vicuna1_1Engine,
 		vicuna: VicunaEngine,
 		alpaca: AlpacaEngine,
+		'nous-hermes': AlpacaEngine,
     	redpajama: RedPajamaEngine,
     	dante: DanteEngine,
 		default: ChatEngine,
