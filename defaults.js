@@ -68,7 +68,17 @@ const userArgByName = {
 		description:
 			'use Mirostat sampling (default: 0, 0=disabled, 1=Mirostat, 2=Mirostat 2.0)',
 	},
+	"n-gpu-layers": {
+		type: 'number',
+		description: 'number of layers to store in VRAM (1 for Mac GPU)'
+	}
 };
+
+const shortUserArgByName = {
+	t: userArgByName['threads'],
+	h: userArgByName['help'],
+	ngl: userArgByName['n-gpu-layers'],
+}
 
 export const getHelpList = Object.keys(userArgByName)
 	.map((name) => {
@@ -81,10 +91,12 @@ export const validateAndReturnUserArgs = () => {
 	const processArgs = process.argv.slice(2);
 	const errors = [];
 
+	const shortAndLongUserArgsByName = {...userArgByName, ...shortUserArgByName}
+
 	processArgs.forEach((arg, i) => {
 		// Check if the argument is supported
-		if (Object.keys(userArgByName).includes(arg)) {
-			const expectedType = userArgByName[arg].type;
+		if (Object.keys(shortAndLongUserArgsByName).includes(arg)) {
+			const expectedType = shortAndLongUserArgsByName[arg].type;
 
 			// Check if the argument doesn't require a value
 			if (expectedType === 'undefined') {
@@ -92,7 +104,7 @@ export const validateAndReturnUserArgs = () => {
 				if (i < processArgs.length - 1) {
 					const argValue = processArgs[i + 1];
 					// If next value != an arg, that means it's a value. This arg didn't need a value so add error
-					if (!Object.keys(userArgByName).includes(argValue)) {
+					if (!Object.keys(shortAndLongUserArgsByName).includes(argValue)) {
 						errors.push(`${arg} does not require a value.`);
 						return;
 					}
@@ -104,7 +116,7 @@ export const validateAndReturnUserArgs = () => {
 			if (i < processArgs.length - 1) {
 				const argValue = processArgs[i + 1];
 				// If next arg is an user arg, that means we're missing a value
-				if (Object.keys(userArgByName).includes(argValue)) {
+				if (Object.keys(shortAndLongUserArgsByName).includes(argValue)) {
 					errors.push(`${arg} is missing a value.`);
 					return;
 				}
@@ -127,7 +139,7 @@ export const validateAndReturnUserArgs = () => {
 			// If this isn't a valid arg, it must be a value. That means prev arg must be a valid arg.
 			if (i > 0) {
 				const prevArg = processArgs[i - 1];
-				if (!Object.keys(userArgByName).includes(prevArg)) {
+				if (!Object.keys(shortAndLongUserArgsByName).includes(prevArg)) {
 					errors.push(`${arg} is not a valid argument.`);
 				}
 			} else {
@@ -148,6 +160,8 @@ export const validateAndReturnUserArgs = () => {
 		userArgs: processArgs.map((arg) => {
 			if (Object.keys(userArgByName).includes(arg)) {
 				return `--${arg}`;
+			} else if (Object.keys(shortUserArgByName).includes(arg)) {
+				return `-${arg}`;
 			}
 			return `${arg}`;
 		}),
