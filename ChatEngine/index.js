@@ -13,7 +13,7 @@ export class ChatEngine {
 		historyPrefix = '',
 		responsePrefix = '',
 		hasAiResponsePrefix = true,
-		newLine = false,
+		newLine = true,
 	} = {}) {
 		this.chatPrefix = chatPrefix;
 		this.roleMap = roleMap;
