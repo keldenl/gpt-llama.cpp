@@ -135,11 +135,9 @@ router.post('/completions', async (req, res) => {
 	} else {
 		!!global.childProcess && global.childProcess.kill('SIGINT');
 		const scriptArgs = ['-m', modelPath, ...args, '-p', initPrompt];
-
-		global.childProcess = spawn(`./InferenceEngine/completion/ggml/build/bin/${modelType}`, scriptArgs);
-		// global.childProcess = spawn(`../ggml/build/bin/${modelType}`, scriptArgs);
+		global.childProcess = spawn(`${scriptPath}`, scriptArgs);
 		console.log(`\n=====  GGML SPAWNED  =====`);
-		console.log(`${`./InferenceEngine/completion/ggml/build/bin/${modelType}`} ${scriptArgs.join(' ')}\n`);
+		console.log(`${scriptPath} ${scriptArgs.join(' ')}\n`);
 	}
 
 	console.log(

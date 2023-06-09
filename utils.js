@@ -156,17 +156,17 @@ export const getLlamaPath = (req, res) => {
 // GGML
 export const getGgmlModelType = (req, res) => {
 	const modelPath = getModelPath(req, res);
-	// old (non-inference)
-	// const path = modelPath.split('models')[1];
-	// return modelArr[1];
-	console.log('MODEL PATH: ', modelPath);
-	
-	// new (InferenceEngine)
-	const path = modelPath.split('ggml')[1];
-	console.log('PATH: ', path);
+	const path = modelPath.split('models')[1];
+	console.log("🚀 ~ file: utils.js:161 ~ getGgmlModelType ~ path:", path)
 	const modelArr = splitPath(path);
-	console.log('modelArr: ', modelArr);
+	console.log("🚀 ~ file: utils.js:162 ~ getGgmlModelType ~ modelArr:", modelArr)
 	return modelArr[0];
+	
+	// old (InferenceEngine)
+	// const path = modelPath.split('ggml')[1];
+	// console.log('PATH: ', pat/h);
+	// console.log('modelArr: ', modelArr);
+	// return modelArr[0];
 };
 
 export const getGgmlPath = (req, res) => {
