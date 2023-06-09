@@ -157,9 +157,7 @@ export const getLlamaPath = (req, res) => {
 export const getGgmlModelType = (req, res) => {
 	const modelPath = getModelPath(req, res);
 	const path = modelPath.split('models')[1];
-	console.log("🚀 ~ file: utils.js:161 ~ getGgmlModelType ~ path:", path)
 	const modelArr = splitPath(path);
-	console.log("🚀 ~ file: utils.js:162 ~ getGgmlModelType ~ modelArr:", modelArr)
 	return modelArr[0];
 	
 	// old (InferenceEngine)
