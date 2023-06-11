@@ -183,19 +183,22 @@ router.post('/', async (req, res) => {
 
 			const onClose = () => {
 				global.serverBusy = false;
-				global.childProcess.kill('SIGINT');
 				console.log('Request DONE');
-				res
-					.status(200)
-					.json(
-						dataToCompletionResponse(
-							responseContent.trim(),
-							promptTokens,
-							completionTokens,
-							'stop'
-						)
-					);
-				res.end()
+				if (!res.headersSent) {
+					res
+						.status(200)
+						.json(
+							dataToCompletionResponse(
+								responseContent.trim(),
+								promptTokens,
+								completionTokens,
+								'stop'
+							)
+						);
+					res.end();
+				} else {
+					!res.writableEnded && res.end();
+				}
 				global.lastRequest = {
 					type: 'completion',
 					prompt: prompt,
@@ -205,6 +208,7 @@ router.post('/', async (req, res) => {
 				!!debounceTimer && clearTimeout(debounceTimer);
 				console.log('Readable Stream: CLOSED');
 				controller.close();
+				global.childProcess.kill('SIGINT');
 			};
 
 			const onError = (error) => {
@@ -244,7 +248,6 @@ router.post('/', async (req, res) => {
 					stopPrompts.includes(last2Content) ||
 					completionTokens >= maxTokens - 1
 				) {
-					global.childProcess.kill('SIGINT');
 					console.log('Request DONE');
 					res.write('event: data\n');
 					res.write(
@@ -267,6 +270,7 @@ router.post('/', async (req, res) => {
 					global.serverBusy = false;
 					stdoutStream.removeAllListeners();
 					clearTimeout(debounceTimer);
+					global.childProcess.kill('SIGINT');
 				} else {
 					res.write('event: data\n');
 					res.write(`data: ${JSON.stringify(chunk)}\n\n`);
@@ -305,7 +309,6 @@ router.post('/', async (req, res) => {
 					stopPrompts.includes(last2Content) ||
 					completionTokens >= maxTokens - 1
 				) {
-					global.childProcess.kill('SIGINT');
 					console.log('Request DONE');
 					res
 						.status(200)
@@ -325,6 +328,7 @@ router.post('/', async (req, res) => {
 					global.serverBusy = false;
 					stdoutStream.removeAllListeners();
 					clearTimeout(debounceTimer);
+					global.childProcess.kill('SIGINT');
 				} else {
 					responseContent += currContent;
 					lastChunk = chunk;
