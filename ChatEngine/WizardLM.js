@@ -13,6 +13,10 @@ export class WizardLM extends ChatEngine {
 		});
 		this.stopPrompts = [
 			...this.stopPrompts,
+			'USER:',
+			'\nUSER',
+			'SYSTEM:',
+			'\nSYSTEM',
 			'</s>',
 			'\n</s>',
 			'\n</s',
